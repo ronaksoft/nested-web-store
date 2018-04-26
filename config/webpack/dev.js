@@ -1,13 +1,15 @@
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
-var postcssAssets = require('postcss-assets');
-var postcssNext = require('postcss-cssnext');
 var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 
-const lessToJs = require('less-vars-to-js');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const extractLess = new ExtractTextPlugin({
+  filename: "[name].[contenthash].css",
+  disable: process.env.NODE_ENV === "development"
+});
 
 // themeVariables["@icon-url"] = "https://fonts.googleapis.com/css?family=Open+Sans";
 
@@ -45,9 +47,7 @@ var config = {
         exclude: /node_modules/,
         test: /\.js$/,
         options: {
-          plugins: [
-            ['import', { libraryName: "antd", style: true }]
-          ]
+          plugins: []
         },
       },
       {
@@ -63,30 +63,22 @@ var config = {
         loader: 'json-loader'
       },
       {
-        test: /\.css$/,
-        include: path.resolve('./src/app'),
-        loaders: [
-          'style-loader',
-          'css-loader?modules&importLoaders=10&localIdentName=[local]___[hash:base64:5]',
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.css$/,
-        exclude: path.resolve('./src/app'),
-        loaders: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
-      {
         test: /\.less$/,
-        use: [
-          {loader: "style-loader"},
-          {loader: "css-loader"},
-          {loader: "less-loader",
-          }
-        ]
+        include: path.resolve('./src/app'),
+        use: extractLess.extract({
+          use: [{
+              loader: "css-loader", options: {
+                sourceMap: true,
+              }
+          }, {
+              loader: "less-loader", options: {
+                sourceMap: true,
+                paths: [
+                    path.resolve(__dirname, "node_modules")
+                ]
+              }
+          }],
+        })
       },
       {
         test: /\.eot(\?.*)?$/,
@@ -112,23 +104,13 @@ var config = {
   },
 
   plugins: [
+    extractLess,
     new CheckerPlugin(),
     new webpack.LoaderOptionsPlugin({
       debug: true,
       options: {
         tslint: {
           failOnHint: true
-        },
-        postcss: function () {
-          return [
-            stylelint({
-              files: '../../src/app/*.css'
-            }),
-            postcssNext(),
-            postcssAssets({
-              relative: true
-            }),
-          ];
         },
       }
     }),

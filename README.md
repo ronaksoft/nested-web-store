@@ -37,7 +37,6 @@ App uses the following libraries and tools:
 - [Redux Connect](https://github.com/makeomatic/redux-connect) for resolving async props in react-router.
 - [React Helmet](https://github.com/nfl/react-helmet)
 - [classnames](https://github.com/JedWatson/classnames)
-- [antd](https://github.com/ant-design/ant-design) for some button and form elements
 - [lodash](https://github.com/lodash/lodash)
 - [moment](https://github.com/moment/moment) to handle the timestamp converts
 

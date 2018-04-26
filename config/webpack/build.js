@@ -10,7 +10,12 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 var CopyAssetsPlugin = require('./copy-asset-plugin');
 
-const lessToJs = require('less-vars-to-js');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const extractLess = new ExtractTextPlugin({
+  filename: "[name].[contenthash].css",
+  disable: process.env.NODE_ENV === "development"
+});
+
 
 var config = {
   bail: true,
@@ -82,12 +87,21 @@ var config = {
       },
       {
         test: /\.less$/,
-        use: [
-          {loader: "style-loader"},
-          {loader: "css-loader"},
-          {loader: "less-loader",
-          }
-        ]
+        include: path.resolve('./src/app'),
+        use: extractLess.extract({
+          use: [{
+              loader: "css-loader", options: {
+                sourceMap: true,
+              }
+          }, {
+              loader: "less-loader", options: {
+                sourceMap: true,
+                paths: [
+                    path.resolve(__dirname, "node_modules")
+                ]
+              }
+          }],
+        })
       },
       {
         test: /\.eot(\?.*)?$/,
@@ -113,6 +127,7 @@ var config = {
   },
 
   plugins: [
+    extractLess,
     new WebpackCleanupPlugin(),
     new CopyAssetsPlugin(),
     new webpack.LoaderOptionsPlugin({
@@ -120,17 +135,6 @@ var config = {
       options: {
         tslint: {
           failOnHint: true
-        },
-        postcss: function () {
-          return [
-            stylelint({
-              files: '../../src/app/*.css'
-            }),
-            postcssNext(),
-            postcssAssets({
-              relative: true
-            }),
-          ];
         },
       }
     }),

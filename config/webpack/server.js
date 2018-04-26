@@ -1,10 +1,11 @@
 var path = require('path');
 var fs = require('fs');
 var webpack = require('webpack');
-var postcssAssets = require('postcss-assets');
-var postcssNext = require('postcss-cssnext');
-var stylelint = require('stylelint');
-
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const extractLess = new ExtractTextPlugin({
+  filename: "[name].[contenthash].css",
+  disable: process.env.NODE_ENV === "development"
+});
 var nodeModules = {};
 fs.readdirSync('node_modules')
   .filter(function (x) {
@@ -59,28 +60,30 @@ var config = {
         loader: "file-loader"
       },
       {
-        test: /\.css$/,
-        loaders: [
-          'isomorphic-style-loader',
-          'css-loader?modules&importLoaders=10&localIdentName=[local]___[hash:base64:5]'
-        ]
+        test: /\.less$/,
+        include: path.resolve('./src'),
+        use: extractLess.extract({
+          use: [{
+              loader: "css-loader", options: {
+                sourceMap: true,
+              }
+          }, {
+              loader: "less-loader", options: {
+                sourceMap: true,
+                paths: [
+                    path.resolve(__dirname, "node_modules")
+                ]
+              }
+          }],
+        })
       }
     ]
   },
 
   plugins: [
+    extractLess,
       new webpack.LoaderOptionsPlugin({
         debug: false,
-        options: {
-          postcss: function () {
-            return [
-              postcssNext(),
-              postcssAssets({
-                relative: true
-              }),
-            ];
-          },
-        }
       })
   ],
 

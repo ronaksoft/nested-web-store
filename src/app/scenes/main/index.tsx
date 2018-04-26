@@ -4,8 +4,6 @@ import * as React from 'react';
 // import {sortBy} from 'lodash';
 // import {IcoN, Loading, InfiniteScroll} from 'components';
 
-const style = require('./sidebar.css');
-
 class Main extends React.Component<any, any> {
 
   /**
@@ -27,7 +25,7 @@ class Main extends React.Component<any, any> {
    */
   public render() {
     return (
-      <div className={style.sidebar}>
+      <div>
         a
       </div>
     );

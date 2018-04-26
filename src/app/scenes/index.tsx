@@ -9,14 +9,12 @@
  */
 import * as React from 'react';
 import {connect} from 'react-redux';
-// import {hashHistory} from 'react-router';
+// import {browserHistory} from 'react-router';
 import {login, logout} from 'redux/app/actions';
-
+import './main.less';
 import Main from './main/';
 
 import {IUser} from 'api/interfaces';
-import { FormattedMessage, formatMessage } from 'react-intl';
-// const style = require('./private.css');
 
 interface IState {
   isLogin: boolean;
@@ -52,14 +50,17 @@ class Container extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
-    console.log(formatMessage('hello'));
     return (
       <div>
-        a
-        <FormattedMessage
-          id={'Header.greeting'}
-          defaultMessage={'Hello'}
-        />
+        <div className="navbar">
+          <img src={require('../assets/icons/Nested_LogoNegative.svg')} alt="Nested"/>
+          <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"/>
+          <div className="nested-logo"/>
+          <div className="nested-logo-type"/>
+          <div className="devider"/>
+          <span>App Store</span>
+          <span>Browse</span>
+        </div>
       </div>
     );
   }

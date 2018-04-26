@@ -3,7 +3,7 @@
 var config = {
   env: process.env.NODE_ENV || 'development',
   host: process.env.HOST || '0.0.0.0',
-  port: process.env.PORT || 8889,
+  port: process.env.PORT || 8899,
   karmaPort: 9876,
 
   // This part goes to React-Helmet for Head of our HTML
