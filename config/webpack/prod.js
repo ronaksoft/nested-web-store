@@ -1,13 +1,14 @@
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
-var postcssAssets = require('postcss-assets');
-var postcssNext = require('postcss-cssnext');
-var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const extractLess = new ExtractTextPlugin({
+  filename: "[name].[contenthash].css",
+  disable: process.env.NODE_ENV === "development"
+});
 const lessToJs = require('less-vars-to-js');
 
 var config = {
@@ -58,34 +59,24 @@ var config = {
         loader: 'json-loader'
       },
       {
-        test: /\.css$/,
-        include: path.resolve('./src/app'),
-        loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: [
-            'css-loader?modules&importLoaders=10&localIdentName=[local]___[hash:base64:5]',
-            'postcss-loader'
-          ]
-        })
-      },
-      {
-        test: /\.css$/,
-        exclude: path.resolve('./src/app'),
-        loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: [
-            'css-loader',
-          ]
-        })
-      },
-      {
         test: /\.less$/,
-        use: [
-          {loader: "style-loader"},
-          {loader: "css-loader"},
-          {loader: "less-loader",
-          }
-        ]
+        include: path.resolve('./src'),
+        use: extractLess.extract({
+          use: [{
+              loader: "css-loader", options: {
+                sourceMap: true,
+              }
+          }, {
+              loader: "less-loader", options: {
+                sourceMap: true,
+                strictMath: true,
+                noIeCompat: true,
+                paths: [
+                    path.resolve(__dirname, "node_modules")
+                ]
+              }
+          }],
+        })
       },
       {
         test: /\.eot(\?.*)?$/,
@@ -111,24 +102,14 @@ var config = {
   },
 
   plugins: [
+    extractLess,
     new HtmlWebpackPlugin(),
     new webpack.LoaderOptionsPlugin({
       debug: true,
       options: {
         tslint: {
           failOnHint: true
-        },
-        postcss: function () {
-          return [
-            stylelint({
-              files: '../../src/app/*.css'
-            }),
-            postcssNext(),
-            postcssAssets({
-              relative: true
-            }),
-          ];
-        },
+        }
       }
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),

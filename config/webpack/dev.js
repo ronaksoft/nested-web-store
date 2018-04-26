@@ -73,6 +73,8 @@ var config = {
           }, {
               loader: "less-loader", options: {
                 sourceMap: true,
+                strictMath: true,
+                noIeCompat: true,
                 paths: [
                     path.resolve(__dirname, "node_modules")
                 ]
