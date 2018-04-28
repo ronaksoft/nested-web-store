@@ -2,7 +2,6 @@ var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
 var ManifestPlugin = require('webpack-manifest-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const extractLess = new ExtractTextPlugin({
@@ -59,24 +58,9 @@ var config = {
         loader: 'json-loader'
       },
       {
-        test: /\.less$/,
-        include: path.resolve('./src'),
-        use: extractLess.extract({
-          use: [{
-              loader: "css-loader", options: {
-                sourceMap: true,
-              }
-          }, {
-              loader: "less-loader", options: {
-                sourceMap: true,
-                strictMath: true,
-                noIeCompat: true,
-                paths: [
-                    path.resolve(__dirname, "node_modules")
-                ]
-              }
-          }],
-        })
+        test: /(\.css|\.less)$/,
+        include: path.resolve('./src/app'),
+        use: ['style-loader', 'css-loader', 'less-loader']
       },
       {
         test: /\.eot(\?.*)?$/,
@@ -123,7 +107,6 @@ var config = {
         warnings: false
       }
     }),
-    new ExtractTextPlugin('css/[name].[hash].css'),
     new ManifestPlugin({
       fileName: '../manifest.json'
     }),
@@ -150,7 +133,7 @@ const createIfDoesntExist = dest => {
   }
 }
 
-createIfDoesntExist('./build');
+reateIfDoesntExist('./build');
 createIfDoesntExist('./build/public');
 createIfDoesntExist('./build/public/images');
 copySync('./src/favicon.ico', './build/public/favicon.ico', true);

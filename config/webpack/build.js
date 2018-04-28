@@ -5,7 +5,6 @@ var postcssAssets = require('postcss-assets');
 var postcssNext = require('postcss-cssnext');
 var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 var CopyAssetsPlugin = require('./copy-asset-plugin');
@@ -155,25 +154,6 @@ var config = {
       'process.env': {
         BROWSER: JSON.stringify(true),
         NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      debug: true,
-      options: {
-        tslint: {
-          failOnHint: true
-        },
-        postcss: function () {
-          return [
-            stylelint({
-              files: '../../src/app/*.css'
-            }),
-            postcssNext(),
-            postcssAssets({
-              relative: true
-            }),
-          ];
-        },
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
