@@ -84,9 +84,9 @@ var config = {
 
   plugins: [
     extractLess,
-      new webpack.LoaderOptionsPlugin({
-        debug: false,
-      })
+    new webpack.LoaderOptionsPlugin({
+      debug: false,
+    })
   ],
 
   node: {

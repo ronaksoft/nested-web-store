@@ -63,24 +63,9 @@ var config = {
         loader: 'json-loader'
       },
       {
-        test: /\.less$/,
+        test: /(\.css|\.less)$/,
         include: path.resolve('./src/app'),
-        use: extractLess.extract({
-          use: [{
-              loader: "css-loader", options: {
-                sourceMap: true,
-              }
-          }, {
-              loader: "less-loader", options: {
-                sourceMap: true,
-                strictMath: true,
-                noIeCompat: true,
-                paths: [
-                    path.resolve(__dirname, "node_modules")
-                ]
-              }
-          }],
-        })
+        use: ['style-loader', 'css-loader', 'less-loader']
       },
       {
         test: /\.eot(\?.*)?$/,
@@ -105,8 +90,14 @@ var config = {
     ]
   },
 
+  devtool: 'inline-source-map',
+
+  devServer: {
+    contentBase: './dist',
+    hot: true
+  },
+
   plugins: [
-    extractLess,
     new CheckerPlugin(),
     new webpack.LoaderOptionsPlugin({
       debug: true,

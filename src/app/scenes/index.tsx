@@ -55,9 +55,8 @@ class Container extends React.Component<IProps, IState> {
         <div className="navbar">
           <img src={require('../assets/icons/Nested_LogoNegative.svg')} alt="Nested"/>
           <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"/>
-          <div className="nested-logo"/>
-          <div className="nested-logo-type"/>
           <div className="devider"/>
+          <div className="filler"/>
           <span>App Store</span>
           <span>Browse</span>
         </div>

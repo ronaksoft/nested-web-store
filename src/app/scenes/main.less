@@ -1,7 +1,6 @@
 @import "../styles/fonts/fonts.less";
 @import (reference) "../styles/core.less";
 
-
 /**
  * Global Reset of all HTML Elements
  *
@@ -49,9 +48,13 @@ footer, header, nav, section, audio, video {
 .navbar {
   height: 64px;
   position: relative;
-  background: #004DA6;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16);
+  background: @color-bg-pending-wire;
+  box-shadow: 0px 2px 4px @color-breeze;
   color: white;
   display: flex;
   width: 100%;
+  padding: 0 32px;
+  img {
+    height: 100%;
+  }
 }
