@@ -16,7 +16,6 @@ export default (
         <IndexRoute component={Main}/>
         <Route path="/" component={Main}/>
         <Route path="/app/:appid" component={AppView}/>
-        {/* <Route path="/message/:postId" component={Post}/> */}
       </Route>
       <Route path="/404" component={NotFound}/>
       <Route path="*" component={NotFound}/>

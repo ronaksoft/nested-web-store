@@ -44,7 +44,7 @@ class Container extends React.Component<IProps, IState> {
   }
 
   public componentDidMount() {
-    reactTranslateChangeLanguage('fa');
+    // reactTranslateChangeLanguage('fa');
   }
 
   /**

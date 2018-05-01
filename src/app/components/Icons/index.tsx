@@ -9,7 +9,6 @@
  *              Date of review:         -
  */
 import * as React from 'react';
-// const style = require('./icons.css');
 const Icons = require('./nst-icons.json');
 
 interface IOptionsMenuProps {
