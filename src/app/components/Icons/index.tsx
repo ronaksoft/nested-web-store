@@ -9,7 +9,7 @@
  *              Date of review:         -
  */
 import * as React from 'react';
-const style = require('./icons.css');
+// const style = require('./icons.css');
 const Icons = require('./nst-icons.json');
 
 interface IOptionsMenuProps {
@@ -53,7 +53,7 @@ class IcoN extends React.Component<IOptionsMenuProps, any> {
       version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`;
     return (
       <i dangerouslySetInnerHTML={{__html: headSvgContent + Icons[this.props.name] + '</svg>'}}
-        className={style.nstIcon} />
+        className="nstIcon" />
     );
   }
 }

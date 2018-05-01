@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {
-  Main,
+import AppWrapper, {
+  Main, AppView,
 } from 'scenes';
-import AppWrapper from 'scenes';
 import NotFound from 'containers/404';
 import {Provider} from 'react-redux';
 import {Router, Route, browserHistory, IndexRoute, Redirect} from 'react-router';
@@ -16,6 +15,7 @@ export default (
       <Route component={AppWrapper}>
         <IndexRoute component={Main}/>
         <Route path="/" component={Main}/>
+        <Route path="/app/:appid" component={AppView}/>
         {/* <Route path="/message/:postId" component={Post}/> */}
       </Route>
       <Route path="/404" component={NotFound}/>

@@ -1,0 +1,95 @@
+@import (reference) "./core.less";
+.nst-input {
+  display: flex;
+  flex-direction: column;
+  label {
+    margin-bottom: 6px;
+    color: @color-solid;
+    Opacity: 80%;
+    font-size: 13px;
+    font-weight: bold;
+  }
+  p {
+    opacity: .8;
+    background-color: fade(@color-solid, 10%);
+    padding: 4px 6px;
+    color: #323D47;
+    font-size: 13px;
+    line-height: 18px;
+    margin: 0;
+    width: 100%;
+  }
+
+}
+input[type="text"],
+input[type="number"],
+input[type="password"] {
+  height: 40px;
+  padding: 0 8px;
+  margin-bottom: 8px;
+  border: 1px solid @color-border;
+  box-shadow: inset 0px 0px 1px transparent;
+  color: @color-solid;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: all @animation-dur;
+  &:hover {
+    border: 1px solid @color-new-hurricane;
+  }
+  &:focus {
+    border: 1px solid @color-solid;
+    box-shadow: inset 0px 0px 1px @color-solid;
+  }
+  &.error {
+    @color-solid : @color-force;
+    @color-new-hurricane : @color-force;
+    @color-border : @color-force;
+    color: @color-solid;
+    border: 1px solid @color-border;
+    &:hover {
+      border: 1px solid @color-new-hurricane;
+    }
+    &:focus {
+      border: 1px solid @color-solid;
+      box-shadow: inset 0px 0px 1px @color-solid;
+    }
+    & + p {
+      color: @color-solid;
+      background-color: fade(@color-solid, 10%);
+    }
+  }
+  &.success {
+    @color-solid : @color-sense;
+    @color-new-hurricane : @color-sense;
+    @color-border : @color-sense;
+    color: @color-solid;
+    border: 1px solid @color-border;
+    &:hover {
+      border: 1px solid @color-new-hurricane;
+    }
+    &:focus {
+      border: 1px solid @color-solid;
+      box-shadow: inset 0px 0px 1px @color-solid;
+    }
+    & + p {
+      color: @color-solid;
+      background-color: fade(@color-solid, 10%);
+    }
+  }
+}
+input {
+  outline: none;
+}
+
+input::-webkit-input-placeholder {
+    color: @color-gale-new;
+    font-size: 16px;
+}
+input:-moz-placeholder {
+    color: @color-gale-new;
+    font-size: 16px;
+}
+input::-moz-placeholder {
+    color: @color-gale-new;
+    font-size: 16px;
+}

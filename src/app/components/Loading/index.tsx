@@ -9,7 +9,7 @@
  */
 import * as React from 'react';
 
-const style = require('./loading.css');
+// const style = require('./loading.css');
 
 interface IProps {
   active: boolean;
@@ -77,10 +77,10 @@ class Loading extends React.Component<IProps, IState> {
       <div>
         {/* chck the visibility condition for rendering */}
         { this.state.active && (
-          <div className={style.nstLoading + ' '
-            + (size ? style[size] : '') + ' '
-            + (position ? style[position] : '') + ' '
-            + (color ? style[color] : '')}/>
+          <div className={'nstLoading' + ' '
+            + (size ? size : '') + ' '
+            + (position ? position : '') + ' '
+            + (color ? color : '')}/>
         )}
       </div>
     );

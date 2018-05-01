@@ -1,12 +1,10 @@
 export {PlaceChips} from './Chips/';
 export {IcoN} from './Icons/';
 export {Loading} from './Loading/';
+export {reactTranslateChangeLanguage} from './i18n/';
+export {Translate} from './i18n/';
 
-export {NstInput} from './nst-input/index';
-
-import InfiniteScroll from './scroll/infinite-scroll';
-import Scrollable from './scroll/scroll-children';
 import RTLDetector from './RTLDetector';
-import i18next from './i18next';
+import AppSearch from './app-search';
 
-export {Scrollable, RTLDetector, InfiniteScroll, i18next};
+export {RTLDetector, AppSearch};

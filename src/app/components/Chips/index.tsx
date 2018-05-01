@@ -11,7 +11,7 @@ import * as React from 'react';
 import FileUtil from 'services/utils/file';
 import {IPicture} from 'api/interfaces';
 
-const style = require('./chips.css');
+// const style = require('./chips.css');
 const unknownPicture = require('assets/icons/absents_place.svg');
 
 interface IChipsItem {
@@ -103,7 +103,7 @@ class PlaceChips extends React.Component<IChipsProps, IChipsState> {
   public render() {
     return (
       <a key={this.props.item._id} onClick={this.itemSelected.bind(this, '')}
-      className={this.state.active ? style.placechips + ' ' + style.selectedItem : style.placechips}>
+      className={this.state.active ? 'placechips selectedItem' : 'placechips'}>
         <img src={this.getPicture(this.props.item)} alt=""/>
         {this.props.item.name || this.props.item._id}
       </a>

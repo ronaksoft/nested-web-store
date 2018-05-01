@@ -1,0 +1,14 @@
+<svg width="380" height="429" viewBox="0 0 380 429" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Canvas" fill="none">
+        <path d="M 89.5 429L 461 0L 0 0L 0 429L 89.5 429Z" transform="translate(461 0) scale(-1 1)" fill="url(#paint0_linear)" fill-opacity="0.9"/>
+    </g>
+    <defs>
+
+        <linearGradient id="paint0_linear" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(381 250 -49.8991 57.9341 43.9495 33.5329)">
+            <stop stop-color="#774FCD"/>
+            <stop offset="1" stop-color="#228BA3"/>
+        </linearGradient>
+
+    </defs>
+</svg>
+

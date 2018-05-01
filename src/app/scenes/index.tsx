@@ -12,10 +12,11 @@ import {connect} from 'react-redux';
 // import {browserHistory} from 'react-router';
 import {login, logout} from 'redux/app/actions';
 import './main.less';
+import AppView from './view/';
 import Main from './main/';
-
 import {IUser} from 'api/interfaces';
 
+import {Translate, reactTranslateChangeLanguage} from 'components';
 interface IState {
   isLogin: boolean;
 };
@@ -42,6 +43,10 @@ class Container extends React.Component<IProps, IState> {
     };
   }
 
+  public componentDidMount() {
+    reactTranslateChangeLanguage('fa');
+  }
+
   /**
    * renders the component if the credentials are valid
    * @returns {ReactElement} markup
@@ -51,16 +56,66 @@ class Container extends React.Component<IProps, IState> {
    */
   public render() {
     return (
-      <div>
-        <div className="navbar">
-          <img src={require('../assets/icons/Nested_LogoNegative.svg')} alt="Nested"/>
-          <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"/>
-          <div className="devider"/>
-          <div className="filler"/>
-          <span>App Store</span>
-          <span>Browse</span>
+        <div>
+          <div className="navbar-wrapper">
+            <div className="navbar">
+              <img src={require('../assets/icons/Nested_LogoNegative.svg')} alt="Nested" className="logo"/>
+              <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"
+                className="logo-type"/>
+              <div className="devider"/>
+              <a>
+                <Translate>App Store</Translate>
+              </a>
+              <button onClick={reactTranslateChangeLanguage.bind(this, 'en')}>
+                English
+              </button>
+              <button onClick={reactTranslateChangeLanguage.bind(this, 'fa')}>
+                Farsi
+              </button>
+              <div className="filler"/>
+              <a><Translate>Browse</Translate></a>
+              <button className="butn"><Translate>Sign in</Translate></button>
+            </div>
+          </div>
+          {this.props.children}
+          <footer>
+            <div className="footer-inner">
+              <div className="_aic">
+                <div className="nested">
+                  <img src={require('../assets/icons/Nested_LogoNegative.svg')} alt="Nested" className="logo"/>
+                  <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"
+                    className="logo-type"/>
+                </div>
+                <span>App Store</span>
+              </div>
+              <div>
+                <h6><Translate>NESTED</Translate></h6>
+                <a href=""><Translate>Features</Translate></a>
+                <a href=""><Translate>Get Nested app</Translate></a>
+              </div>
+              <div>
+                <h6><Translate>COMPANY</Translate></h6>
+                <a href=""><Translate>About us</Translate></a>
+                <a href=""><Translate>Press</Translate></a>
+                <a href=""><Translate>Work with us</Translate></a>
+              </div>
+              <div>
+                <h6><Translate>SUPPORT</Translate></h6>
+                <a href=""><Translate>Help center</Translate></a>
+                <a href=""><Translate>Contact us</Translate></a>
+                <a href=""><Translate>Terms & Conditions</Translate></a>
+              </div>
+              <div>
+                <h6><Translate>SOCIAL NETWORKS</Translate></h6>
+                <a href=""><Translate>Blog</Translate></a>
+                <a href=""><Translate>Twitter</Translate></a>
+                <a href=""><Translate>Facebook</Translate></a>
+                <a href=""><Translate>Instagram</Translate></a>
+                <a href=""><Translate>LinkedIn</Translate> </a>
+              </div>
+            </div>
+          </footer>
         </div>
-      </div>
     );
   }
 }
@@ -94,5 +149,5 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
-  Main
+  Main, AppView
 };
