@@ -51,6 +51,9 @@ footer, header, nav, section, audio, video {
 a {
   text-decoration: none;
 }
+a:-webkit-any-link {
+  color: @color-solid;
+}
 main {
   padding-top: 64px;
 }
@@ -181,6 +184,10 @@ main {
   padding: 56px 0;
   min-height: ~'calc(100vh - 360px)';
   max-width: 928px;
+  &.vertical{
+    flex-direction: column;
+    padding-top: 0;
+  }
 }
 .apps-wrapper {
   display: flex;
@@ -402,6 +409,24 @@ footer {
   .logo-type {
     height: 32px;
   }
+  .languages {
+    margin-top: 16px;
+    display: flex;
+    img {
+      width: 24px;
+      cursor: pointer;
+      height: 16px;
+    }
+    .devider {
+      margin: 0 8px;
+      width: 1px;
+      height: 24px;
+      background-color: white;
+    }
+  }
+}
+.lng-fa {
+  opacity: .64;
 }
 
 .search-box {
@@ -481,5 +506,96 @@ footer {
   .css-rsyb7x {
     margin: 0;
     padding: 0;
+  }
+}
+
+.app-content {
+  display: flex;
+  width: 100%;
+  margin-top: 36px;
+  .product-hero {
+    width: 216px;
+    margin-right: 24px;
+    display: flex;
+    flex-direction: column;
+    img {
+      width: 216px;
+      height: 216px;
+      background: #FFFFFF;
+      border-radius: 16px;
+      margin-bottom: 16px;
+    }
+    .report-butn {
+      line-height: normal;
+      font-size: 12px;
+      text-align: center;
+      width: 100%;
+      color: @color-force-wire;
+      margin-bottom: 16px;
+    }
+    .categories {
+      padding: 16px 8px;
+      background: #FFFFFF;
+      border-radius: 16px;
+      h4 {
+        font-size: 11px;
+        padding-bottom: 6px;
+        width: 100%;
+        margin-bottom: 8px;
+        line-height: 14px;
+        border-bottom: 1px solid @color-breeze;
+      }
+      a {
+        background: #FFFFFF;
+        border: 1px solid @color-solid;
+        opacity: .64;
+        border-radius: 6px;
+        line-height: 14px;
+        padding: 5px 6px;
+        display: inline-block;
+        margin: 0 6px 6px 0;
+      }
+    }
+  }
+  .product-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    h1 {
+      font-size: 24px;
+      margin-bottom: 4px;
+      line-height: 29px;
+    }
+    .rating {
+      height: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      svg {
+        fill: @color-shine;
+      }
+      span {
+        font-size: 12px;
+        padding: 0 4px;
+        color: @color-solid-64;
+      }
+    }
+  }
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  margin-bottom: 8px;
+  > a {
+    display: flex;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 16px;
+    border-bottom: 2px solid transparent;
+    line-height: 21px;
+    &.active {
+      color: #004DA6;
+      border-bottom: 2px solid @color-bg-pending-wire;
+    }
   }
 }

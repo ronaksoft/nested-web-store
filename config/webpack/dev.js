@@ -4,6 +4,7 @@ var webpack = require('webpack');
 var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+var CopyAssetsPlugin = require('./copy-asset-plugin');
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const extractLess = new ExtractTextPlugin({
@@ -99,6 +100,7 @@ var config = {
 
   plugins: [
     new CheckerPlugin(),
+    new CopyAssetsPlugin(),
     new webpack.LoaderOptionsPlugin({
       debug: true,
       options: {
@@ -119,33 +121,5 @@ var config = {
     new webpack.HotModuleReplacementPlugin()
   ]
 };
-
-const copySync = (src, dest, overwrite) => {
-  if (overwrite && fs.existsSync(dest)) {
-    fs.unlinkSync(dest);
-  }
-  const data = fs.readFileSync(src);
-  fs.writeFileSync(dest, data);
-}
-
-const createIfDoesntExist = dest => {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest);
-  }
-}
-
-createIfDoesntExist('./build');
-createIfDoesntExist('./build/public');
-createIfDoesntExist('./build/public/images');
-copySync('./src/favicon.ico', './build/public/favicon.ico', true);
-copySync('./src/manifest.json', './build/public/manifest.json', true);
-copySync('./src/app/assets/images/nested-24.png', './build/public/images/nested-24.png', true);
-copySync('./src/app/assets/images/nested-48.png', './build/public/images/nested-48.png', true);
-copySync('./src/app/assets/images/nested-72.png', './build/public/images/nested-72.png', true);
-copySync('./src/app/assets/images/nested-96.png', './build/public/images/nested-96.png', true);
-copySync('./src/app/assets/images/nested-144.png', './build/public/images/nested-144.png', true);
-copySync('./src/app/assets/images/nested-168.png', './build/public/images/nested-168.png', true);
-copySync('./src/app/assets/images/nested-192.png', './build/public/images/nested-192.png', true);
-copySync('./src/app/assets/images/nested-512.png', './build/public/images/nested-512.png', true);
 
 module.exports = config;

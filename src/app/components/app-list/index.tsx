@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Translate} from 'components';
-
+import { Link } from 'react-router';
 interface IProps {
     items: any[];
     mode?: string;
@@ -35,7 +35,7 @@ export default class AppList extends React.Component<IProps, IState> {
             </div>
             <div className="list-body">
                 {this.state.items.map((item, index) => (
-                    <a key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
+                    <Link to={'/app/' + item.id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
                         <div className="app-image">
                             <img src={require('../../assets/icons/absents_place.svg')} alt=""/>
                             {!isMini && (
@@ -48,7 +48,7 @@ export default class AppList extends React.Component<IProps, IState> {
                             <h4>{item.name}</h4>
                             <aside><Translate>{item.category}</Translate></aside>
                         </div>
-                    </a>
+                    </Link>
                 ))}
             </div>
           </div>

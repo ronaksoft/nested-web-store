@@ -66,12 +66,6 @@ class Container extends React.Component<IProps, IState> {
               <a>
                 <Translate>App Store</Translate>
               </a>
-              <button onClick={reactTranslateChangeLanguage.bind(this, 'en')}>
-                English
-              </button>
-              <button onClick={reactTranslateChangeLanguage.bind(this, 'fa')}>
-                Farsi
-              </button>
               <div className="filler"/>
               <a><Translate>Browse</Translate></a>
               <button className="butn"><Translate>Sign in</Translate></button>
@@ -87,6 +81,13 @@ class Container extends React.Component<IProps, IState> {
                     className="logo-type"/>
                 </div>
                 <span>App Store</span>
+                <div className="languages">
+                  <img onClick={reactTranslateChangeLanguage.bind(this, 'en')} alt="EN" className="lng-en"
+                    src="/public/assets/images/en-logo.png" srcSet="/public/assets/images/en-logo@2x.png"/>
+                  <div className="devider"/>
+                  <img src="/public/assets/images/fa-logo.png" srcSet="/public/assets/images/fa-logo@2x.png"
+                    onClick={reactTranslateChangeLanguage.bind(this, 'fa')} alt="FA" className="lng-fa"/>
+                </div>
               </div>
               <div>
                 <h6><Translate>NESTED</Translate></h6>

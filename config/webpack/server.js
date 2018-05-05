@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CopyAssetsPlugin = require('./copy-asset-plugin');
 const extractLess = new ExtractTextPlugin({
   filename: "[name].[contenthash].css",
   disable: process.env.NODE_ENV === "development"
@@ -84,6 +85,7 @@ var config = {
 
   plugins: [
     extractLess,
+    new CopyAssetsPlugin(),
     new webpack.LoaderOptionsPlugin({
       debug: false,
     })
@@ -98,23 +100,5 @@ var config = {
     __dirname: false
   }
 };
-
-const copySync = (src, dest, overwrite) => {
-  if (overwrite && fs.existsSync(dest)) {
-    fs.unlinkSync(dest);
-  }
-  const data = fs.readFileSync(src);
-  fs.writeFileSync(dest, data);
-}
-
-const createIfDoesntExist = dest => {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest);
-  }
-}
-
-createIfDoesntExist('./build');
-createIfDoesntExist('./build/public');
-copySync('./src/favicon.ico', './build/public/favicon.ico', true);
 
 module.exports = config;
