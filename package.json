@@ -11,6 +11,7 @@
     "prestart": "npm run build",
     "start": "node build/server.js",
     "start:prod": "cross-env NODE_ENV=production npm start",
+    "postbuild": "webpack --config config/webpack/server.js",
     "test": "karma start config/test/karma.conf.js",
     "lint": "tslint \"src/**/**.ts*\"",
     "doc": "typedoc --out ./doc ./src"
