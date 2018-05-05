@@ -10,6 +10,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 // import {browserHistory} from 'react-router';
+import {Link} from 'react-router';
 import {login, logout} from 'redux/app/actions';
 import './main.less';
 import AppView from './view/';
@@ -82,9 +83,9 @@ class Container extends React.Component<IProps, IState> {
               <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"
                 className="logo-type"/>
               <div className="devider"/>
-              <a>
+              <Link to="/">
                 <Translate>App Store</Translate>
-              </a>
+              </Link>
               <div className="filler"/>
               <a><Translate>Browse</Translate></a>
               <button className="butn"><Translate>Sign in</Translate></button>
