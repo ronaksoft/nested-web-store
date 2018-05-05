@@ -1,6 +1,20 @@
 import * as React from 'react';
 import {Translate, AppList, IcoN} from 'components';
-class AppView extends React.Component<any, any> {
+import { Link } from 'react-router';
+interface IProps {
+  app: string;
+  /**
+   * @prop routeParams
+   * @desc The parameters are given by React Router
+   * @type {*}
+   * @memberof IOwnProps
+   */
+  routeParams?: any;
+};
+interface IState {
+  activeTab: number;
+};
+class AppView extends React.Component<IProps, IState> {
 
   /**
    * @constructor
@@ -10,6 +24,9 @@ class AppView extends React.Component<any, any> {
    */
   constructor(props: any) {
     super(props);
+    this.state = {
+      activeTab: 0,
+    };
   }
 
   /**
@@ -20,6 +37,8 @@ class AppView extends React.Component<any, any> {
    * @generator
    */
   public render() {
+    console.log(this.props);
+    const {activeTab} = this.state;
     return (
       <div className="main-container">
         <div className="main-container-inner vertical">
@@ -47,10 +66,16 @@ class AppView extends React.Component<any, any> {
                 <span>4/5</span>
               </div>
               <div className="tabs">
-                <a href="" className="active"><Translate>App info</Translate></a>
-                <a href=""><Translate>Pictures</Translate></a>
-                <a href=""><Translate>Permissions</Translate></a>
-                <a href=""><Translate>Reviews</Translate></a>
+                <Link to={{pathname: '/app/' + this.props.routeParams.appid + '#info'}}
+                  className={activeTab === 0 ? 'active' : ''}>
+                  <Translate>App info</Translate>
+                </Link>
+                <Link to={{pathname: '/app/' + this.props.routeParams.appid + '#pictures'}}
+                  className={activeTab === 1 ? 'active' : ''}>
+                  <Translate>Pictures</Translate>
+                </Link>
+                <a href="" className={activeTab === 2 ? 'active' : ''}><Translate>Permissions</Translate></a>
+                <a href="" className={activeTab === 3 ? 'active' : ''}><Translate>Reviews</Translate></a>
               </div>
               <div className="tabs-content">
                 asdasdasdasd
