@@ -117,7 +117,28 @@ class AppView extends React.Component<IProps, IState> {
                   </div>
                 )}
                 {activeTab === 3 && (
-                  <div>d</div>
+                  <div>
+                    <ul className="reviews">
+                      <li>
+                        <div className="rev-logo">
+                          <img src="" alt=""/>
+                        </div>
+                        <div className="rev-info">
+                          <h4>
+                            Personal Info
+                            <div className="rating">
+                              <IcoN name="star16" size={16}/>
+                              <IcoN name="star16" size={16}/>
+                              <IcoN name="star16" size={16}/>
+                              <IcoN name="starWire16" size={16}/>
+                              <IcoN name="starWire16" size={16}/>
+                            </div>
+                          </h4>
+                          <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
                 )}
               </div>
             </div>
