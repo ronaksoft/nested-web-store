@@ -71,7 +71,7 @@ class Html extends React.Component<IHtmlProps, {}> {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
       </head>
       <body>
-      <main id="app" dangerouslySetInnerHTML={{__html: markup}}/>
+      <main className="nested-main" id="app" dangerouslySetInnerHTML={{__html: markup}}/>
         {initialState}
         {nestedConfig}
         {renderScripts}

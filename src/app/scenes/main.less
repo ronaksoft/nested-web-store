@@ -54,7 +54,7 @@ a {
 a:-webkit-any-link {
   color: @color-solid;
 }
-main {
+.nested-main {
   padding-top: 64px;
 }
 .navbar-wrapper {
@@ -596,6 +596,31 @@ footer {
     &.active {
       color: #004DA6;
       border-bottom: 2px solid @color-bg-pending-wire;
+    }
+  }
+}
+.tabs-content {
+  .permissions {
+    li {
+      display: flex;
+      .per-icon {
+        display: flex;
+        height: 100%;
+        flex: none;
+        padding: 3px 16px 0 0;
+      }
+      .per-info {
+        padding-left: 6px;
+        border-left: 1px solid @color-wind-new;
+        h4 {
+          font-weight: bold;
+          font-size: 16px;
+          margin-bottom: 4px;
+        }
+        p {
+          font-size: 12px;
+        }
+      }
     }
   }
 }
