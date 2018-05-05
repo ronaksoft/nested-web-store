@@ -11,7 +11,7 @@ var CopyAssetsPlugin = require('./copy-asset-plugin');
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const extractLess = new ExtractTextPlugin({
-  filename: "[name].[contenthash].css",
+  filename: "public/css/[name].[contenthash].css",
   disable: process.env.NODE_ENV === "development"
 });
 
@@ -42,7 +42,7 @@ var config = {
   output: {
     path: path.resolve('./build/'),
     publicPath: '/',
-    filename: 'js/[name].[chunkhash].js'
+    filename: 'public/js/[name].[chunkhash].js'
   },
 
   module: {
@@ -106,19 +106,19 @@ var config = {
       },
       {
         test: /\.eot(\?.*)?$/,
-        loader: 'file-loader?name=fonts/[hash].[ext]'
+        loader: 'file-loader?name=public/fonts/[hash].[ext]'
       },
       {
         test: /\.(woff|woff2)(\?.*)?$/,
-        loader: 'file-loader?name=fonts/[hash].[ext]'
+        loader: 'file-loader?name=public/fonts/[hash].[ext]'
       },
       {
         test: /\.ttf(\?.*)?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/octet-stream&name=fonts/[hash].[ext]'
+        loader: 'url-loader?limit=10000&mimetype=application/octet-stream&name=public/fonts/[hash].[ext]'
       },
       {
         test: /\.svg(\?.*)?$/,
-        loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=fonts/[hash].[ext]'
+        loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=public/fonts/[hash].[ext]'
       },
       {
         test: /\.(jpe?g|png|gif)$/i,
@@ -131,25 +131,6 @@ var config = {
     extractLess,
     new WebpackCleanupPlugin(),
     new CopyAssetsPlugin(),
-    new webpack.LoaderOptionsPlugin({
-      debug: true,
-      options: {
-        tslint: {
-          failOnHint: true
-        },
-        postcss: function () {
-          return [
-            stylelint({
-              files: '../../src/app/*.css'
-            }),
-            postcssNext(),
-            postcssAssets({
-              relative: true
-            }),
-          ];
-        },
-      }
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         BROWSER: JSON.stringify(true),
@@ -165,9 +146,9 @@ var config = {
       }
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
-    new ExtractTextPlugin('css/[name].[hash].css'),
+    new ExtractTextPlugin('public/css/[name].[hash].css'),
     new ManifestPlugin({
-      fileName: '../manifest.json'
+      fileName: './public/manifest.json'
     }),
     new HtmlWebpackPlugin({
       template: './src/template.html',
