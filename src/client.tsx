@@ -19,6 +19,11 @@ const store = configureStore(
 );
 const history = syncHistoryWithStore(browserHistory, store);
 const connectedCmp = (props) => <ReduxAsyncConnect {...props} />;
+console.log('__INITIAL_DATA__', window.__INITIAL_DATA__);
+
+if (!window.__INITIAL_DATA__) {
+  window.__INITIAL_DATA__ = {};
+}
 
 ReactDOM.render(
   <Provider store={store} key="provider">

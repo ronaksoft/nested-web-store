@@ -16,15 +16,19 @@ import AppView from './view/';
 import Main from './main/';
 import {IUser} from 'api/interfaces';
 
-import {Translate, reactTranslateChangeLanguage} from 'components';
+import {Translate} from 'components';
+import {translateChangeLanguag} from 'components/i18n/reactTranslateChangeLanguage';
 interface IState {
   isLogin: boolean;
+  user: any[];
+  lang: string;
 };
 
 interface IProps {
   isLogin: boolean;
   user: IUser;
   params: string;
+  language: string;
   setLogin: (user: IUser) => {};
   setLogout: () => {};
 }
@@ -33,18 +37,33 @@ class Container extends React.Component<IProps, IState> {
 
   public constructor(props: IProps) {
     super(props);
-
+    let initData: any;
+    if (typeof window !== 'undefined') {
+      initData = window;
+    }
+    // const win = window || {initailData: null};
     /**
      * @default this.state
      * @type {IState}
      */
-    this.state = {
-      isLogin: false,
-    };
+    if (initData) {
+      this.state = {
+        isLogin: false,
+        user: initData.__INITIAL_DATA__.user || [],
+        lang: initData.__INITIAL_DATA__.locale || this.props.language || 'en',
+      };
+    } else {
+      this.state = {
+        isLogin: false,
+        user: [],
+        lang: 'en',
+      };
+    }
   }
 
   public componentDidMount() {
-    // reactTranslateChangeLanguage('fa');
+    console.log(this.props.language);
+    translateChangeLanguag(this.state.lang);
   }
 
   /**
@@ -82,11 +101,11 @@ class Container extends React.Component<IProps, IState> {
                 </div>
                 <span>App Store</span>
                 <div className="languages">
-                  <img onClick={reactTranslateChangeLanguage.bind(this, 'en')} alt="EN" className="lng-en"
+                  <img onClick={translateChangeLanguag.bind(this, 'en')} alt="EN" className="lng-en"
                     src="/public/assets/images/en-logo.png" srcSet="/public/assets/images/en-logo@2x.png"/>
                   <div className="devider"/>
                   <img src="/public/assets/images/fa-logo.png" srcSet="/public/assets/images/fa-logo@2x.png"
-                    onClick={reactTranslateChangeLanguage.bind(this, 'fa')} alt="FA" className="lng-fa"/>
+                    onClick={translateChangeLanguag.bind(this, 'fa')} alt="FA" className="lng-fa"/>
                 </div>
               </div>
               <div>
@@ -129,6 +148,7 @@ class Container extends React.Component<IProps, IState> {
 const mapStateToProps = (store) => ({
   isLogin: store.app.isLogin,
   user: store.app.user,
+  language: store.app.language,
 });
 
 /**

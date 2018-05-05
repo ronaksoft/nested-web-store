@@ -1,12 +1,17 @@
 import * as React from 'react';
 import AppSearch from 'components/app-search';
-// import {Link} from 'react-router';
+interface IState {
+  slides: any[];
+  recentApps: any[];
+  featuredApps: any[];
+  categories: any[];
+};
 
 // import {sortBy} from 'lodash';
 // import {IcoN, Loading, InfiniteScroll} from 'components';
 
 import {Translate, AppList} from 'components';
-class Main extends React.Component<any, any> {
+class Main extends React.Component<any, IState> {
 
   /**
    * @constructor
@@ -16,6 +21,26 @@ class Main extends React.Component<any, any> {
    */
   constructor(props: any) {
     super(props);
+    let initData: any;
+    if (typeof window !== 'undefined') {
+      initData = window;
+    }
+    if (initData) {
+      this.state = {
+        slides: initData.__INITIAL_DATA__.slides || [],
+        recentApps: initData.__INITIAL_DATA__.recent_apps || [],
+        featuredApps: initData.__INITIAL_DATA__.featured_apps || [],
+        categories: initData.__INITIAL_DATA__.categories || [],
+      };
+      initData.__INITIAL_DATA__ = {};
+    } else {
+      this.state = {
+        slides: [],
+        recentApps: [],
+        featuredApps: [],
+        categories: [],
+      };
+    }
   }
 
   /**

@@ -12,3 +12,5 @@ export const APP_LOGOUT: string = 'APP/LOGOUT';
 /** SCROLL POSITIONS ACTION */
 export const APP_SCROLL_POSITION_SET: string = 'APP/SCROLL_SET';
 export const APP_SCROLL_POSITION_UNSET: string = 'APP/SCROLL_UNSET';
+
+export const APP_SET_LANGUAGE: string = 'APP/LANGUAGE_SET';

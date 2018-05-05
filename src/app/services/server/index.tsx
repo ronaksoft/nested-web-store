@@ -108,6 +108,19 @@ class Server {
     };
 
     /**
+     * add Session key and Session ID to the request object
+     * @const
+     * @type {object}
+     */
+    // if (credential.sk && credential.sk !== 'null') {
+    //   socketRequest._sk = credential.sk;
+    // }
+
+    // if (credential.ss && credential.ss !== 'null') {
+    //   socketRequest._ss = credential.ss;
+    // }
+
+    /**
      * Create promise functions for reslove and rejecting the requests
      * @var
      * @callback

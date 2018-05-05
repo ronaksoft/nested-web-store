@@ -13,6 +13,7 @@ interface IProps {
 };
 interface IState {
   activeTab: number;
+  app: any;
 };
 class AppView extends React.Component<IProps, IState> {
   public hashLinks: string[] = ['info', 'pictures', 'permissions', 'reviews'];
@@ -24,9 +25,22 @@ class AppView extends React.Component<IProps, IState> {
    */
   constructor(props: any) {
     super(props);
-    this.state = {
-      activeTab: this.getTabIndexFromHash(this.props.location.hash),
-    };
+    let initData: any;
+    if (typeof window !== 'undefined') {
+      initData = window;
+    }
+    if (initData) {
+      this.state = {
+        activeTab: this.getTabIndexFromHash(this.props.location.hash),
+        app: initData.__INITIAL_DATA__.app || {},
+      };
+      initData.__INITIAL_DATA__ = {};
+    } else {
+      this.state = {
+        activeTab: this.getTabIndexFromHash(this.props.location.hash),
+        app: {},
+      };
+    }
   }
 
   private getTabIndexFromHash(hash) {

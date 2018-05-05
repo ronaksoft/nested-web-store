@@ -11,6 +11,11 @@ const initialState = Immutable.from<IAppAction>({
 
 export default function appReducer(state = initialState, action?: IAppAction) {
   switch (action.type) {
+    case ActionTypes.APP_SET_LANGUAGE:
+      return Immutable.merge(state, {
+        language: action.payload,
+      });
+
     case ActionTypes.APP_LOGIN:
       return Immutable.merge(state, {
         isLogin: true,
