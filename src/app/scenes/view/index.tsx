@@ -99,7 +99,9 @@ class AppView extends React.Component<IProps, IState> {
                   <div>a</div>
                 )}
                 {activeTab === 1 && (
-                  <div>b</div>
+                  <div className="pictures">
+                    <img src="" alt=""/>
+                  </div>
                 )}
                 {activeTab === 2 && (
                   <div>
