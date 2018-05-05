@@ -9,7 +9,7 @@
   },
   "Browse": {
     "en": "Browse",
-    "fa": "Browse"
+    "fa": "مرور کردن"
   },
   "NESTED": {
     "en": "",
@@ -17,11 +17,11 @@
   },
   "Features": {
     "en": "",
-    "fa": ""
+    "fa": "ویژگی‌ها"
   },
   "Get Nested app": {
     "en": "",
-    "fa": ""
+    "fa": "دریافت اپ نستد"
   },
   "COMPANY": {
     "en": "",
@@ -89,22 +89,54 @@
   },
   "Categories": {
     "en": "",
-    "fa": ""
+    "fa": "موضوعات"
   },
   "Featured Apps": {
     "en": "",
     "fa": ""
   },
   "See more": {
-    "en": "",
-    "fa": ""
+    "en": "See more",
+    "fa": "نمایش بیشتر"
   },
   "Most Recents": {
     "en": "",
-    "fa": ""
+    "fa": "جدیدترین‌ها"
   },
   "Search for apps...": {
     "en": "",
+    "fa": "جستجو برای Apps"
+  },
+  "{item.category}": {
+    "en": "",
     "fa": ""
+  },
+  "Install App": {
+    "en": "",
+    "fa": "نصب اپلیکیشن"
+  },
+  "Report this app": {
+    "en": "",
+    "fa": "گزارش تخلف"
+  },
+  "App info": {
+    "en": "",
+    "fa": "توضیحات"
+  },
+  "Pictures": {
+    "en": "",
+    "fa": "تصاویر"
+  },
+  "Permissions": {
+    "en": "",
+    "fa": "دسترسی‌ها"
+  },
+  "Reviews": {
+    "en": "",
+    "fa": "بررسی کاربران"
+  },
+  "Similar apps": {
+    "en": "",
+    "fa": "اپ‌های مشابه"
   }
 }
