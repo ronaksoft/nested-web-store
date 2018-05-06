@@ -6,11 +6,11 @@ interface IProps {
     mode?: string;
     title: any;
     haveMore: boolean;
-};
+}
 
 interface IState {
     items: any[];
-};
+}
 
 export default class AppList extends React.Component<IProps, IState> {
   private translator: Translate;

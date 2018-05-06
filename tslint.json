@@ -28,5 +28,10 @@
       false
     ],
     "jsx-no-multiline-js" : false
+  },
+  "linterOptions": {
+    "exclude": [
+      "./node_modules/*.d.ts"
+    ]
   }
 }
