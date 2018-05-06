@@ -78,8 +78,8 @@ class Container extends React.Component<IProps, IState> {
         <div>
           <nav className="navbar-wrapper">
             <div className="navbar">
-              <img src={require('../assets/icons/Nested_LogoNegative.svg')} alt="Nested" className="logo"/>
-              <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"
+              <img src="/public/assets/icons/Nested_LogoNegative.svg" alt="Nested" className="logo"/>
+              <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
                 className="logo-type"/>
               <div className="devider"/>
               <Link to="/">
@@ -95,11 +95,11 @@ class Container extends React.Component<IProps, IState> {
             <div className="footer-inner">
               <div className="_aic">
                 <div className="nested">
-                  <img src={require('../assets/icons/Nested_LogoNegative.svg')} alt="Nested" className="logo"/>
-                  <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"
+                  <img src="/public/assets/icons/Nested_LogoNegative.svg" alt="Nested" className="logo"/>
+                  <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
                     className="logo-type"/>
                 </div>
-                <span>App Store</span>
+                <Translate>App Store</Translate>
                 <div className="languages">
                   <img onClick={reactTranslateChangeLanguage.bind(this, 'en')} alt="EN" className="lng-en"
                     src="/public/assets/images/en-logo.png" srcSet="/public/assets/images/en-logo@2x.png"/>
