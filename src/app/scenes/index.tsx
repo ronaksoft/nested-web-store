@@ -81,6 +81,8 @@ class Container extends React.Component<IProps, IState> {
               <img src="/public/assets/icons/Nested_LogoNegative.svg" alt="Nested" className="logo"/>
               <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
                 className="logo-type"/>
+              <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" alt="Nested"
+                className="logo-type fa"/>
               <div className="devider"/>
               <Link to="/">
                 <Translate>App Store</Translate>
@@ -98,6 +100,8 @@ class Container extends React.Component<IProps, IState> {
                   <img src="/public/assets/icons/Nested_LogoNegative.svg" alt="Nested" className="logo"/>
                   <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
                     className="logo-type"/>
+                  <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" alt="Nested"
+                    className="logo-type fa"/>
                 </div>
                 <Translate>App Store</Translate>
                 <div className="languages">
