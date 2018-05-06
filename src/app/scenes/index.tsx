@@ -15,6 +15,7 @@ import {login, logout} from 'redux/app/actions';
 import './main.less';
 import AppView from './view/';
 import Main from './main/';
+import AdminApp from './admin/app';
 import {IUser} from 'api/interfaces';
 import * as Cookies from 'cookies-js';
 
@@ -24,7 +25,7 @@ interface IState {
   isLogin: boolean;
   user: any[];
   lang: string;
-};
+}
 
 interface IProps {
   isLogin: boolean;
@@ -173,5 +174,5 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
-  Main, AppView
+  Main, AppView, AdminApp
 };
