@@ -2,7 +2,7 @@ import * as React from 'react';
 const translations = require('./translations.json');
 // import translations from './translations';
 interface IState {
-    language: string;
+  language: string;
 }
 export default class Translate extends React.Component <any, IState> {
   private translations: any;
@@ -11,12 +11,22 @@ export default class Translate extends React.Component <any, IState> {
 
   public constructor(props = {}) {
     super(props);
+    let win: any;
+    if (typeof window !== 'undefined') {
+      win = window;
+    }
     this.translations = translations;
     this.defaultLanguage = 'en';
     this.debugMode = false;
-    this.state = {
-      language: this.defaultLanguage,
-    };
+    if (win) {
+      this.state = {
+        language: win.locale || this.defaultLanguage,
+      };
+    } else {
+      this.state = {
+        language: this.defaultLanguage,
+      };
+    }
   }
 
   public componentDidMount() {
@@ -29,10 +39,11 @@ export default class Translate extends React.Component <any, IState> {
     );
   }
 
-  public _getText(text) {
-    if (this.state.language !== this.defaultLanguage && text) {
-      if (this.translations[text] && this.translations[text][this.state.language]) {
-        return this.translations[text][this.state.language];
+  public _getText(text, locale?) {
+    const lng = locale || this.state.language;
+    if (text) {
+      if (this.translations[text] && this.translations[text][lng]) {
+        return this.translations[text][lng];
       }
     }
     return text;

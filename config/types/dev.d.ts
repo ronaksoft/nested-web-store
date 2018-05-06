@@ -8,7 +8,7 @@ interface Window {
   __INITIAL_STATE__?: any;
   __NESTED_CONFIG__?: any;
   __INITIAL_DATA__?: any;
-  initailData?: any;
+  locale?: string;
 }
 
 interface ObjectConstructor {

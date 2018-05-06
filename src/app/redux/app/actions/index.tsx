@@ -23,13 +23,6 @@ export function userUnset(): IAppAction {
   };
 }
 
-export function setLang(language: string): IAppAction {
-  return {
-    type: ActionTypes.APP_SET_LANGUAGE,
-    payload: language,
-  };
-}
-
 export function login(user: IUser): IAppAction {
   return {
     type: ActionTypes.APP_LOGIN,

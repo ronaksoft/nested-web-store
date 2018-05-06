@@ -90,6 +90,19 @@ export default class AppSearch extends React.Component<any, IState> {
       );
   }
 
+  public componentDidMount() {
+    window.addEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
+  private updateLang = () => {
+    this.translator = new Translate();
+    this.forceUpdate();
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
   /**
    * @function render
    * @description Renders the component

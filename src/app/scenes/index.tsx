@@ -18,7 +18,7 @@ import Main from './main/';
 import {IUser} from 'api/interfaces';
 
 import {Translate} from 'components';
-import {translateChangeLanguag} from 'components/i18n/reactTranslateChangeLanguage';
+import {reactTranslateChangeLanguage} from 'components/';
 interface IState {
   isLogin: boolean;
   user: any[];
@@ -29,7 +29,6 @@ interface IProps {
   isLogin: boolean;
   user: IUser;
   params: string;
-  language: string;
   setLogin: (user: IUser) => {};
   setLogout: () => {};
 }
@@ -51,7 +50,7 @@ class Container extends React.Component<IProps, IState> {
       this.state = {
         isLogin: false,
         user: initData.__INITIAL_DATA__.user || [],
-        lang: initData.__INITIAL_DATA__.locale || this.props.language || 'en',
+        lang: initData.__INITIAL_DATA__.locale || 'en', // from browser
       };
     } else {
       this.state = {
@@ -63,8 +62,7 @@ class Container extends React.Component<IProps, IState> {
   }
 
   public componentDidMount() {
-    console.log(this.props.language);
-    translateChangeLanguag(this.state.lang);
+    reactTranslateChangeLanguage(this.state.lang);
   }
 
   /**
@@ -77,7 +75,7 @@ class Container extends React.Component<IProps, IState> {
   public render() {
     return (
         <div>
-          <div className="navbar-wrapper">
+          <nav className="navbar-wrapper">
             <div className="navbar">
               <img src={require('../assets/icons/Nested_LogoNegative.svg')} alt="Nested" className="logo"/>
               <img src={require('../assets/icons/Nested_EnglishTypeNegative.svg')} alt="Nested"
@@ -90,7 +88,7 @@ class Container extends React.Component<IProps, IState> {
               <a><Translate>Browse</Translate></a>
               <button className="butn"><Translate>Sign in</Translate></button>
             </div>
-          </div>
+          </nav>
           {this.props.children}
           <footer>
             <div className="footer-inner">
@@ -102,11 +100,11 @@ class Container extends React.Component<IProps, IState> {
                 </div>
                 <span>App Store</span>
                 <div className="languages">
-                  <img onClick={translateChangeLanguag.bind(this, 'en')} alt="EN" className="lng-en"
+                  <img onClick={reactTranslateChangeLanguage.bind(this, 'en')} alt="EN" className="lng-en"
                     src="/public/assets/images/en-logo.png" srcSet="/public/assets/images/en-logo@2x.png"/>
                   <div className="devider"/>
                   <img src="/public/assets/images/fa-logo.png" srcSet="/public/assets/images/fa-logo@2x.png"
-                    onClick={translateChangeLanguag.bind(this, 'fa')} alt="FA" className="lng-fa"/>
+                    onClick={reactTranslateChangeLanguage.bind(this, 'fa')} alt="FA" className="lng-fa"/>
                 </div>
               </div>
               <div>
@@ -149,7 +147,6 @@ class Container extends React.Component<IProps, IState> {
 const mapStateToProps = (store) => ({
   isLogin: store.app.isLogin,
   user: store.app.user,
-  language: store.app.language,
 });
 
 /**
