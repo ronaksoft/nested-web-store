@@ -95,8 +95,10 @@ export default class AppSearch extends React.Component<any, IState> {
   }
 
   private updateLang = () => {
-    this.translator = new Translate();
-    this.forceUpdate();
+    setTimeout(() => {
+      this.translator = new Translate();
+      this.forceUpdate();
+    }, 100);
   }
 
   public componentWillUnmount() {

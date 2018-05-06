@@ -16,6 +16,7 @@ import './main.less';
 import AppView from './view/';
 import Main from './main/';
 import {IUser} from 'api/interfaces';
+import * as Cookies from 'cookies-js';
 
 import {Translate} from 'components';
 import {reactTranslateChangeLanguage} from 'components/';
@@ -50,7 +51,7 @@ class Container extends React.Component<IProps, IState> {
       this.state = {
         isLogin: false,
         user: initData.__INITIAL_DATA__.user || [],
-        lang: initData.__INITIAL_DATA__.locale || 'en', // from browser
+        lang: initData.__INITIAL_DATA__.locale || Cookies.get('locale') || 'en', // from browser
       };
     } else {
       this.state = {

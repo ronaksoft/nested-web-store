@@ -1,5 +1,6 @@
 import * as React from 'react';
 const translations = require('./translations.json');
+
 // import translations from './translations';
 interface IState {
   language: string;
