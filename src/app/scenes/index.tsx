@@ -126,7 +126,7 @@ class Container extends React.Component<IProps, IState> {
                 <a href=""><Translate>Terms & Conditions</Translate></a>
               </div>
               <div>
-                <h6><Translate>SOCIAL NETWORKS</Translate></h6>
+                {/* <h6><Translate>SOCIAL NETWORKS</Translate></h6> */}
                 <a href=""><Translate>Blog</Translate></a>
                 <a href=""><Translate>Twitter</Translate></a>
                 <a href=""><Translate>Facebook</Translate></a>
