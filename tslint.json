@@ -16,6 +16,8 @@
     "align": [false],
     "no-var-requires": false,
     "ordered-imports": false,
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": false,
     "member-ordering": [
       false
     ],

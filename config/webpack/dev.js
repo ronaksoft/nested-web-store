@@ -40,8 +40,8 @@ var config = {
   module: {
     rules: [{
         enforce: 'pre',
-        test: /\.tsx?$/,
-        loader: 'tslint-loader'
+        test: /\.(tsx|ts)?$/,
+        loader: 'tslint-loader',
       },
       {
         loader: 'babel-loader',
@@ -53,7 +53,7 @@ var config = {
       },
       {
         test: /\.tsx?$/,
-        loader: ['babel-loader?plugins=react-hot-loader/babel', 'awesome-typescript-loader']
+        loader: ['babel-loader?plugins=react-hot-loader/babel', 'awesome-typescript-loader'],
       },
       {
         test: /\.jsx$/,
