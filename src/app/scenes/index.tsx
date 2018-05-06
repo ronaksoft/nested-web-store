@@ -128,7 +128,7 @@ class Container extends React.Component<IProps, IState> {
                 <h6><Translate>SUPPORT</Translate></h6>
                 <a href=""><Translate>Help center</Translate></a>
                 <a href=""><Translate>Contact us</Translate></a>
-                <a href=""><Translate>Terms & Conditions</Translate></a>
+                <a href=""><Translate>Terms &amp; Conditions</Translate></a>
               </div>
               <div>
                 {/* <h6><Translate>SOCIAL NETWORKS</Translate></h6> */}
@@ -174,5 +174,5 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
-  Main, AppView, AdminApp
+  Main, AppView, AdminApp,
 };

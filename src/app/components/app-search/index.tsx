@@ -6,7 +6,7 @@ import Highlighter from 'react-highlight-words';
 interface IState {
     value: string;
     suggestions: any[];
-};
+}
 
 export default class AppSearch extends React.Component<any, IState> {
   private translator: Translate;

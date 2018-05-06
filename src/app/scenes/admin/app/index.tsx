@@ -63,10 +63,10 @@ class AdminApp extends React.Component<IProps, IState> {
       <div className="main-container">
         <div className="main-container-inner vertical">
           <Row>
-            <Col md={6}>
+            <Col md={12}>
               <Input/>
             </Col>
-            <Col md={6}>
+            <Col md={12}>
               <Upload/>
             </Col>
           </Row>

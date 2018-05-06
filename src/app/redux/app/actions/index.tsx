@@ -1,4 +1,3 @@
-import {} from '../IAppStore';
 import * as ActionTypes from './types';
 import {IUser} from 'api/interfaces';
 import {IAppAction} from '../IAppStore';

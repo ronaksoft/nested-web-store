@@ -87,4 +87,4 @@ class Loading extends React.Component<IProps, IState> {
   }
 }
 
-export {Loading}
+export {Loading};

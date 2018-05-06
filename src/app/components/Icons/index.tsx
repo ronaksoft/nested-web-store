@@ -41,7 +41,7 @@ class IcoN extends React.Component<IOptionsMenuProps, any> {
      */
     let width;
     let height;
-    const size = this.props.size.toString() || this.props.name.replace( /^\D+/g, '').toString();
+    const size = this.props.size.toString() || this.props.name.replace(/^\D+/g, '').toString();
     if (size.length === 4) {
       width = size.slice(0, 2);
       height = size.slice(2, 4);
@@ -57,4 +57,4 @@ class IcoN extends React.Component<IOptionsMenuProps, any> {
   }
 }
 
-export {IcoN}
+export {IcoN};

@@ -111,4 +111,4 @@ class PlaceChips extends React.Component<IChipsProps, IChipsState> {
   }
 }
 
-export {PlaceChips, IChipsItem}
+export {PlaceChips, IChipsItem};
