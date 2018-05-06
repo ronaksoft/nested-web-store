@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, AppList, IcoN} from 'components';
+import {Translate, AppList, IcoN, Rating} from 'components';
 
 interface IProps {
   app: string;
@@ -138,6 +138,7 @@ class AppView extends React.Component<IProps, IState> {
                 )}
                 {activeTab === 3 && (
                   <div>
+                    <Rating appId="aaa"/>
                     <ul className="reviews">
                       <li>
                         <div className="rev-logo">

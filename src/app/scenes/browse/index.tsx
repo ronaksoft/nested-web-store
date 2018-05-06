@@ -11,7 +11,7 @@ interface IState {
 // import {IcoN, Loading, InfiniteScroll} from 'components';
 
 import {Translate, AppList} from 'components';
-class Main extends React.Component<any, IState> {
+class Browse extends React.Component<any, IState> {
 
   /**
    * @constructor
@@ -52,90 +52,56 @@ class Main extends React.Component<any, IState> {
    */
   public render() {
     return (
-      <div>
-        <div className="jumbotron">
-          <div className="bg-left">
-            <img src={require('../../assets/icons/jumbo-bg-left.svg')} alt="Nested" className="logo"/>
-            <img src={require('../../assets/icons/jumbo-bg-top.svg')} alt="Nested" className="logo"/>
+      <div className="main-container">
+        <div className="main-container-inner">
+          <div className="sidebar">
+            <h3><Translate>Categories</Translate></h3>
+            <ul>
+              <li>Bots</li>
+              <li>Communication</li>
+            </ul>
           </div>
-          <div className="bg-right">
-            <img src={require('../../assets/icons/jumbo-bg-right.svg')} alt="Nested" className="logo"/>
-            <img src={require('../../assets/icons/jumbo-bg-bottom.svg')} alt="Nested" className="logo"/>
-          </div>
-          <div className="content">
-            <h2><Translate>Make it easier!</Translate></h2>
-            <p><Translate>Add useful apps to you workspace.</Translate></p>
-            <div className="featureds">
-              <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
-              </a>
-              <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
-              </a>
-              <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
-              </a>
-              <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
-              </a>
-              <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
-              </a>
-            </div>
+          <div className="apps-wrapper">
+            <AppSearch/>
+            <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={[
+              {
+                id: 'a',
+                name: 'Google Assisstant',
+                category: 'Customer Support',
+              },
+              {
+                id: 'b',
+                name: 'Google Assisstant',
+                category: 'Customer Support',
+              },
+              {
+                id: 'v',
+                name: 'Google Assisstant',
+                category: 'Customer Support',
+              },
+            ]}/>
+            <AppList title={<Translate>Most Recents</Translate>} haveMore={true} items={[
+              {
+                id: 'a',
+                name: 'Google Assisstant',
+                category: 'Customer Support',
+              },
+              {
+                id: 'b',
+                name: 'Google Assisstant',
+                category: 'Customer Support',
+              },
+              {
+                id: 'v',
+                name: 'Google Assisstant',
+                category: 'Customer Support',
+              },
+            ]}/>
           </div>
         </div>
-
-        <div className="main-container">
-            <div className="main-container-inner">
-              <div className="sidebar">
-                <h3><Translate>Categories</Translate></h3>
-                <ul>
-                  <li>Bots</li>
-                  <li>Communication</li>
-                </ul>
-              </div>
-              <div className="apps-wrapper">
-                <AppSearch/>
-                <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={[
-                  {
-                    id: 'a',
-                    name: 'Google Assisstant',
-                    category: 'Customer Support',
-                  },
-                  {
-                    id: 'b',
-                    name: 'Google Assisstant',
-                    category: 'Customer Support',
-                  },
-                  {
-                    id: 'v',
-                    name: 'Google Assisstant',
-                    category: 'Customer Support',
-                  },
-                ]}/>
-                <AppList title={<Translate>Most Recents</Translate>} haveMore={true} items={[
-                  {
-                    id: 'a',
-                    name: 'Google Assisstant',
-                    category: 'Customer Support',
-                  },
-                  {
-                    id: 'b',
-                    name: 'Google Assisstant',
-                    category: 'Customer Support',
-                  },
-                  {
-                    id: 'v',
-                    name: 'Google Assisstant',
-                    category: 'Customer Support',
-                  },
-                ]}/>
-              </div>
-            </div>
-          </div>
       </div>
     );
   }
 }
 
-export default Main;
+export default Browse;

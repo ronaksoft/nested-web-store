@@ -9,7 +9,7 @@ var config = {
   // This part goes to React-Helmet for Head of our HTML
   app: {
     head: {
-      title: 'nested',
+      title: 'Nested App Store',
       titleTemplate: 'nested: %s',
       meta: [
         { charset: 'utf-8' },

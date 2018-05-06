@@ -15,6 +15,7 @@ import {login, logout} from 'redux/app/actions';
 import './main.less';
 import AppView from './view/';
 import Main from './main/';
+import Browse from './browse/';
 import AdminApp from './admin/app';
 import {IUser} from 'api/interfaces';
 import * as Cookies from 'cookies-js';
@@ -89,7 +90,7 @@ class Container extends React.Component<IProps, IState> {
                 <Translate>App Store</Translate>
               </Link>
               <div className="filler"/>
-              <a><Translate>Browse</Translate></a>
+              <Link to="/apps"><Translate>Browse</Translate></Link>
               <button className="butn"><Translate>Sign in</Translate></button>
             </div>
           </nav>
@@ -174,5 +175,5 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
-  Main, AppView, AdminApp
+  Main, AppView, AdminApp, Browse
 };

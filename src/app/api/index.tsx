@@ -15,7 +15,6 @@ class Api {
   private requestKeyList: IRequestKeyList[] = [];
 
   private constructor() {
-    // start api service
     this.syncActivityListeners = {};
   }
 

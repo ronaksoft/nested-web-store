@@ -7,5 +7,6 @@ export {Translate} from './i18n/';
 import RTLDetector from './RTLDetector';
 import AppSearch from './app-search';
 import AppList from './app-list';
+import Rating from './rating';
 
-export {RTLDetector, AppSearch, AppList};
+export {RTLDetector, AppSearch, AppList, Rating};

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AppWrapper, {
-  Main, AppView, AdminApp,
+  Main, AppView, AdminApp, Browse,
 } from 'scenes';
 import NotFound from 'containers/404';
 import {Provider} from 'react-redux';
@@ -16,6 +16,8 @@ export default (
         <IndexRoute component={Main}/>
         <Route path="/" component={Main}/>
         <Route path="/app/:appid" component={AppView}/>
+        <Route path="/apps" component={Browse}/>
+        <Route path="/apps/:cat" component={Browse}/>
         <Route path="/admin/app" component={AdminApp}/>
       </Route>
       <Route path="/404" component={NotFound}/>
