@@ -53,7 +53,7 @@ var config = {
       },
       {
         test: /\.tsx?$/,
-        loader: 'react-hot-loader!awesome-typescript-loader'
+        loader: ['babel-loader?plugins=react-hot-loader/babel', 'awesome-typescript-loader']
       },
       {
         test: /\.jsx$/,
