@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Translate, AppList, IcoN} from 'components';
+
 interface IProps {
   app: string;
   /**
@@ -10,13 +11,16 @@ interface IProps {
    */
   routeParams?: any;
   location?: any;
-};
+}
+
 interface IState {
   activeTab: number;
   app: any;
-};
+}
+
 class AppView extends React.Component<IProps, IState> {
   public hashLinks: string[] = ['info', 'pictures', 'permissions', 'reviews'];
+
   /**
    * @constructor
    * Creates an instance of Sidebar.
@@ -44,7 +48,7 @@ class AppView extends React.Component<IProps, IState> {
   }
 
   private getTabIndexFromHash(hash) {
-    return hash ? this.hashLinks.indexOf(hash.replace('#', '')) : 0 ;
+    return hash ? this.hashLinks.indexOf(hash.replace('#', '')) : 0;
   }
 
   public componentWillUpdate(nextProps) {
@@ -69,14 +73,14 @@ class AppView extends React.Component<IProps, IState> {
         <div className="main-container-inner vertical">
           <div className="app-content">
             <div className="product-hero">
-              <img src={require('../../assets/icons/Nested_Logo.svg')} alt="" />
+              <img src={require('../../assets/icons/Nested_Logo.svg')} alt=""/>
               <button className="butn butn-primary full-width"><Translate>Install App</Translate></button>
               <a href="" className="report-butn"><Translate>Report this app</Translate></a>
               <div className="categories">
                 <h4><Translate>Categories</Translate>:</h4>
-                <a href="">Music & Fun</a>
+                <a href="">Music &amp; Fun</a>
                 <a href="">Social Networks</a>
-                <a href="">Music & Fun</a>
+                <a href="">Music &amp; Fun</a>
                 <a href="">Social Networks</a>
               </div>
             </div>
@@ -92,19 +96,19 @@ class AppView extends React.Component<IProps, IState> {
               </div>
               <div className="tabs">
                 <a href={'#' + this.hashLinks[0]}
-                  className={activeTab === 0 ? 'active' : ''}>
+                   className={activeTab === 0 ? 'active' : ''}>
                   <Translate>App info</Translate>
                 </a>
                 <a href={'#' + this.hashLinks[1]}
-                  className={activeTab === 1 ? 'active' : ''}>
+                   className={activeTab === 1 ? 'active' : ''}>
                   <Translate>Pictures</Translate>
                 </a>
                 <a href={'#' + this.hashLinks[2]}
-                  className={activeTab === 2 ? 'active' : ''}>
+                   className={activeTab === 2 ? 'active' : ''}>
                   <Translate>Permissions</Translate>
                 </a>
                 <a href={'#' + this.hashLinks[3]}
-                  className={activeTab === 3 ? 'active' : ''}>
+                   className={activeTab === 3 ? 'active' : ''}>
                   <Translate>Reviews</Translate>
                 </a>
               </div>
