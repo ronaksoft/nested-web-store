@@ -1,5 +1,9 @@
 
 html[dir="rtl"] {
+    .navbar a:last-of-type {
+        margin-right: 5px;
+        margin-left: 20px;
+    }
     .app-content {
         .product-hero {
             margin-right: 0;
@@ -9,22 +13,25 @@ html[dir="rtl"] {
             }
         }
     }
-
-.jumbotron {
-    .content {
-        .featureds {
-            > a {
-                &:first-child {
-                margin-right: 0;
-                margin-left: 16px;
-                }
-                &:last-child {
-                margin-left: 0;
-                margin-right: 16px;
-                }
+    .jumbotron {
+        .content {
+            .featureds {
+                > a {
+                    &:first-child {
+                    margin-right: 0;
+                    margin-left: 16px;
+                    }
+                    &:last-child {
+                    margin-left: 0;
+                    margin-right: 16px;
+                    }
                 }
             }
         }
+    }
+    .sidebar {
+        margin-right: 0;
+        margin-left: 32px;
     }
     .search-box {
       > i {

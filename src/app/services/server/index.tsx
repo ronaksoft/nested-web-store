@@ -101,7 +101,7 @@ class Server {
      * @const
      * @type {object}
      */
-    const socketRequest: any = {
+    const httpRequest: any = {
       ...req,
       _cver: CONFIG().APP_VERSION,
       _cid: this.cid,
@@ -113,11 +113,11 @@ class Server {
      * @type {object}
      */
     // if (credential.sk && credential.sk !== 'null') {
-    //   socketRequest._sk = credential.sk;
+    //   httpRequest._sk = credential.sk;
     // }
 
     // if (credential.ss && credential.ss !== 'null') {
-    //   socketRequest._ss = credential.ss;
+    //   httpRequest._ss = credential.ss;
     // }
 
     /**
@@ -133,7 +133,7 @@ class Server {
       internalResolve = res;
       internalReject = rej;
 
-      this.sendRequest(socketRequest);
+      this.sendRequest(httpRequest);
     });
 
     /**
@@ -144,7 +144,7 @@ class Server {
       reqId: req._reqid,
       resolve: internalResolve,
       reject: internalReject,
-      request: socketRequest,
+      request: httpRequest,
       timeout: this.handleTimeout(req._reqid),
     });
 

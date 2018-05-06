@@ -1,17 +1,6 @@
-/**
- * @file api/index.tsx
- * @author Soroush Torkzadeh <sorousht@nested.com>
- * @desc All APIs are related to Post
- * @export PlaceApi
- * Documented by:         Soroush Torkzadeh
- * Date of documentation: 2017-07-29
- * Reviewed by:           -
- * Date of review:        -
- */
 import {Server, IRequest, IResponse} from 'services/server';
 import IRequestKeyList from './interfaces/IRequestKeyList';
 import Unique from './../services/utils/unique';
-import {setNewConfig} from './../config';
 
 /**
  * @class Api
@@ -176,73 +165,6 @@ class Api {
       this.messageCanceller = this.server.addMessageListener(this.callServerMessageListener.bind(this));
     }
     return this.server;
-  }
-
-  /**
-   * Get end point configs from /getConfig
-   * get configs from remote server and if response is `ok`, application config will be replace with new configs
-   *
-   * @param {string} domain Domain name
-   * @returns {Promise<any>}
-   */
-  public reconfigEndPoints(domain: string): Promise<any> {
-    const api = this;
-    return new Promise((resolve, reject) => {
-
-      // create request path
-      const getConfigUrl = `/getConfig/${domain}`;
-      // const getConfigUrl = `https://webapp.nested.me/getConfig/${domain}`;
-
-      // create xhr request
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', getConfigUrl, true);
-      // These request headers are required for talking to Xerxes
-      xhr.setRequestHeader('Cache-Control', 'no-cache');
-      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          let newConfigs: any;
-
-          // try to parse response text
-          try {
-            newConfigs = JSON.parse(xhr.response);
-          } catch (e) {
-            reject();
-            return;
-          }
-
-          if (newConfigs.status === 'ok') {
-
-            // replace configs with new configs
-            setNewConfig(
-              domain,
-              newConfigs.data.cyrus.ws[0],
-              newConfigs.data.cyrus.http[0],
-              newConfigs.data.xerxes.http[0],
-            );
-
-            // close server socket and remove current server
-            if (api.server) {
-              api.server.socket.close();
-              api.server = null;
-            }
-
-            // store domain of new configs in local storage
-            if (process.env.BROWSER) {
-              localStorage.setItem('nested.server.domain', domain);
-            }
-            resolve();
-          } else {
-            reject();
-          }
-        } else {
-          reject();
-        }
-      };
-
-      xhr.send();
-
-    });
   }
 
 }
