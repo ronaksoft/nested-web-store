@@ -9,6 +9,21 @@ html[dir="rtl"] {
             }
         }
     }
+
+.jumbotron {
+    .content {
+        .featureds {
+            > a {
+                &:first-child {
+                margin-right: 0;
+                }
+                &:last-child {
+                margin-left: 0;
+                }
+                }
+            }
+        }
+    }
     .search-box {
       > i {
         left: auto;
