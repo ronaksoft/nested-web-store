@@ -34,7 +34,7 @@ export default class Rating extends React.Component<IProps, IState> {
   }
   public render() {
     return (
-        <div className="rating-form">
+        <div className={'rating-form' + (this.state.rate === 0 ? ' empty' : '')}>
             {this.state.rate === 0 && <legend><Translate>Submit your rating</Translate></legend>}
             <div className="rate-stars">
                 <input id="rating-5" name="rating" type="radio" value="5"
