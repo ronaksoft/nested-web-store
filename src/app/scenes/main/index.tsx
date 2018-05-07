@@ -55,31 +55,31 @@ class Main extends React.Component<any, IState> {
       <div>
         <div className="jumbotron">
           <div className="bg-left">
-            <img src={require('../../assets/icons/jumbo-bg-left.svg')} alt="Nested" className="logo"/>
-            <img src={require('../../assets/icons/jumbo-bg-top.svg')} alt="Nested" className="logo"/>
+            <img src={'/public/assets/icons/jumbo-bg-left.svg'} alt="Nested" className="logo"/>
+            <img src={'/public/assets/icons/jumbo-bg-top.svg'} alt="Nested" className="logo"/>
           </div>
           <div className="bg-right">
-            <img src={require('../../assets/icons/jumbo-bg-right.svg')} alt="Nested" className="logo"/>
-            <img src={require('../../assets/icons/jumbo-bg-bottom.svg')} alt="Nested" className="logo"/>
+            <img src={'/public/assets/icons/jumbo-bg-right.svg'} alt="Nested" className="logo"/>
+            <img src={'/public/assets/icons/jumbo-bg-bottom.svg'} alt="Nested" className="logo"/>
           </div>
           <div className="content">
             <h2><Translate>Make it easier!</Translate></h2>
             <p><Translate>Add useful apps to you workspace.</Translate></p>
             <div className="featureds">
               <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
+                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
               </a>
               <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
+                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
               </a>
               <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
+                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
               </a>
               <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
+                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
               </a>
               <a href="">
-                <img src={require('../../assets/icons/absents_place.svg')} alt="Nested" className="logo"/>
+                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
               </a>
             </div>
           </div>

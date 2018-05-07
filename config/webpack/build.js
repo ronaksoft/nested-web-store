@@ -1,14 +1,11 @@
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
-var postcssAssets = require('postcss-assets');
-var postcssNext = require('postcss-cssnext');
-var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 var CopyAssetsPlugin = require('./copy-asset-plugin');
-
+var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const extractLess = new ExtractTextPlugin({
   filename: "public/css/[name].[contenthash].css",
@@ -69,7 +66,7 @@ var config = {
         loader: ExtractTextPlugin.extract({
           fallbackLoader: 'style-loader',
           loader: [
-            'css-loader?modules&importLoaders=10&localIdentName=[local]___[hash:base64:5]',
+            'css-loader?modules&importLoaders=10&localIdentName=public/css/[local]___[hash:base64:5]',
             'postcss-loader'
           ]
         })
@@ -91,12 +88,14 @@ var config = {
           use: [{
               loader: "css-loader", options: {
                 sourceMap: true,
-              }
+                minimize: true,
+              },
           }, {
               loader: "less-loader", options: {
                 sourceMap: true,
                 strictMath: true,
                 noIeCompat: true,
+                minimize: true,
                 paths: [
                     path.resolve(__dirname, "node_modules")
                 ]
