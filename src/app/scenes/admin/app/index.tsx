@@ -197,6 +197,14 @@ class AdminApp extends React.Component<IProps, IState> {
     );
     tabs[this.translator._getText('Permissions')] = (
       <div>
+        <div className="form-row">
+          <Select
+              name="permission"
+              className="suggester"
+              options={this.state.suggestions}
+              placeholder={this.translator._getText('Select from the list of permissions')}
+          />
+        </div>
         <ul className="permissions">
           <li>
             <div className="per-icon">
