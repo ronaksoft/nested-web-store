@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, AppList, IcoN, Rating} from 'components';
+import {Translate, AppList, IcoN, Rating, Tab} from 'components';
 
 interface IProps {
   app: string;
@@ -14,12 +14,10 @@ interface IProps {
 }
 
 interface IState {
-  activeTab: number;
   app: any;
 }
 
 class AppView extends React.Component<IProps, IState> {
-  public hashLinks: string[] = ['info', 'pictures', 'permissions', 'reviews'];
 
   /**
    * @constructor
@@ -35,27 +33,13 @@ class AppView extends React.Component<IProps, IState> {
     }
     if (initData) {
       this.state = {
-        activeTab: this.getTabIndexFromHash(this.props.location.hash),
         app: initData.__INITIAL_DATA__.app || {},
       };
       initData.__INITIAL_DATA__ = {};
     } else {
       this.state = {
-        activeTab: this.getTabIndexFromHash(this.props.location.hash),
         app: {},
       };
-    }
-  }
-
-  private getTabIndexFromHash(hash) {
-    return hash ? this.hashLinks.indexOf(hash.replace('#', '')) : 0;
-  }
-
-  public componentWillUpdate(nextProps) {
-    if (nextProps.location.hash !== '#' + this.hashLinks[this.state.activeTab]) {
-      this.setState({
-        activeTab: this.getTabIndexFromHash(nextProps.location.hash),
-      });
     }
   }
 
@@ -67,7 +51,54 @@ class AppView extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
-    const {activeTab} = this.state;
+    const tabs = {
+      'App info' : <div>a</div>,
+      'Pictures' : (
+        <div className="pictures">
+          <img src="" alt=""/>
+        </div>
+      ),
+      'Permissions' : (
+        <div>
+          <ul className="permissions">
+            <li>
+              <div className="per-icon">
+                <IcoN name="filter16" size={16}/>
+              </div>
+              <div className="per-info">
+                <h4>Personal Info</h4>
+                <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      ),
+      'Reviews' : (
+        <div>
+          <Rating appId="aaa"/>
+          <ul className="reviews">
+            <li>
+              <div className="rev-logo">
+                <img src="" alt=""/>
+              </div>
+              <div className="rev-info">
+                <h4>
+                  Personal Info
+                  <div className="rating">
+                    <IcoN name="star16" size={16}/>
+                    <IcoN name="star16" size={16}/>
+                    <IcoN name="star16" size={16}/>
+                    <IcoN name="starWire16" size={16}/>
+                    <IcoN name="starWire16" size={16}/>
+                  </div>
+                </h4>
+                <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      ),
+    };
     return (
       <div className="main-container">
         <div className="main-container-inner vertical">
@@ -94,74 +125,7 @@ class AppView extends React.Component<IProps, IState> {
                 <IcoN name="starWire16" size={16}/>
                 <span>4/5</span>
               </div>
-              <div className="tabs">
-                <a href={'#' + this.hashLinks[0]}
-                   className={activeTab === 0 ? 'active' : ''}>
-                  <Translate>App info</Translate>
-                </a>
-                <a href={'#' + this.hashLinks[1]}
-                   className={activeTab === 1 ? 'active' : ''}>
-                  <Translate>Pictures</Translate>
-                </a>
-                <a href={'#' + this.hashLinks[2]}
-                   className={activeTab === 2 ? 'active' : ''}>
-                  <Translate>Permissions</Translate>
-                </a>
-                <a href={'#' + this.hashLinks[3]}
-                   className={activeTab === 3 ? 'active' : ''}>
-                  <Translate>Reviews</Translate>
-                </a>
-              </div>
-              <div className="tabs-content">
-                {activeTab === 0 && (
-                  <div>a</div>
-                )}
-                {activeTab === 1 && (
-                  <div className="pictures">
-                    <img src="" alt=""/>
-                  </div>
-                )}
-                {activeTab === 2 && (
-                  <div>
-                    <ul className="permissions">
-                      <li>
-                        <div className="per-icon">
-                          <IcoN name="filter16" size={16}/>
-                        </div>
-                        <div className="per-info">
-                          <h4>Personal Info</h4>
-                          <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-                {activeTab === 3 && (
-                  <div>
-                    <Rating appId="aaa"/>
-                    <ul className="reviews">
-                      <li>
-                        <div className="rev-logo">
-                          <img src="" alt=""/>
-                        </div>
-                        <div className="rev-info">
-                          <h4>
-                            Personal Info
-                            <div className="rating">
-                              <IcoN name="star16" size={16}/>
-                              <IcoN name="star16" size={16}/>
-                              <IcoN name="star16" size={16}/>
-                              <IcoN name="starWire16" size={16}/>
-                              <IcoN name="starWire16" size={16}/>
-                            </div>
-                          </h4>
-                          <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
+              <Tab items={tabs}/>
             </div>
           </div>
           <AppList title={<Translate>Similar apps</Translate>} haveMore={false} items={[{

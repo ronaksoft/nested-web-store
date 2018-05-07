@@ -1,6 +1,6 @@
 import * as React from 'react';
-// import {Translate, AppList, IcoN} from 'components';
-import {Row, Col, Input, Upload} from 'antd';
+import {Translate} from 'components';
+// import {Row, Col, Input, Upload} from 'antd';
 
 interface IProps {
   app: string;
@@ -62,14 +62,10 @@ class AdminApp extends React.Component<IProps, IState> {
     return (
       <div className="main-container">
         <div className="main-container-inner vertical">
-          <Row>
-            <Col md={12}>
-              <Input/>
-            </Col>
-            <Col md={12}>
-              <Upload/>
-            </Col>
-          </Row>
+          <h2><Translate>Add an app to the market</Translate></h2>
+          <p><Translate>
+              Add your developed app by filling these fields and helping users find your app better.
+          </Translate></p>
         </div>
       </div>
     );

@@ -12,12 +12,6 @@ import {connect} from 'react-redux';
 // import {browserHistory} from 'react-router';
 import {Link} from 'react-router';
 import {login, logout} from 'redux/app/actions';
-import './main.less';
-import AppView from './view/';
-import Main from './main/';
-import Browse from './browse/';
-import AdminApp from './admin/app';
-import AdminWrapper from './admin/';
 import {IUser} from 'api/interfaces';
 import * as Cookies from 'cookies-js';
 
@@ -37,7 +31,7 @@ interface IProps {
   setLogout: () => {};
 }
 
-class Container extends React.Component<IProps, IState> {
+class AdminWrapper extends React.Component<IProps, IState> {
 
   public constructor(props: IProps) {
     super(props);
@@ -80,19 +74,20 @@ class Container extends React.Component<IProps, IState> {
     return (
         <div>
           <nav className="navbar-wrapper">
-            <div className="navbar">
-              <img src="/public/assets/icons/Nested_LogoNegative.svg" alt="Nested" className="logo"/>
-              <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
+            <div className="navbar admin">
+              <img src="/public/assets/icons/Nested_Logo.svg" alt="Nested" className="logo"/>
+              <img src="/public/assets/icons/Nested_EnglishType.svg" alt="Nested"
                 className="logo-type"/>
-              <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" alt="Nested"
+              <img src="/public/assets/icons/Nested_PersianType.svg" alt="Nested"
                 className="logo-type fa"/>
               <div className="devider"/>
               <Link to="/">
-                <Translate>App Store</Translate>
+                <Translate>Add an App</Translate>
               </Link>
               <div className="filler"/>
-              <Link to="/apps"><Translate>Browse</Translate></Link>
-              <button className="butn"><Translate>Sign in</Translate></button>
+              <button className="butn butn-blue"><Translate>Preview</Translate></button>
+              <button className="butn butn-primary"><Translate>Submit</Translate></button>
+              <div className="user-wrapper"/>
             </div>
           </nav>
           {this.props.children}
@@ -173,8 +168,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Container);
-
-export {
-  Main, AppView, AdminApp, Browse, AdminWrapper,
-};
+export default connect(mapStateToProps, mapDispatchToProps)(AdminWrapper);

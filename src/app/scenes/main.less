@@ -102,6 +102,24 @@ a:-webkit-any-link {
     width: 93px;
     height: 32px;
   }
+  .user-wrapper {
+    margin-left: 24px;
+    border-radius: 16px;
+    width: 32px;
+    height: 32px;
+  }
+  &.admin {
+    background: @color-white;
+    a {
+      color: #508EE6;
+    }
+    button {
+      margin: 0 8px;
+    }
+    .devider {
+      background-color: rgba(50, 61, 71, 0.16);
+    }
+  }
 }
 
 .jumbotron {
@@ -612,6 +630,9 @@ footer {
       opacity: 1;
       color: #004DA6;
       border-bottom: 2px solid @color-bg-pending-wire;
+    }
+    &:hover {
+      color: @color-solid;
     }
   }
 }

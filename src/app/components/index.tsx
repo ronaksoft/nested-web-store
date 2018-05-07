@@ -8,5 +8,6 @@ import RTLDetector from './RTLDetector';
 import AppSearch from './app-search';
 import AppList from './app-list';
 import Rating from './rating';
+import Tab from './tab';
 
-export {RTLDetector, AppSearch, AppList, Rating};
+export {RTLDetector, AppSearch, AppList, Rating, Tab};
