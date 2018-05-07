@@ -22,6 +22,7 @@ interface IState {
   loading: boolean;
   imageUrl: string;
   category: string;
+  language: string;
   suggestions: any[];
 }
 
@@ -44,6 +45,7 @@ class AdminApp extends React.Component<IProps, IState> {
       loading: false,
       imageUrl: '',
       category: '',
+      language: '',
       suggestions: [
           {
             label: 'Form Builder',
@@ -67,6 +69,12 @@ class AdminApp extends React.Component<IProps, IState> {
     console.log(event);
     this.setState({
       category: newValue,
+    });
+  }
+  public languageOnChange = (event, { newValue }) => {
+    console.log(event);
+    this.setState({
+      language: newValue,
     });
   }
   private handleChange = (info) => {
@@ -102,7 +110,7 @@ class AdminApp extends React.Component<IProps, IState> {
     tabs[this.translator._getText('App info')] = (
       <div>
         <h4><Translate>App user ID &amp; Logo</Translate></h4>
-        <div>
+        <div className="form-row">
           <Upload
             name="avatar"
             listType="picture-card"
@@ -115,41 +123,86 @@ class AdminApp extends React.Component<IProps, IState> {
             {imageUrl ? <img src={imageUrl} alt="" /> : uploadButton}
           </Upload>
         </div>
-        <div className="multi-input-row">
+        <div className="multi-input-row form-row">
           <input type="text" placeholder={this.translator._getText('App user ID')}/>
           <input type="text" placeholder={this.translator._getText('Owner URL')}/>
         </div>
         <h4><Translate>Information</Translate></h4>
-        <div className="multi-input-row">
+        <div className="multi-input-row form-row">
           <input type="text" placeholder={this.translator._getText('App name (eng)')}/>
-          <input type="text" placeholder="(یسراف) نشیکیلپا مان"/>
+          <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)"/>
         </div>
-        <div className="multi-input-row">
+        <div className="multi-input-row form-row">
           <textarea placeholder={this.translator._getText('Description (eng)')}/>
-          <textarea placeholder="(یسراف) تاحیضوت"/>
+          <textarea dir="rtl" placeholder="توضیحات (فارسی)"/>
         </div>
-        <input type="text" placeholder={this.translator._getText('Summery (open graph)')}/>
+        <input className="form-row" type="text" placeholder={this.translator._getText('Summery (open graph)')}/>
         <h4><Translate>Category</Translate></h4>
-        <Select
-            name="form-field-name"
-            value={this.state.category}
-            onChange={this.categoryOnChange}
-            className="suggester"
-            options={this.state.suggestions}
-            placeholder={this.translator._getText('Search for apps...')}
-        />
+        <div className="form-row">
+          <Select
+              name="category"
+              value={this.state.category}
+              onChange={this.categoryOnChange}
+              className="suggester"
+              options={this.state.suggestions}
+              placeholder={this.translator._getText('Select from the list of categories')}
+          />
+        </div>
+        <h4><Translate>Languages</Translate></h4>
+        <div className="form-row">
+          <Select
+              name="language"
+              value={this.state.language}
+              onChange={this.languageOnChange}
+              className="suggester"
+              options={this.state.suggestions}
+              placeholder={this.translator._getText('Select your app languages')}
+          />
+        </div>
       </div>
     );
-    tabs[this.translator._getText('Pictures')] = <div>a</div>;
+    tabs[this.translator._getText('Pictures')] = (
+      <div>
+        <h4><Translate>Screenshots &amp; Pictures</Translate></h4>
+        <div className="images-container">
+          <div className="image-handler">
+            <img src="/public/assets/icons/Nested_Logo.svg" alt=""/>
+            <div className="image-buttons">
+              <div>
+                <IcoN name="xcross16Red" size={16} />
+              </div>
+              <div>
+                <IcoN name="pencil16" size={16} />
+              </div>
+            </div>
+          </div>
+          <div className="upload-box">
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              action="//jsonplaceholder.typicode.com/posts/"
+              beforeUpload={beforeUpload}
+              onChange={this.handleChange}
+            >
+              <div className="ant-upload-text">+<br/>Add photo</div>
+            </Upload>
+          </div>
+        </div>
+      </div>
+    );
     tabs[this.translator._getText('Permissions')] = <div>a</div>;
     return (
       <div className="main-container">
-        <div className="main-container-inner vertical">
-          <h2><Translate>Add an app to the market</Translate></h2>
-          <p><Translate>
-              Add your developed app by filling these fields and helping users find your app better.
-          </Translate></p>
-          <Tab items={tabs}/>
+        <div className="main-container-inner vertical admin">
+          <div className="add-app">
+            <h2><Translate>Add an app to the market</Translate></h2>
+            <p><Translate>
+                Add your developed app by filling these fields and helping users find your app better.
+            </Translate></p>
+            <Tab items={tabs}/>
+          </div>
         </div>
       </div>
     );
