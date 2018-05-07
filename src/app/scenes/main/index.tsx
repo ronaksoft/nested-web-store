@@ -76,10 +76,10 @@ class Main extends React.Component<any, IState> {
                 <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
               </a>
               <a href="">
-                <img src={'../../assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
+                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
               </a>
               <a href="">
-                <img src={'../../assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
+                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
               </a>
             </div>
           </div>
