@@ -12,7 +12,7 @@ import FileUtil from 'services/utils/file';
 import {IPicture} from 'api/interfaces';
 
 // const style = require('./chips.css');
-const unknownPicture = require('assets/icons/absents_place.svg');
+const unknownPicture = '/public/assets/icons/absents_place.svg';
 
 interface IChipsItem {
   _id: string;

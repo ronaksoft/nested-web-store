@@ -69,6 +69,7 @@ class AdminApp extends React.Component<IProps, IState> {
       category: newValue,
     });
   }
+
   private handleChange = (info) => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
@@ -108,7 +109,7 @@ class AdminApp extends React.Component<IProps, IState> {
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
-            action="//jsonplaceholder.typicode.com/posts/"
+            action="http://localhost:8080/admin/file/add"
             beforeUpload={beforeUpload}
             onChange={this.handleChange}
           >
@@ -171,7 +172,7 @@ function beforeUpload(file) {
   if (!isLt2M) {
     message.error('Image must smaller than 2MB!');
   }
-  return isJPG && isLt2M;
+  return isJPG && isLt2M || true;
 }
 
 export default AdminApp;
