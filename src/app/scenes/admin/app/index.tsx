@@ -92,6 +92,7 @@ class AdminApp extends React.Component<IProps, IState> {
       }));
     }
   }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -194,7 +195,24 @@ class AdminApp extends React.Component<IProps, IState> {
         </div>
       </div>
     );
-    tabs[this.translator._getText('Permissions')] = <div>a</div>;
+    tabs[this.translator._getText('Permissions')] = (
+      <div>
+        <ul className="permissions">
+          <li>
+            <div className="per-icon">
+              <IcoN name="filter16" size={16}/>
+            </div>
+            <div className="per-info">
+              <h4>Personal Info</h4>
+              <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
+            </div>
+            <div className="per-remove">
+              <IcoN name="negativeXCross24" size={24} />
+            </div>
+          </li>
+        </ul>
+      </div>
+    );
     return (
       <div className="main-container">
         <div className="main-container-inner vertical admin">
