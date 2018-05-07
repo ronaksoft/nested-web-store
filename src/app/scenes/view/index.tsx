@@ -18,7 +18,7 @@ interface IState {
 }
 
 class AppView extends React.Component<IProps, IState> {
-
+  private translator: Translate;
   /**
    * @constructor
    * Creates an instance of Sidebar.
@@ -41,6 +41,7 @@ class AppView extends React.Component<IProps, IState> {
         app: {},
       };
     }
+    this.translator = new Translate();
   }
 
   /**
@@ -51,54 +52,53 @@ class AppView extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
-    const tabs = {
-      'App info' : <div>a</div>,
-      'Pictures' : (
-        <div className="pictures">
-          <img src="" alt=""/>
-        </div>
-      ),
-      'Permissions' : (
-        <div>
-          <ul className="permissions">
-            <li>
-              <div className="per-icon">
-                <IcoN name="filter16" size={16}/>
-              </div>
-              <div className="per-info">
-                <h4>Personal Info</h4>
-                <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      ),
-      'Reviews' : (
-        <div>
-          <Rating appId="aaa"/>
-          <ul className="reviews">
-            <li>
-              <div className="rev-logo">
-                <img src="" alt=""/>
-              </div>
-              <div className="rev-info">
-                <h4>
-                  Personal Info
-                  <div className="rating">
-                    <IcoN name="star16" size={16}/>
-                    <IcoN name="star16" size={16}/>
-                    <IcoN name="star16" size={16}/>
-                    <IcoN name="starWire16" size={16}/>
-                    <IcoN name="starWire16" size={16}/>
-                  </div>
-                </h4>
-                <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      ),
-    };
+    const tabs = {};
+    tabs[this.translator._getText('App info')] = <div>a</div>;
+    tabs[this.translator._getText('Pictures')] = (
+      <div className="pictures">
+        <img src="" alt=""/>
+      </div>
+    );
+    tabs[this.translator._getText('Permissions')] = (
+      <div>
+        <ul className="permissions">
+          <li>
+            <div className="per-icon">
+              <IcoN name="filter16" size={16}/>
+            </div>
+            <div className="per-info">
+              <h4>Personal Info</h4>
+              <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    );
+    tabs[this.translator._getText('Reviews')] = (
+      <div>
+        <Rating appId="aaa"/>
+        <ul className="reviews">
+          <li>
+            <div className="rev-logo">
+              <img src="" alt=""/>
+            </div>
+            <div className="rev-info">
+              <h4>
+                Personal Info
+                <div className="rating">
+                  <IcoN name="star16" size={16}/>
+                  <IcoN name="star16" size={16}/>
+                  <IcoN name="star16" size={16}/>
+                  <IcoN name="starWire16" size={16}/>
+                  <IcoN name="starWire16" size={16}/>
+                </div>
+              </h4>
+              <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    );
     return (
       <div className="main-container">
         <div className="main-container-inner vertical">
