@@ -73,7 +73,7 @@ class AppView extends React.Component<IProps, IState> {
         <div className="main-container-inner vertical">
           <div className="app-content">
             <div className="product-hero">
-              <img src={require('../../assets/icons/Nested_Logo.svg')} alt=""/>
+              <img src="/public/assets/icons/Nested_Logo.svg" alt=""/>
               <button className="butn butn-primary full-width"><Translate>Install App</Translate></button>
               <a href="" className="report-butn"><Translate>Report this app</Translate></a>
               <div className="categories">

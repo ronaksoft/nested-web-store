@@ -19,7 +19,23 @@
   = RATING
 *******************************************/
 
-
+.rate-stars {
+	display: inline-flex;
+	flex-direction: row-reverse;
+}
+.rating-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	margin-top: 8px;
+}
+.rating-form legend{
+	line-height: 21px;
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 8px;
+}
 .rating-form input[type='radio'] {
     position: absolute;
     left: -9999px;
@@ -33,83 +49,47 @@
 }
 
 .rating-form .rating-star {
-    display: inline-block;
+    display: inline-flex;
     position: relative;
-}
-
-.rating-form input[type='radio']+label:before {
-    content: attr(data-value);
-    position: absolute;
-    right: 30px;
-    top: 83px;
-    font-size: 30px;
-    font-size: 3rem;
-    opacity: 0;
-    direction: ltr;
-    transition: all .2s ease-in-out;
-}
-
-.rating-form input[type='radio']:checked+label:before {
-    right: 25px;
-    opacity: 1;
-}
-
-.rating-form input[type='radio']+label:after {
-    content: "/ 5";
-    position: absolute;
-    right: 5px;
-    top: 96px;
-    font-size: 16px;
-    font-size: 1.6rem;
-    opacity: 0;
-    direction: ltr;
-    transition: all .2s ease-in-out;
-}
-
-.rating-form input[type='radio']:checked+label:after {
-    /*right: 5px;*/
-    opacity: 1;
+    i:first-child {
+        path {
+            opacity: .48;
+        }
+    }
 }
 
 .rating-form label i {
-    font-size: 60px;
-    font-size: 6rem;
-    line-height: 60px;
+    height: 32px;
     transition: all .2s ease-in-out;
 }
 
-.rating-form label .i:first-child {}
+.rating-form label i:first-of-type {}
 
-.rating-form label:hover .i:first-child,
-.rating-form label:focus .i:first-child,
-.rating-form label:hover~label .i:first-child,
-.rating-form label:focus~label .i:first-child,
-.rating-form input[type='radio']:checked~label .i:first-child {
+.rating-form label:hover i:first-of-type,
+.rating-form label:focus i:first-of-type,
+.rating-form label:hover~label i:first-of-type,
+.rating-form label:focus~label i:first-of-type,
+.rating-form input[type='radio']:checked~label i:first-of-type {
     opacity: 0;
 }
 
-.rating-form label .i:last-child {
+.rating-form label i:last-of-type {
     position: absolute;
     left: 0;
     top: 0;
     opacity: 0;
 }
 
-.rating-form label:hover .i:last-child,
-.rating-form label:focus .i:last-child,
-.rating-form label:hover~label .i:last-child,
-.rating-form label:focus~label .i:last-child,
-.rating-form input[type='radio']:checked~label .i:last-child {
+.rating-form label:hover i:last-of-type,
+.rating-form label:focus i:last-of-type,
+.rating-form label:hover~label i:last-of-type,
+.rating-form label:focus~label i:last-of-type,
+.rating-form input[type='radio']:checked~label i:last-of-type {
     opacity: 1;
 }
 
-.rating-form input[type='radio']:checked~label .i:last-child {
+.rating-form input[type='radio']:checked~label i:last-of-type {
     color: gold;
-}
-
-.rating-form .ir {
-    position: absolute;
-    left: -9999px;
 }
 
 /* RATING - Form - Action */
@@ -149,4 +129,33 @@
 
 .rating-form input[type='radio']:checked~.form-action .btn-reset {
     cursor: pointer;
+}
+
+.rating-form {
+	.comment-box {
+		display: flex;
+		width: 100%;
+		.user-logo {
+			width: 40px;
+			padding-right: 8px;
+			img {
+				border-radius: 16px;
+			}
+		}
+		.text-box {
+			display: flex;
+			flex: 1;
+			flex-direction: column;
+			textarea {
+				width: 100%;
+				height: 64px;
+				margin-bottom: 8px;
+			}
+			button {
+				align-self: flex-end;
+				margin: 0 0 8px;
+				width: 92px;
+			}
+		}
+	}
 }

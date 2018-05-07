@@ -5,7 +5,7 @@ interface IState {
   recentApps: any[];
   featuredApps: any[];
   categories: any[];
-};
+}
 
 // import {sortBy} from 'lodash';
 // import {IcoN, Loading, InfiniteScroll} from 'components';
