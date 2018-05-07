@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Translate, Tab, Loading, IcoN} from 'components';
 import { Upload, message} from 'antd';
 import Select from 'react-select';
+import axios from 'axios';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -93,6 +94,34 @@ class AdminApp extends React.Component<IProps, IState> {
     }
   }
 
+  private customRequest = (uploadData) => {
+    const formData = new FormData();
+    if (uploadData.data) {
+      Object.keys(uploadData.data).map((key) => {
+        formData.append(key, uploadData.data[key]);
+      });
+    }
+    formData.append('file-' + uploadData.filename, uploadData.file);
+
+    axios
+      .post('http://localhost:8080/admin/file/add', formData, {
+        headers: '',
+        onUploadProgress: ({ total, loaded }) => {
+          uploadData.onProgress({ percent: Math.round(loaded / total * 100).toFixed(2) }, uploadData.file);
+        },
+      })
+      .then(({ data: response }) => {
+        uploadData.onSuccess(response, uploadData.file);
+      })
+      .catch(uploadData.onError);
+
+    return {
+      abort() {
+        console.log('upload progress is aborted.');
+      },
+    };
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -119,9 +148,9 @@ class AdminApp extends React.Component<IProps, IState> {
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
-            action="http://localhost:8080/admin/file/add"
             beforeUpload={beforeUpload}
             onChange={this.handleChange}
+            customRequest={this.customRequest}
           >
             {imageUrl ? <img src={imageUrl} alt="" /> : uploadButton}
           </Upload>
