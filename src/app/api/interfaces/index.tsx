@@ -1,5 +1,6 @@
 interface IApplication {
   _id: string;
+  app_id: string;
   name: string;
   name_fa: string;
   summary: string;
@@ -13,6 +14,7 @@ interface IApplication {
   official: boolean;
   stared: boolean;
   status: number;
+  lang: string;
   created_by?: IUser;
   created_by_name?: string;
   created_at?: number;
@@ -20,18 +22,18 @@ interface IApplication {
 
 interface IFile {
   _id: string;
-  name: string;
-  path: string;
-  type: string;
-  created_at: number;
+  name?: string;
+  path?: string;
+  type?: string;
+  created_at?: number;
 }
 
 interface ICategory {
   _id: string;
-  name: string;
-  name_fa: string;
-  stared: boolean;
-  order: number;
+  name?: string;
+  name_fa?: string;
+  stared?: boolean;
+  order?: number;
 }
 
 interface IUser {

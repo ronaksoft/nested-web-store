@@ -5,7 +5,7 @@ import Const from '../consts/CServer';
 class AppFactory {
 
   public createApp(app: IApplication) {
-    return axios.post(Const.SERVER_URL + '/admin/add', app, {
+    return axios.post(Const.SERVER_URL + '/admin/app/add', app, {
       headers: '',
     }).then((response) => {
       return response.data;

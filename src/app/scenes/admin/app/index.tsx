@@ -61,6 +61,7 @@ class AdminApp extends React.Component<IProps, IState> {
       ],
       app: {
         _id: '',
+        app_id: '',
         logo: null,
         name: '',
         name_fa: '',
@@ -74,6 +75,7 @@ class AdminApp extends React.Component<IProps, IState> {
         official: false,
         stared: null,
         status: 0,
+        lang: '',
       },
     };
     // if (initData) {
@@ -92,17 +94,19 @@ class AdminApp extends React.Component<IProps, IState> {
   //
   // }
 
-  public categoryOnChange = (event, {newValue}) => {
-    console.log(event);
+  public categoryOnChange = (_, {newValue}) => {
+    const model = this.state.app;
+    model.categories.push({_id: newValue});
     this.setState({
-      category: newValue,
+      app: model,
     });
   }
 
-  public languageOnChange = (event, {newValue}) => {
-    console.log(event);
+  public languageOnChange = (_, {newValue}) => {
+    const model = this.state.app;
+    model.lang = newValue;
     this.setState({
-      language: newValue,
+      app: model,
     });
   }
 
@@ -166,6 +170,14 @@ class AdminApp extends React.Component<IProps, IState> {
     return isValid && isLt1M;
   }
 
+  private bindInputToModel(name, e: any) {
+    const model = this.state.app;
+    model[name] = e.target.value;
+    this.setState({
+      app: model,
+    });
+  }
+
   private onSubmit = () => {
     this.appFactory.createApp(this.state.app).then((data) => {
       console.log(data);
@@ -208,19 +220,26 @@ class AdminApp extends React.Component<IProps, IState> {
           </Upload>
         </div>
         <div className="multi-input-row form-row">
-          <input type="text" placeholder={this.translator._getText('App user ID')}/>
-          <input type="text" placeholder={this.translator._getText('Owner URL')}/>
+          <input type="text" placeholder={this.translator._getText('App user ID')} value={this.state.app.app_id}
+                 onChange={this.bindInputToModel.bind(this, 'app_id')}/>
+          <input type="text" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
+                 onChange={this.bindInputToModel.bind(this, 'website')}/>
         </div>
         <h4><Translate>Information</Translate></h4>
         <div className="multi-input-row form-row">
-          <input type="text" placeholder={this.translator._getText('App name (eng)')}/>
-          <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)"/>
+          <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
+                 onChange={this.bindInputToModel.bind(this, 'name')}/>
+          <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)" value={this.state.app.name_fa}
+                 onChange={this.bindInputToModel.bind(this, 'name_fa')}/>
         </div>
         <div className="multi-input-row form-row">
-          <textarea placeholder={this.translator._getText('Description (eng)')}/>
-          <textarea dir="rtl" placeholder="توضیحات (فارسی)"/>
+          <textarea placeholder={this.translator._getText('Description (eng)')} value={this.state.app.description}
+                    onChange={this.bindInputToModel.bind(this, 'description')}/>
+          <textarea dir="rtl" placeholder="توضیحات (فارسی)" value={this.state.app.description_fa}
+                    onChange={this.bindInputToModel.bind(this, 'description_fa')}/>
         </div>
-        <input className="form-row" type="text" placeholder={this.translator._getText('Summery (open graph)')}/>
+        <input className="form-row" type="text" placeholder={this.translator._getText('Summery (open graph)')}
+               value={this.state.app.summary} onChange={this.bindInputToModel.bind(this, 'summary')}/>
         <h4><Translate>Category</Translate></h4>
         <div className="form-row">
           <Select
@@ -313,11 +332,11 @@ class AdminApp extends React.Component<IProps, IState> {
         <div className="main-container-inner vertical admin">
           <div className="add-app">
             <h2><Translate>Add an app to the market</Translate></h2>
+            <button onClick={this.onSubmit} className="pull-right">Submit</button>
             <p><Translate>
               Add your developed app by filling these fields and helping users find your app better.
             </Translate></p>
             <Tab items={tabs}/>
-            <button onClick={this.onSubmit}>Submit</button>
           </div>
         </div>
       </div>
