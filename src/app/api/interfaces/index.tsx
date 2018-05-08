@@ -30,8 +30,8 @@ interface ICategory {
   _id: string;
   name: string;
   name_fa: string;
-  stared: boolean;
-  order: number;
+  stared?: boolean;
+  order?: number;
 }
 
 interface IUser {

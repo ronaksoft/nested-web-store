@@ -3,7 +3,7 @@ import {Translate, Tab, Loading, IcoN} from 'components';
 import {Upload, message} from 'antd';
 import Select from 'react-select';
 import {file as FileFactory, app as AppFactory} from './../../../api';
-import {IApplication} from './../../../api/interfaces';
+import {IApplication, ICategory} from './../../../api/interfaces';
 import Const from './../../../api/consts/CServer';
 
 // import {Row, Col, Input, Upload} from 'antd';
@@ -27,6 +27,7 @@ interface IState {
   category: string;
   language: string;
   suggestions: any[];
+  categories: ICategory[];
 }
 
 class AdminApp extends React.Component<IProps, IState> {
@@ -59,6 +60,11 @@ class AdminApp extends React.Component<IProps, IState> {
           value: 'form_builder',
         },
       ],
+      categories: [{
+        _id: 'a',
+        name: '',
+        name_fa: '',
+      }],
       app: {
         _id: '',
         logo: null,
@@ -155,7 +161,6 @@ class AdminApp extends React.Component<IProps, IState> {
 
   private beforeUploadPictures = (file: any) => {
     const isValid = (['image/png', 'image/jpg', 'image/jpeg'].indexOf(file.type) > -1);
-    console.log(isValid, file);
     if (!isValid) {
       message.error('You can only upload PNG and JPG file!');
     }
@@ -317,7 +322,10 @@ class AdminApp extends React.Component<IProps, IState> {
               Add your developed app by filling these fields and helping users find your app better.
             </Translate></p>
             <Tab items={tabs}/>
-            <button onClick={this.onSubmit}>Submit</button>
+              {/* <button className="butn butn-blue"><Translate>Preview</Translate></button> */}
+            <button className="butn butn-primary full-width" onClick={this.onSubmit}>
+              <Translate>Submit</Translate>
+            </button>
           </div>
         </div>
       </div>
