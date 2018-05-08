@@ -825,7 +825,7 @@ footer {
           line-height: 21px;
           font-size: 12px;
         }
-        .rating {
+        .rate-result {
           margin: 0 0 0 8px;
           transform: translateY(4px);
           display: inline-flex;
@@ -885,7 +885,10 @@ textarea::-webkit-input-placeholder{
   }
   &.silver {
     svg {
-      fill: @color-solid;
+      opacity: .32;
+    }
+    svg, path {
+      fill: @color-solid!important;
     }
   }
   span {

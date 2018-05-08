@@ -85,13 +85,7 @@ class AppView extends React.Component<IProps, IState> {
             <div className="rev-info">
               <h4>
                 Personal Info
-                <div className="rating">
-                  <IcoN name="star16" size={16}/>
-                  <IcoN name="star16" size={16}/>
-                  <IcoN name="star16" size={16}/>
-                  <IcoN name="starWire16" size={16}/>
-                  <IcoN name="starWire16" size={16}/>
-                </div>
+              <RateResult rate={4.2} silver={true}/>
               </h4>
               <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
             </div>

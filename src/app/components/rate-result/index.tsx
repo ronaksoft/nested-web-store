@@ -12,6 +12,9 @@ export default class RateResult extends React.Component<IProps, any> {
       const Max = 5;
       const rateArray = [];
       const unrateArray = [];
+      // while (rateArray.length !== rate) {
+      //   rateArray.push(rateArray.length + 1);
+      // }
       for (let i = 0; i < rate; i++) {
         rateArray.push(i + 1);
       }
