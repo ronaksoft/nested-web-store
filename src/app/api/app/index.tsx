@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {IApp} from '../interfaces';
+import {IApplication} from '../interfaces';
 import Const from '../consts/CServer';
 
 class AppFactory {
 
-  public createApp(app: IApp) {
+  public createApp(app: IApplication) {
     return axios.post(Const.SERVER_URL + '/admin/add', app, {
       headers: '',
     }).then((response) => {

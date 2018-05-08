@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Translate, Tab, Loading, IcoN} from 'components';
 import {Upload, message} from 'antd';
 import Select from 'react-select';
-import {file as FileFactory} from './../../../api';
+import {file as FileFactory, app as AppFactory} from './../../../api';
 import {IApplication} from './../../../api/interfaces';
 import Const from './../../../api/consts/CServer';
 
@@ -32,6 +32,7 @@ interface IState {
 class AdminApp extends React.Component<IProps, IState> {
   private translator: Translate;
   private customRequest: any;
+  private appFactory: AppFactory;
   private fileFactory: FileFactory;
 
   /**
@@ -82,6 +83,7 @@ class AdminApp extends React.Component<IProps, IState> {
     //   state.app = {};
     // }
     this.state = state;
+    this.appFactory = new AppFactory();
     this.fileFactory = new FileFactory();
     this.customRequest = this.fileFactory.customRequest.bind(this);
   }
@@ -161,6 +163,14 @@ class AdminApp extends React.Component<IProps, IState> {
       message.error('Image must smaller than 1MB!');
     }
     return isValid && isLt1M;
+  }
+
+  private onSubmit = () => {
+    this.appFactory.createApp(this.state.app).then((data) => {
+      console.log(data);
+    }).catch((error) => {
+      message.error(error);
+    });
   }
 
   /**
@@ -306,6 +316,7 @@ class AdminApp extends React.Component<IProps, IState> {
               Add your developed app by filling these fields and helping users find your app better.
             </Translate></p>
             <Tab items={tabs}/>
+            <button onClick={this.onSubmit}>Submit</button>
           </div>
         </div>
       </div>
