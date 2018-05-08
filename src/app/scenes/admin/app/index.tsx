@@ -213,9 +213,11 @@ class AdminApp extends React.Component<IProps, IState> {
 
   private onSubmit = () => {
     const model: IApplication = cloneDeep(this.state.app);
-    model.logo = {
-      _id: model.logo._id,
-    };
+    if (model.logo) {
+      model.logo = {
+        _id: model.logo._id,
+      };
+    }
     model.screenshots.map((val) => {
       return {
         _id: val._id,

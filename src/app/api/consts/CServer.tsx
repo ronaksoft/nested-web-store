@@ -1,3 +1,4 @@
 export default {
-  SERVER_URL: 'http://192.168.1.10:8080',
+  CLIENT_ID: '_appstore',
+  SERVER_URL: 'https://webapp.ronaksoftware.com:8090',
 };
