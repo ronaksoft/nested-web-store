@@ -83,4 +83,28 @@ html[dir="rtl"] {
         background-position: right center;
         padding: 5px 30px 5px 6px;
     }
+    .add-app .images-container {
+    .image-handler {
+        img {
+          border-radius: 4px 4px 4px 0px;
+        }
+        .image-buttons {
+          left: 0;
+          right: auto;
+          border-radius:  4px 0px 0px 4px;
+        }
+        &:nth-child(odd) {
+          margin-right: 0;
+          margin-left: 20px;
+        }
+        &:nth-child(even) {
+          margin-right: 20px;
+          margin-left: 0;
+        }
+      }
+    }
+    .add-app .images-container .upload-box {
+        margin-right: 20px;
+        margin-left: 0;
+    }
 }

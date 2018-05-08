@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, AppList, IcoN, Rating, Tab} from 'components';
+import {Translate, AppList, IcoN, Rating, Tab, RateResult} from 'components';
 
 interface IProps {
   app: string;
@@ -122,14 +122,7 @@ class AppView extends React.Component<IProps, IState> {
             </div>
             <div className="product-info">
               <h1>Google Play Music</h1>
-              <div className="rating">
-                <IcoN name="star16" size={16}/>
-                <IcoN name="star16" size={16}/>
-                <IcoN name="star16" size={16}/>
-                <IcoN name="star16" size={16}/>
-                <IcoN name="starWire16" size={16}/>
-                <span>4/5</span>
-              </div>
+              <RateResult rate={4.2}/>
               <Tab items={tabs}/>
             </div>
           </div>

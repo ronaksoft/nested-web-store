@@ -735,19 +735,6 @@ footer {
       margin-bottom: 4px;
       line-height: 29px;
     }
-    .rating {
-      height: 16px;
-      margin-bottom: 16px;
-      display: flex;
-      svg {
-        fill: @color-shine;
-      }
-      span {
-        font-size: 12px;
-        padding: 0 4px;
-        color: @color-solid-64;
-      }
-    }
   }
 }
 
@@ -885,6 +872,27 @@ textarea:-ms-input-placeholder{
 }
 textarea::-webkit-input-placeholder{
   color: rgba(50, 61, 71, 0.32);
+}
+
+
+
+.rate-result {
+  height: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  svg {
+    fill: @color-shine;
+  }
+  &.silver {
+    svg {
+      fill: @color-solid;
+    }
+  }
+  span {
+    font-size: 12px;
+    padding: 0 4px;
+    color: @color-solid-64;
+  }
 }
 
 @import "../containers/404/style";
