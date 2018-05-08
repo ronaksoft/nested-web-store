@@ -3,8 +3,9 @@ import {Translate, Tab, Loading, IcoN} from 'components';
 import {Upload, message} from 'antd';
 import Select from 'react-select';
 import {file as FileFactory, app as AppFactory} from './../../../api';
-import {IApplication, ICategory} from './../../../api/interfaces';
+import {IApplication} from './../../../api/interfaces';
 import Const from './../../../api/consts/CServer';
+import {cloneDeep} from 'lodash';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -124,9 +125,12 @@ class AdminApp extends React.Component<IProps, IState> {
     if (info.file.status === 'done') {
       console.log(info);
       // Get this url from response in real world.
+      const app = this.state.app;
+      app.logo = info.file.response.data.files[0];
       this.getBase64(info.file.originFileObj, (imageUrl) => this.setState({
         imageUrl,
         loading: false,
+        app,
       }));
     }
   }
@@ -178,6 +182,15 @@ class AdminApp extends React.Component<IProps, IState> {
   }
 
   private onSubmit = () => {
+    const model: IApplication = cloneDeep(this.state.app);
+    model.logo = {
+      _id: model.logo._id,
+    };
+    model.screenshots.map((val) => {
+      return {
+        _id: val._id,
+      };
+    });
     this.appFactory.createApp(this.state.app).then((data) => {
       console.log(data);
     }).catch((error) => {
