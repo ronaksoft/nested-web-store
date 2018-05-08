@@ -87,8 +87,6 @@ class AdminWrapper extends React.Component<IProps, IState> {
                 <Translate>Add an App</Translate>
               </Link>
               <div className="filler"/>
-              <button className="butn butn-blue"><Translate>Preview</Translate></button>
-              <button className="butn butn-primary"><Translate>Submit</Translate></button>
               <div className="user-wrapper"/>
             </div>
           </nav>

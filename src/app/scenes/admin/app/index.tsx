@@ -3,7 +3,7 @@ import {Translate, Tab, Loading, IcoN} from 'components';
 import {Upload, message} from 'antd';
 import Select from 'react-select';
 import {file as FileFactory, app as AppFactory} from './../../../api';
-import {IApplication} from './../../../api/interfaces';
+import {IApplication, ICategory} from './../../../api/interfaces';
 import Const from './../../../api/consts/CServer';
 
 // import {Row, Col, Input, Upload} from 'antd';
@@ -159,7 +159,6 @@ class AdminApp extends React.Component<IProps, IState> {
 
   private beforeUploadPictures = (file: any) => {
     const isValid = (['image/png', 'image/jpg', 'image/jpeg'].indexOf(file.type) > -1);
-    console.log(isValid, file);
     if (!isValid) {
       message.error('You can only upload PNG and JPG file!');
     }
@@ -332,11 +331,14 @@ class AdminApp extends React.Component<IProps, IState> {
         <div className="main-container-inner vertical admin">
           <div className="add-app">
             <h2><Translate>Add an app to the market</Translate></h2>
-            <button onClick={this.onSubmit} className="pull-right">Submit</button>
             <p><Translate>
               Add your developed app by filling these fields and helping users find your app better.
             </Translate></p>
             <Tab items={tabs}/>
+              {/* <button className="butn butn-blue"><Translate>Preview</Translate></button> */}
+            <button className="butn butn-primary full-width" onClick={this.onSubmit}>
+              <Translate>Submit</Translate>
+            </button>
           </div>
         </div>
       </div>
