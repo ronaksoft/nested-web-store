@@ -4,6 +4,7 @@ import {Upload, message} from 'antd';
 import Select from 'react-select';
 import {file as FileFactory} from './../../../api';
 import {IApplication} from './../../../api/interfaces';
+import Const from './../../../api/consts/CServer';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -244,7 +245,7 @@ class AdminApp extends React.Component<IProps, IState> {
             this.state.app.screenshots.map((val, index) => {
               return (
                 <div key={index} className="image-handler">
-                  <img src={'http://localhost:8080' + val.path} alt=""/>
+                  <img src={Const.SERVER_URL + val.path} alt=""/>
                   <div className="image-buttons">
                     <div>
                       <IcoN name="xcross16Red" size={16}/>
