@@ -81,10 +81,10 @@ class Container extends React.Component<IProps, IState> {
         <div>
           <nav className="navbar-wrapper">
             <div className="navbar">
-              <img src="/public/assets/icons/Nested_LogoNegative.svg" alt="Nested" className="logo"/>
-              <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
+              <img src="/public/assets/icons/Nested_LogoNegative.svg" height="32" alt="Nested" className="logo"/>
+              <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" height="32" alt="Nested"
                 className="logo-type"/>
-              <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" alt="Nested"
+              <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
                 className="logo-type fa"/>
               <div className="devider"/>
               <Link to="/">

@@ -13,9 +13,9 @@ interface IApplication {
   official: boolean;
   stared: boolean;
   status: number;
-  created_by: IUser;
-  created_by_name: string;
-  created_at: number;
+  created_by?: IUser;
+  created_by_name?: string;
+  created_at?: number;
 }
 
 interface IFile {

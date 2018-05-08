@@ -75,11 +75,13 @@ class AdminWrapper extends React.Component<IProps, IState> {
         <div>
           <nav className="navbar-wrapper">
             <div className="navbar admin">
-              <img src="/public/assets/icons/Nested_Logo.svg" alt="Nested" className="logo"/>
-              <img src="/public/assets/icons/Nested_EnglishType.svg" alt="Nested"
-                className="logo-type"/>
-              <img src="/public/assets/icons/Nested_PersianType.svg" alt="Nested"
-                className="logo-type fa"/>
+              <Link to="/">
+                <img src="/public/assets/icons/Nested_Logo.svg" height={32} alt="Nested" className="logo"/>
+                <img src="/public/assets/icons/Nested_EnglishType.svg" height={32} alt="Nested"
+                  className="logo-type"/>
+                <img src="/public/assets/icons/Nested_PersianType.svg" height={32} alt="Nested"
+                  className="logo-type fa"/>
+              </Link>
               <div className="devider"/>
               <Link to="/">
                 <Translate>Add an App</Translate>
