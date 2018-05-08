@@ -3,7 +3,7 @@ import {Translate, Tab, Loading, IcoN} from 'components';
 import {Upload, message} from 'antd';
 import Select from 'react-select';
 import {file as FileFactory, app as AppFactory} from './../../../api';
-import {IApplication, ISelectOption, ICategory} from './../../../api/interfaces';
+import {IApplication, ISelectOption} from './../../../api/interfaces';
 import Const from './../../../api/consts/CServer';
 import {cloneDeep} from 'lodash';
 
@@ -26,9 +26,10 @@ interface IState {
   loading: boolean;
   imageUrl: string;
   categories: ISelectOption[];
-  language: string;
+  languages: ISelectOption[];
+  selectedCategories: ISelectOption[];
+  selectedLanguages: ISelectOption[];
   suggestions: any[];
-  value: any;
 }
 
 class AdminApp extends React.Component<IProps, IState> {
@@ -36,7 +37,6 @@ class AdminApp extends React.Component<IProps, IState> {
   private customRequest: any;
   private appFactory: AppFactory;
   private fileFactory: FileFactory;
-  private categories: ICategory[];
 
   /**
    * @constructor
@@ -51,34 +51,31 @@ class AdminApp extends React.Component<IProps, IState> {
       initData = window;
     }
     this.translator = new Translate();
-    this.categories = [{
-      _id: 'aa',
-      name: 'aa',
-      name_fa: 'aa',
-    }, {
-      _id: 'bb',
-      name: 'bb',
-      name_fa: 'bb',
-    }, {
-      _id: 'cc',
-      name: 'cc',
-      name_fa: 'cc',
-    }];
     const state: IState = {
       loading: false,
       imageUrl: '',
-      value: [],
-      categories: [{
-        value: 'aa',
-        label: 'aa',
-      }, {
-        value: 'bb',
-        label: 'bb',
-      }, {
-        value: 'cc',
-        label: 'cc',
-      }],
-      language: '',
+      selectedCategories: [],
+      selectedLanguages: [],
+      categories: [
+        {
+          label: 'aaa',
+          value: 'aaa',
+        },
+        {
+          label: 'bbb',
+          value: 'bbb',
+        },
+      ],
+      languages: [
+        {
+          label: 'farsi',
+          value: 'fa',
+        },
+        {
+          label: 'English',
+          value: 'en',
+        },
+      ],
       suggestions: [
         {
           label: 'Form Builder',
@@ -232,13 +229,15 @@ class AdminApp extends React.Component<IProps, IState> {
     });
   }
 
-  public handleSelectChange = (value) => {
-    // console.log('You\'ve selected:', selected);
-    // const app: IApplication = this.state.app;
-    // const category: ICategory = this.categories.find((cat) => cat._id === selected.value);
-    // app.categories.push(category);
+  public handleSelectChangeCategories = (selectedCategories) => {
     this.setState({
-      value,
+      selectedCategories,
+    });
+  }
+
+  public handleSelectChangeLanguage = (selectedLanguages) => {
+    this.setState({
+      selectedLanguages,
     });
   }
 
@@ -306,16 +305,15 @@ class AdminApp extends React.Component<IProps, IState> {
             placeholder={this.translator._getText('Select from the list of categories')}
           /> */}
           <Select
-            closeOnSelect={false}
-            disabled={false}
             isMulti={true}
-            onChange={this.handleSelectChange}
+            onChange={this.handleSelectChangeCategories}
             options={this.state.categories}
             placeholder={this.translator._getText('Select from the list of categories')}
             removeSelected={true}
             rtl={true}
             simpleValue={true}
-            value={this.state.value}
+            className="multi-selector"
+            value={this.state.selectedCategories}
           />
         </div>
         {/* <ul className="selected-categories">
@@ -330,11 +328,15 @@ class AdminApp extends React.Component<IProps, IState> {
         <div className="form-row">
           <Select
             name="language"
-            value={this.state.language}
-            onChange={this.languageOnChange}
-            className="suggester"
-            options={this.state.suggestions}
+            isMulti={true}
+            onChange={this.handleSelectChangeLanguage}
+            options={this.state.languages}
             placeholder={this.translator._getText('Select your app languages')}
+            removeSelected={true}
+            rtl={true}
+            simpleValue={true}
+            className="multi-selector"
+            value={this.state.selectedLanguages}
           />
         </div>
       </div>
