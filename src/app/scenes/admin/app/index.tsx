@@ -3,7 +3,7 @@ import {Translate, Tab, Loading, IcoN} from 'components';
 import {Upload, message} from 'antd';
 import Select from 'react-select';
 import {file as FileFactory, app as AppFactory} from './../../../api';
-import {IApplication} from './../../../api/interfaces';
+import {IApplication, ISelectOption, ICategory} from './../../../api/interfaces';
 import Const from './../../../api/consts/CServer';
 import {cloneDeep} from 'lodash';
 
@@ -25,9 +25,10 @@ interface IState {
   app: IApplication;
   loading: boolean;
   imageUrl: string;
-  category: string;
+  categories: ISelectOption[];
   language: string;
   suggestions: any[];
+  value: any;
 }
 
 class AdminApp extends React.Component<IProps, IState> {
@@ -35,6 +36,7 @@ class AdminApp extends React.Component<IProps, IState> {
   private customRequest: any;
   private appFactory: AppFactory;
   private fileFactory: FileFactory;
+  private categories: ICategory[];
 
   /**
    * @constructor
@@ -49,10 +51,33 @@ class AdminApp extends React.Component<IProps, IState> {
       initData = window;
     }
     this.translator = new Translate();
+    this.categories = [{
+      _id: 'aa',
+      name: 'aa',
+      name_fa: 'aa',
+    }, {
+      _id: 'bb',
+      name: 'bb',
+      name_fa: 'bb',
+    }, {
+      _id: 'cc',
+      name: 'cc',
+      name_fa: 'cc',
+    }];
     const state: IState = {
       loading: false,
       imageUrl: '',
-      category: '',
+      value: [],
+      categories: [{
+        value: 'aa',
+        label: 'aa',
+      }, {
+        value: 'bb',
+        label: 'bb',
+      }, {
+        value: 'cc',
+        label: 'cc',
+      }],
       language: '',
       suggestions: [
         {
@@ -198,6 +223,16 @@ class AdminApp extends React.Component<IProps, IState> {
     });
   }
 
+  public handleSelectChange = (value) => {
+    // console.log('You\'ve selected:', selected);
+    // const app: IApplication = this.state.app;
+    // const category: ICategory = this.categories.find((cat) => cat._id === selected.value);
+    // app.categories.push(category);
+    this.setState({
+      value,
+    });
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -254,15 +289,34 @@ class AdminApp extends React.Component<IProps, IState> {
                value={this.state.app.summary} onChange={this.bindInputToModel.bind(this, 'summary')}/>
         <h4><Translate>Category</Translate></h4>
         <div className="form-row">
-          <Select
+          {/* <Select
             name="category"
-            value={this.state.category}
-            onChange={this.categoryOnChange}
-            className="suggester"
-            options={this.state.suggestions}
+            multi={true}
+            className="mulit-selector"
+            options={this.state.categories}
             placeholder={this.translator._getText('Select from the list of categories')}
+          /> */}
+          <Select
+            closeOnSelect={false}
+            disabled={false}
+            multi={true}
+            onChange={this.handleSelectChange}
+            options={this.state.categories}
+            placeholder={this.translator._getText('Select from the list of categories')}
+            removeSelected={true}
+            rtl={true}
+            simpleValue={true}
+            value={this.state.value}
           />
         </div>
+        {/* <ul className="selected-categories">
+          {this.state.app.categories.map((cat) => (
+            <li key={cat._id}>
+              <span>{cat.name}</span>
+              <IcoN name="negativeXCross24" size={24}/>
+            </li>
+          ))}
+        </ul> */}
         <h4><Translate>Languages</Translate></h4>
         <div className="form-row">
           <Select

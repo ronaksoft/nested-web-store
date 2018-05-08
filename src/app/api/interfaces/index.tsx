@@ -36,6 +36,11 @@ interface ICategory {
   order?: number;
 }
 
+interface ISelectOption {
+  value: string;
+  label: string;
+}
+
 interface IUser {
   _id: string;
   username: string;
@@ -57,4 +62,4 @@ interface IApp {
   created_by: number;
 }
 
-export {IApplication, IFile, ICategory, IUser, IApp};
+export {IApplication, IFile, ICategory, IUser, IApp, ISelectOption};
