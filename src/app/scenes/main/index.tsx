@@ -41,6 +41,7 @@ class Main extends React.Component<any, IState> {
         categories: [],
       };
     }
+    console.log(this.state);
   }
 
   /**

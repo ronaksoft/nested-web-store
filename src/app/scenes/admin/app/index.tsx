@@ -99,7 +99,7 @@ class AdminApp extends React.Component<IProps, IState> {
         categories: [],
         permissions: [],
         official: false,
-        stared: null,
+        stared: false,
         status: 0,
         lang: '',
       },
@@ -206,6 +206,14 @@ class AdminApp extends React.Component<IProps, IState> {
     });
   }
 
+  private removePictures(index) {
+    const app = this.state.app;
+    app.screenshots.splice(index, 1);
+    this.setState({
+      app,
+    });
+  }
+
   private onSubmit = () => {
     const model: IApplication = cloneDeep(this.state.app);
     model.logo = {
@@ -216,7 +224,8 @@ class AdminApp extends React.Component<IProps, IState> {
         _id: val._id,
       };
     });
-    this.appFactory.createApp(this.state.app).then((data) => {
+    console.log(model);
+    this.appFactory.createApp(model).then((data) => {
       console.log(data);
     }).catch((error) => {
       message.error(error);
@@ -299,7 +308,7 @@ class AdminApp extends React.Component<IProps, IState> {
           <Select
             closeOnSelect={false}
             disabled={false}
-            multi={true}
+            isMulti={true}
             onChange={this.handleSelectChange}
             options={this.state.categories}
             placeholder={this.translator._getText('Select from the list of categories')}
@@ -340,7 +349,7 @@ class AdminApp extends React.Component<IProps, IState> {
                 <div key={index} className="image-handler">
                   <img src={Const.SERVER_URL + val.path} alt=""/>
                   <div className="image-buttons">
-                    <div>
+                    <div onClick={this.removePictures.bind(this, index)}>
                       <IcoN name="xcross16Red" size={16}/>
                     </div>
                     <div>
@@ -358,6 +367,7 @@ class AdminApp extends React.Component<IProps, IState> {
               className="avatar-uploader"
               showUploadList={false}
               beforeUpload={this.beforeUploadPictures}
+              multiple={true}
               onChange={this.picturesChangeHandler}
               customRequest={this.customRequest}
             >

@@ -13,11 +13,6 @@ class FileFactory {
 
   public customRequest(uploadData) {
     const formData = new FormData();
-    if (uploadData.data) {
-      Object.keys(uploadData.data).map((key) => {
-        formData.append(key, uploadData.data[key]);
-      });
-    }
     formData.append('file-' + uploadData.filename, uploadData.file);
     axios
       .post(Const.SERVER_URL + '/admin/file/add', formData, {
