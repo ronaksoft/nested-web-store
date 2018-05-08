@@ -107,12 +107,17 @@ class AppView extends React.Component<IProps, IState> {
               <img src="/public/assets/icons/Nested_Logo.svg" alt=""/>
               <button className="butn butn-primary full-width"><Translate>Install App</Translate></button>
               <a href="" className="report-butn"><Translate>Report this app</Translate></a>
-              <div className="categories">
+              <div className="product-her-block categories">
                 <h4><Translate>Categories</Translate>:</h4>
                 <a href="">Music &amp; Fun</a>
                 <a href="">Social Networks</a>
                 <a href="">Music &amp; Fun</a>
                 <a href="">Social Networks</a>
+              </div>
+              <div className="product-her-block languages">
+                <h4><Translate>Languages Support</Translate>:</h4>
+                <a className="en"><Translate>English</Translate></a>
+                <a className="fa"><Translate>Persian</Translate></a>
               </div>
             </div>
             <div className="product-info">

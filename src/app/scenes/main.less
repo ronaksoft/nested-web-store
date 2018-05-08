@@ -345,6 +345,7 @@ a:-webkit-any-link {
     list-style: none;
     li {
       padding: 0 6px;
+      line-height: 24px;
       margin-bottom: 8px;
       cursor: pointer;
       &:hover, &.active {
@@ -685,10 +686,11 @@ footer {
       font-weight: bold;
       margin-bottom: 16px;
     }
-    .categories {
+    .product-her-block {
       padding: 16px 8px;
       background: #FFFFFF;
       border-radius: 16px;
+      margin-bottom: 16px;
       h4 {
         font-size: 11px;
         padding-bottom: 6px;
@@ -707,6 +709,20 @@ footer {
         padding: 5px 6px;
         display: inline-block;
         margin: 0 6px 6px 0;
+      }
+    }
+    .languages {
+      a {
+        padding: 5px 6px 5px 30px;
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-size: 24px 24px;
+        &.en {
+          background-image: url('/public/assets/images/en-chips-logo.png');
+        }
+        &.fa {
+          background-image: url('/public/assets/images/fa-chips-logo.png');
+        }
       }
     }
   }
