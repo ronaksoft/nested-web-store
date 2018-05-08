@@ -1,4 +1,3 @@
-export {PlaceChips} from './Chips/';
 export {IcoN} from './Icons/';
 export {Loading} from './Loading/';
 export {reactTranslateChangeLanguage} from './i18n/';

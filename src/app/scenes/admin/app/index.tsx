@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {Translate, Tab, Loading, IcoN} from 'components';
-import { Upload, message} from 'antd';
+import {Upload, message} from 'antd';
 import Select from 'react-select';
-import axios from 'axios';
+import {file as FileFactory} from './../../../api';
+import {IApplication} from './../../../api/interfaces';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -19,7 +20,7 @@ interface IProps {
 }
 
 interface IState {
-  app: any;
+  app: IApplication;
   loading: boolean;
   imageUrl: string;
   category: string;
@@ -29,6 +30,9 @@ interface IState {
 
 class AdminApp extends React.Component<IProps, IState> {
   private translator: Translate;
+  private customRequest: any;
+  private fileFactory: FileFactory;
+
   /**
    * @constructor
    * Creates an instance of AppAdd.
@@ -42,84 +46,123 @@ class AdminApp extends React.Component<IProps, IState> {
       initData = window;
     }
     this.translator = new Translate();
-    const state: any = {
+    const state: IState = {
       loading: false,
       imageUrl: '',
       category: '',
       language: '',
       suggestions: [
-          {
-            label: 'Form Builder',
-            value: 'form_builder',
-          },
+        {
+          label: 'Form Builder',
+          value: 'form_builder',
+        },
       ],
+      app: {
+        _id: '',
+        categories: [],
+        created_at: 0,
+        created_by: null,
+        logo: null,
+        created_by_name: '',
+        description: '',
+        description_fa: '',
+        name: '',
+        name_fa: '',
+        official: false,
+        permissions: [],
+        screenshots: [],
+        stared: null,
+        status: 0,
+        summary: '',
+        website: '',
+      },
     };
-    if (initData) {
-      state.app = initData.__INITIAL_DATA__.app || {};
-      initData.__INITIAL_DATA__ = {};
-    } else {
-      state.app = {};
-    }
+    // if (initData) {
+    //   state.app = initData.__INITIAL_DATA__.app || {};
+    //   initData.__INITIAL_DATA__ = {};
+    // } else {
+    //   state.app = {};
+    // }
     this.state = state;
+    this.fileFactory = new FileFactory();
+    this.customRequest = this.fileFactory.customRequest.bind(this);
   }
+
   // public componentWillUpdate(nextProps) {
   //
   // }
 
-  public categoryOnChange = (event, { newValue }) => {
+  public categoryOnChange = (event, {newValue}) => {
     console.log(event);
     this.setState({
       category: newValue,
     });
   }
 
-  public languageOnChange = (event, { newValue }) => {
+  public languageOnChange = (event, {newValue}) => {
     console.log(event);
     this.setState({
       language: newValue,
     });
   }
 
-  private handleChange = (info) => {
+  private getBase64 = (img: any, callback: any) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+
+  private logoChangeHandler = (info) => {
     if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
+      this.setState({loading: true});
       return;
     }
     if (info.file.status === 'done') {
+      console.log(info);
       // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (imageUrl) => this.setState({
+      this.getBase64(info.file.originFileObj, (imageUrl) => this.setState({
         imageUrl,
         loading: false,
       }));
     }
   }
 
-  private customRequest = (uploadData) => {
-    const formData = new FormData();
-    if (uploadData.data) {
-      Object.keys(uploadData.data).map((key) => {
-        formData.append(key, uploadData.data[key]);
+  private beforeUploadLogo = (file: any) => {
+    const isPNG = file.type === 'image/png';
+    if (!isPNG) {
+      message.error('You can only upload JPG file!');
+    }
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('Image must smaller than 1MB!');
+    }
+    return isPNG && isLt1M;
+  }
+
+  private picturesChangeHandler = (info) => {
+    if (info.file.status === 'uploading') {
+      this.setState({loading: true});
+      return;
+    }
+    if (info.file.status === 'done') {
+      const app = this.state.app;
+      app.screenshots.push(info.file.response.data.files[0]);
+      this.setState({
+        app,
       });
     }
-    formData.append('file-' + uploadData.filename, uploadData.file);
+  }
 
-    axios
-      .post('http://localhost:8080/admin/file/add', formData, {
-        headers: '',
-        onUploadProgress: ({ total, loaded }) => {
-          uploadData.onProgress({ percent: Math.round(loaded / total * 100).toFixed(2) }, uploadData.file);
-        },
-      })
-      .then(({ data: response }) => {
-        uploadData.onSuccess(response, uploadData.file);
-      })
-      .catch(uploadData.onError);
-
-    return {
-      abort() {
-        console.log('upload progress is aborted.');
-      },
-    };
+  private beforeUploadPictures = (file: any) => {
+    const isValid = (['image/png', 'image/jpg'].indexOf(file.type) > -1);
+    if (!isValid) {
+      message.error('You can only upload PNG and JPG file!');
+    }
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('Image must smaller than 1MB!');
+    }
+    return isValid && isLt1M;
   }
 
   /**
@@ -148,11 +191,11 @@ class AdminApp extends React.Component<IProps, IState> {
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
-            beforeUpload={beforeUpload}
-            onChange={this.handleChange}
+            beforeUpload={this.beforeUploadLogo}
+            onChange={this.logoChangeHandler}
             customRequest={this.customRequest}
           >
-            {imageUrl ? <img src={imageUrl} alt="" /> : uploadButton}
+            {imageUrl ? <img src={imageUrl} alt=""/> : uploadButton}
           </Upload>
         </div>
         <div className="multi-input-row form-row">
@@ -172,23 +215,23 @@ class AdminApp extends React.Component<IProps, IState> {
         <h4><Translate>Category</Translate></h4>
         <div className="form-row">
           <Select
-              name="category"
-              value={this.state.category}
-              onChange={this.categoryOnChange}
-              className="suggester"
-              options={this.state.suggestions}
-              placeholder={this.translator._getText('Select from the list of categories')}
+            name="category"
+            value={this.state.category}
+            onChange={this.categoryOnChange}
+            className="suggester"
+            options={this.state.suggestions}
+            placeholder={this.translator._getText('Select from the list of categories')}
           />
         </div>
         <h4><Translate>Languages</Translate></h4>
         <div className="form-row">
           <Select
-              name="language"
-              value={this.state.language}
-              onChange={this.languageOnChange}
-              className="suggester"
-              options={this.state.suggestions}
-              placeholder={this.translator._getText('Select your app languages')}
+            name="language"
+            value={this.state.language}
+            onChange={this.languageOnChange}
+            className="suggester"
+            options={this.state.suggestions}
+            placeholder={this.translator._getText('Select your app languages')}
           />
         </div>
       </div>
@@ -197,26 +240,32 @@ class AdminApp extends React.Component<IProps, IState> {
       <div>
         <h4><Translate>Screenshots &amp; Pictures</Translate></h4>
         <div className="images-container">
-          <div className="image-handler">
-            <img src="/public/assets/icons/Nested_Logo.svg" alt=""/>
-            <div className="image-buttons">
-              <div>
-                <IcoN name="xcross16Red" size={16} />
-              </div>
-              <div>
-                <IcoN name="pencil16" size={16} />
-              </div>
-            </div>
-          </div>
+          {
+            this.state.app.screenshots.map((val, index) => {
+              return (
+                <div key={index} className="image-handler">
+                  <img src={'http://localhost:8080' + val.path} alt=""/>
+                  <div className="image-buttons">
+                    <div>
+                      <IcoN name="xcross16Red" size={16}/>
+                    </div>
+                    <div>
+                      <IcoN name="pencil16" size={16}/>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          }
           <div className="upload-box">
             <Upload
               name="avatar"
               listType="picture-card"
               className="avatar-uploader"
               showUploadList={false}
-              action="//jsonplaceholder.typicode.com/posts/"
-              beforeUpload={beforeUpload}
-              onChange={this.handleChange}
+              beforeUpload={this.beforeUploadPictures}
+              onChange={this.picturesChangeHandler}
+              customRequest={this.customRequest}
             >
               <div className="ant-upload-text">+<br/>Add photo</div>
             </Upload>
@@ -228,10 +277,10 @@ class AdminApp extends React.Component<IProps, IState> {
       <div>
         <div className="form-row">
           <Select
-              name="permission"
-              className="suggester"
-              options={this.state.suggestions}
-              placeholder={this.translator._getText('Select from the list of permissions')}
+            name="permission"
+            className="suggester"
+            options={this.state.suggestions}
+            placeholder={this.translator._getText('Select from the list of permissions')}
           />
         </div>
         <ul className="permissions">
@@ -244,7 +293,7 @@ class AdminApp extends React.Component<IProps, IState> {
               <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
             </div>
             <div className="per-remove">
-              <IcoN name="negativeXCross24" size={24} />
+              <IcoN name="negativeXCross24" size={24}/>
             </div>
           </li>
         </ul>
@@ -256,7 +305,7 @@ class AdminApp extends React.Component<IProps, IState> {
           <div className="add-app">
             <h2><Translate>Add an app to the market</Translate></h2>
             <p><Translate>
-                Add your developed app by filling these fields and helping users find your app better.
+              Add your developed app by filling these fields and helping users find your app better.
             </Translate></p>
             <Tab items={tabs}/>
           </div>
@@ -264,24 +313,6 @@ class AdminApp extends React.Component<IProps, IState> {
       </div>
     );
   }
-}
-
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    message.error('You can only upload JPG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJPG && isLt2M || true;
 }
 
 export default AdminApp;
