@@ -221,6 +221,12 @@ a:-webkit-any-link {
   width: 100%;
   border-radius: 10px;
   height: 100%;
+  .ant-upload {
+    img {
+      max-height: 156px;
+      max-width: 100%;
+    }
+  }
   .form-row {
     margin-bottom: 16px;
   }
@@ -263,6 +269,7 @@ a:-webkit-any-link {
       width: ~'calc(50% - 20px)';
       margin: 0 20px 16px;
       position: relative;
+      max-height: 156px;
       img {
         width: 100%;
         object-fit: contain;
@@ -276,8 +283,11 @@ a:-webkit-any-link {
         border-radius: 0px 4px 4px 0px;
         display: flex;
         width: 24px;
+        transform: translateX(100%);
         align-items: center;
         flex-direction: column;
+        transition: opacity .2s;
+        opacity: 0;
         > * {
           width: 16px;
           height: 24px;
@@ -291,6 +301,11 @@ a:-webkit-any-link {
           &:last-child {
             border: none;
           }
+        }
+      }
+      &:hover {
+        .image-buttons {
+          opacity: 1;
         }
       }
       &:nth-child(odd) {
@@ -312,6 +327,9 @@ a:-webkit-any-link {
         padding: 0;
         display: flex;
       }
+    }
+    &:first-child {
+      margin: 0;
     }
   }
   .ant-upload-text {
