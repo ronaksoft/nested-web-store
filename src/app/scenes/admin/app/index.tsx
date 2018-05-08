@@ -128,7 +128,7 @@ class AdminApp extends React.Component<IProps, IState> {
   private beforeUploadLogo = (file: any) => {
     const isPNG = file.type === 'image/png';
     if (!isPNG) {
-      message.error('You can only upload JPG file!');
+      message.error('You can only upload PNG file!');
     }
     const isLt1M = file.size / 1024 / 1024 < 1;
     if (!isLt1M) {
@@ -152,7 +152,8 @@ class AdminApp extends React.Component<IProps, IState> {
   }
 
   private beforeUploadPictures = (file: any) => {
-    const isValid = (['image/png', 'image/jpg'].indexOf(file.type) > -1);
+    const isValid = (['image/png', 'image/jpg', 'image/jpeg'].indexOf(file.type) > -1);
+    console.log(isValid, file);
     if (!isValid) {
       message.error('You can only upload PNG and JPG file!');
     }
