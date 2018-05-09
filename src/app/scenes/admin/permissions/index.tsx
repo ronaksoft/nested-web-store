@@ -50,24 +50,26 @@ class AdminPermissions extends React.Component<IProps, IState> {
           value: 0,
           name: 'a',
           description: 'a',
-          translations: {
-            fa: {
+          translations: [
+            {
+              locale: 'fa',
               name: 'سسس',
               description: 'سسسسسس',
             },
-          },
+          ],
         },
         {
           _id: 'b',
           value: 2,
           name: 'b',
           description: 'b',
-          translations: {
-            fa: {
+          translations: [
+            {
+              locale: 'fa',
               name: 'ششش',
               description: 'ششششش',
             },
-          },
+          ],
         },
       ],
     };
@@ -111,15 +113,15 @@ class AdminPermissions extends React.Component<IProps, IState> {
     const validateForm = false;
     const tabs = {};
     tabs[this.translator._getText('English')] = (
-      <div>
-        <input type="text" placeholder={this.translator._getText('Permission name...')}/>
-        <textarea placeholder={this.translator._getText('Permission description...')}/>
+      <div key="English">
+        <input name="name_en" type="text" placeholder={this.translator._getText('Permission name...')}/>
+        <textarea name="des_en" placeholder={this.translator._getText('Permission description...')}/>
       </div>
     );
     tabs[this.translator._getText('Persian')] = (
-      <div>
-        <input type="text" placeholder={this.translator._getText('Permission name...')}/>
-        <textarea placeholder={this.translator._getText('Permission description...')}/>
+      <div key="Persian">
+        <input name="name_fa" type="text" placeholder={this.translator._getText('Permission name...')}/>
+        <textarea name="des_fa" placeholder={this.translator._getText('Permission description...')}/>
       </div>
     );
     return (

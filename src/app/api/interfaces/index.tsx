@@ -49,6 +49,7 @@ interface IPermission {
 }
 
 interface IPermissionTrans {
+  locale: string;
   name?: string;
   description?: string;
 }

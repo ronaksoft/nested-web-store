@@ -49,16 +49,22 @@ class AdminApp extends React.Component<IProps, IState> {
         {
           _id: 'a',
           name: 'a',
-          name_fa: 'a',
           stared: false,
           order: 0,
+          translations : [{
+            name: 's',
+            locale: 'fa',
+          }]
         },
         {
           _id: 'b',
           name: 'b',
-          name_fa: 'b',
-          stared: true,
-          order: 1,
+          stared: false,
+          order: 0,
+          translations : [{
+            name: 'ssss',
+            locale: 'fa',
+          }]
         },
       ],
     };
@@ -172,7 +178,7 @@ class AdminApp extends React.Component<IProps, IState> {
             <input type="text" placeholder={this.translator._getText('Category name (eng)...')}/>
             <input type="text" placeholder={this.translator._getText('Category name (per)...')}/>
             <input type="text" placeholder={this.translator._getText('Category slug...')}/>
-            <button type="submit" disabled={!validateForm}/>
+            <button className="hidden-submit" type="submit" disabled={!validateForm}/>
           </form>
         </Modal>
       </div>
