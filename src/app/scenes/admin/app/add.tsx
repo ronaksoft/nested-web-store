@@ -2,11 +2,11 @@ import * as React from 'react';
 import {Translate, Tab, Loading, IcoN} from 'components';
 import {Upload, message, Modal} from 'antd';
 import Select from 'react-select';
-import {file as FileFactory, app as AppFactory} from './../../../api';
-import {IApplication, ISelectOption} from './../../../api/interfaces';
-import Const from './../../../api/consts/CServer';
+import {file as FileFactory, app as AppFactory} from 'api';
+import {IApplication, ISelectOption} from 'api/interfaces';
+import Const from 'api/consts/CServer';
 import {cloneDeep} from 'lodash';
-import {AppView} from '../../';
+import {AppView} from 'scenes';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
