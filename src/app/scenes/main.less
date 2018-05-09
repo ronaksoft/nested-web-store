@@ -1112,9 +1112,38 @@ textarea::-webkit-input-placeholder{
     .edit-button, .remove-button {
       margin: 0 8px;
     }
+    .edit-button{
+      opacity: .72;
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 }
 
+.add-permission-modal {
+  input, textarea {
+    width: 100%;
+  }
+  textarea {
+    border: 1px solid @color-wind-new;
+    resize: none;
+    min-height: 128px;
+  }
+}
+
+.ant-modal-header, .ant-modal-footer {
+  border: none
+}
+.ant-modal-footer {
+  padding: 0 24px 24px;
+  button {
+    margin-bottom: none;
+  }
+}
+.hidden-submit {
+  position: absolute;
+}
 @import "../containers/404/style";
 
 @import "../../../node_modules/antd/dist/antd.min.css";

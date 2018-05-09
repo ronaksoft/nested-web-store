@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, IcoN} from 'components';
+import {Translate, IcoN, Tab} from 'components';
 import {Modal} from 'antd';
 import {IPermission} from 'api/interfaces';
 
@@ -109,6 +109,19 @@ class AdminPermissions extends React.Component<IProps, IState> {
    */
   public render() {
     const validateForm = false;
+    const tabs = {};
+    tabs[this.translator._getText('English')] = (
+      <div>
+        <input type="text" placeholder={this.translator._getText('Permission name...')}/>
+        <textarea placeholder={this.translator._getText('Permission description...')}/>
+      </div>
+    );
+    tabs[this.translator._getText('Persian')] = (
+      <div>
+        <input type="text" placeholder={this.translator._getText('Permission name...')}/>
+        <textarea placeholder={this.translator._getText('Permission description...')}/>
+      </div>
+    );
     return (
       <div className="main-container">
         <div className="main-container-inner vertical admin">
@@ -163,12 +176,13 @@ class AdminPermissions extends React.Component<IProps, IState> {
               </button>,
             ]}
           >
-            <input type="text" placeholder={this.translator._getText('Permission Value')}/>
-            <form className="add-category-modal" onSubmit={this.submitCreateCategoryForm}>
-              <input type="text" placeholder={this.translator._getText('Permission name...')}/>
-              <textarea placeholder={this.translator._getText('Permission description...')}/>
-              <button type="submit" disabled={!validateForm}/>
-            </form>
+            <div className="add-permission-modal">
+              <input type="number" placeholder={this.translator._getText('Permission Value')}/>
+              <form className="add-category-modal" onSubmit={this.submitCreateCategoryForm}>
+                <Tab items={tabs}/>
+                <button className="hidden-submit" type="submit" disabled={!validateForm}/>
+              </form>
+            </div>
         </Modal>
       </div>
     );

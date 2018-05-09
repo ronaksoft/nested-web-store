@@ -144,7 +144,7 @@ class AdminApp extends React.Component<IProps, IState> {
             </div>
           </div>
           <div className="add-category">
-            <a className="add-cat" onClick={this.toggleAddCategoryModal}>
+            <a className="add" onClick={this.toggleAddCategoryModal}>
               <IcoN name="cross24" size={24}/>
               <span>Add a category</span>
             </a>
