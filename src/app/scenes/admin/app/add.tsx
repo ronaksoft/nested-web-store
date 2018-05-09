@@ -228,11 +228,13 @@ class AdminAddApp extends React.Component<IProps, IState> {
       };
     }
     model.categories = this.state.selectedCategories.map((cat) => {
-      return {_id: cat.value};
+      return {
+        _id: cat.value,
+      };
     });
     model.lang = this.state.selectedLanguages.map((lng) => lng.value);
-    model.screenshots.map((val) => {
-      return {
+    model.screenshots.forEach((val, index) => {
+      model.screenshots[index] = {
         _id: val._id,
       };
     });
@@ -428,24 +430,24 @@ class AdminAddApp extends React.Component<IProps, IState> {
           <div className="page-buttons">
             <div className="page-buttons-inner">
               <h2><Translate>Add an app to the market</Translate></h2>
-                <button className="butn butn-blue" onClick={this.preview}>
-                  <Translate>Preview</Translate>
-                </button>
-                <button className="butn butn-primary" onClick={this.onSubmit}>
-                  <Translate>Submit</Translate>
-                </button>
+              <button className="butn butn-blue" onClick={this.preview}>
+                <Translate>Preview</Translate>
+              </button>
+              <button className="butn butn-primary" onClick={this.onSubmit}>
+                <Translate>Submit</Translate>
+              </button>
             </div>
           </div>
           <Tab items={tabs}/>
         </div>
         <Modal
-            title="test"
-            wrapClassName="vertical-center-modal"
-            width="90%"
-            visible={this.state.preview}
-            onOk={this.preview}
-            onCancel={this.preview}
-          >
+          title="test"
+          wrapClassName="vertical-center-modal"
+          width="90%"
+          visible={this.state.preview}
+          onOk={this.preview}
+          onCancel={this.preview}
+        >
           <AppView app="test" preview={true}/>
         </Modal>
       </div>
