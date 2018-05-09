@@ -2,13 +2,12 @@ interface IApplication {
   _id: string;
   app_id: string;
   name: string;
-  name_fa: string;
   summary: string;
   logo: IFile;
-  description: string;
-  description_fa: string;
+  desc: string;
   website: string;
   screenshots: IFile[];
+  translations?: IApplicationTrans[];
   permissions: number[];
   categories: ICategory[];
   official: boolean;
@@ -60,6 +59,12 @@ interface IApp {
   name: string;
   token: string;
   created_by: number;
+}
+
+interface IApplicationTrans {
+  locale: string;
+  name: string;
+  desc: string;
 }
 
 export {IApplication, IFile, ICategory, IUser, IApp, ISelectOption};
