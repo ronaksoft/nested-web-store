@@ -1023,6 +1023,7 @@ textarea::-webkit-input-placeholder{
     display: flex;
     align-items: center;
     i {
+      flex: none;
       margin: 0 20px;
       svg {
         fill: #508EE6;
@@ -1072,6 +1073,20 @@ textarea::-webkit-input-placeholder{
     }
   }
 }
+.add-category-modal {
+  input {
+    display: flex;
+    width: 100%;
+    margin: 0 0 16px;
+  }
+  button {
+    opacity: 0;
+    height: 0px;
+    visibility: hidden;
+    width: 0px;
+  }
+}
+
 @import "../containers/404/style";
 
 @import "../../../node_modules/antd/dist/antd.min.css";

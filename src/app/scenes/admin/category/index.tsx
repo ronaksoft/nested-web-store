@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Translate, IcoN} from 'components';
-// import {Upload, message, Modal} from 'antd';
-import {file as FileFactory, app as AppFactory} from 'api';
+import {Modal} from 'antd';
 import {SortableContainer, SortableElement, arrayMove, SortableHandle} from 'react-sortable-hoc';
 import {ICategory} from 'api/interfaces';
 
@@ -22,13 +21,12 @@ interface IProps {
 interface IState {
   loading: boolean;
   categories: ICategory[];
+  untouched: boolean;
+  addCategoryModal: boolean;
 }
 
 class AdminApp extends React.Component<IProps, IState> {
   private translator: Translate;
-  private customRequest: any;
-  private appFactory: AppFactory;
-  private fileFactory: FileFactory;
 
   /**
    * @constructor
@@ -45,6 +43,8 @@ class AdminApp extends React.Component<IProps, IState> {
     this.translator = new Translate();
     const state: IState = {
       loading: false,
+      addCategoryModal: false,
+      untouched: true,
       categories: [
         {
           _id: 'a',
@@ -63,9 +63,6 @@ class AdminApp extends React.Component<IProps, IState> {
       ],
     };
     this.state = state;
-    this.appFactory = new AppFactory();
-    this.fileFactory = new FileFactory();
-    this.customRequest = this.fileFactory.customRequest.bind(this);
   }
 
   private onSave() {
@@ -75,9 +72,33 @@ class AdminApp extends React.Component<IProps, IState> {
   private onSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
       categories: arrayMove(this.state.categories, oldIndex, newIndex),
+      untouched: false,
     });
   }
 
+  private toggleAddCategoryModal = () => {
+    if (!this.state.addCategoryModal) {
+      this.setState({
+        addCategoryModal: true,
+      });
+    } else {
+      this.setState({
+        addCategoryModal: false,
+      });
+    }
+  }
+
+  private createCategory = () => {
+    // ssss
+  }
+
+  private submitCreateCategoryForm = (e) => {
+    console.log(e);
+    e.preventDefault();
+    e.stopPropagation();
+    this.toggleAddCategoryModal();
+    // ssss
+  }
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -86,6 +107,7 @@ class AdminApp extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
+    const validateForm = false;
     const DragHandle = SortableHandle(() => <IcoN name="move24" size={24}/>);
     const SortableItem = SortableElement(({value}) => (
       <li className="add-category-sort-item">
@@ -116,29 +138,43 @@ class AdminApp extends React.Component<IProps, IState> {
           <div className="page-buttons">
             <div className="page-buttons-inner">
               <h2><Translate>Category Management</Translate></h2>
-                <button className="butn butn-primary" onClick={this.onSave}>
+                <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
                   <Translate>Save</Translate>
                 </button>
             </div>
           </div>
           <div className="add-category">
-            <a className="add-cat">
-              <IcoN name="cross16" size={16}/>
+            <a className="add-cat" onClick={this.toggleAddCategoryModal}>
+              <IcoN name="cross24" size={24}/>
               <span>Add a category</span>
             </a>
             <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} lockAxis="Y"/>
           </div>
         </div>
-        {/* <Modal
-            title="test"
+        <Modal
+            title="Add or edit a category"
             wrapClassName="vertical-center-modal"
-            width="90%"
-            visible={this.state.preview}
-            onOk={this.preview}
-            onCancel={this.preview}
+            width="466px"
+            visible={this.state.addCategoryModal}
+            onOk={this.createCategory}
+            onCancel={this.toggleAddCategoryModal}
+            footer={[
+              <button key="back" className="butn secondary" onClick={this.toggleAddCategoryModal}>
+                <Translate>Cancel</Translate>
+              </button>,
+              <button key="submit" className="butn butn-primary" onClick={this.createCategory}
+                disabled={!validateForm}>
+                <Translate>Add</Translate>
+              </button>,
+            ]}
           >
-          <AppView app="test" preview={true}/>
-        </Modal> */}
+          <form className="add-category-modal" onSubmit={this.submitCreateCategoryForm}>
+            <input type="text" placeholder={this.translator._getText('Category name (eng)...')}/>
+            <input type="text" placeholder={this.translator._getText('Category name (per)...')}/>
+            <input type="text" placeholder={this.translator._getText('Category slug...')}/>
+            <button type="submit" disabled={!validateForm}/>
+          </form>
+        </Modal>
       </div>
     );
   }
