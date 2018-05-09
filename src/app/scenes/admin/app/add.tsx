@@ -299,7 +299,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
     );
     const informationTabs = {};
     informationTabs[this.translator._getText('English')] = (
-      <div>
+      <div className="app-translations">
         <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
                onChange={this.bindInputToModel.bind(this, 'name')}/>
         <textarea placeholder={this.translator._getText('Description (eng)')} value={this.state.app.desc}
@@ -307,7 +307,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       </div>
     );
     informationTabs[this.translator._getText('Persian')] = (
-      <div>
+      <div className="app-translations">
         <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)" value={this.state.app.translations[0].name}
                onChange={this.bindInputToModel.bind(this, {name: 'translations[]name', index: 0})}/>
         <textarea dir="rtl" placeholder="توضیحات (فارسی)" value={this.state.app.translations[0].desc}
