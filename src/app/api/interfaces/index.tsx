@@ -14,7 +14,7 @@ interface IApplication {
   official: boolean;
   stared: boolean;
   status: number;
-  lang: string;
+  lang: string[];
   created_by?: IUser;
   created_by_name?: string;
   created_at?: number;

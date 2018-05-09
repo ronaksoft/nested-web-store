@@ -101,7 +101,7 @@ class AdminApp extends React.Component<IProps, IState> {
         official: false,
         stared: false,
         status: 0,
-        lang: '',
+        lang: [],
       },
     };
     // if (initData) {
@@ -227,6 +227,10 @@ class AdminApp extends React.Component<IProps, IState> {
         _id: model.logo._id,
       };
     }
+    model.categories = this.state.selectedCategories.map((cat) => {
+      return {_id: cat.value};
+    });
+    model.lang = this.state.selectedLanguages.map((lng) => lng.value);
     model.screenshots.map((val) => {
       return {
         _id: val._id,
@@ -436,8 +440,8 @@ class AdminApp extends React.Component<IProps, IState> {
         </div>
         <Modal
             title="test"
-            style={{ top: 0 }}
-            width="100%"
+            wrapClassName="vertical-center-modal"
+            width="90%"
             visible={this.state.preview}
             onOk={this.preview}
             onCancel={this.preview}
