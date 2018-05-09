@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AppWrapper, {
-  Main, AppView, AdminApp, Browse, AdminWrapper,
+  Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory,
 } from 'scenes';
 import NotFound from 'containers/404';
 import {Provider} from 'react-redux';
@@ -20,7 +20,9 @@ export default (
         <Route path="/apps/:cat" component={Browse}/>
       </Route>
       <Route component={AdminWrapper}>
-        <Route path="/admin/app" component={AdminApp}/>
+        <Route path="/admin/add/app" component={AdminAddApp}/>
+        <Route path="/admin/add/category" component={AdminAddCategory}/>
+        {/* <Route path="/admin/add/permission" component={AdminAddPermision}/> */}
       </Route>
       <Route path="/404" component={NotFound}/>
       <Route path="*" component={NotFound}/>

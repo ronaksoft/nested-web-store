@@ -16,7 +16,8 @@ import './main.less';
 import AppView from './view/';
 import Main from './main/';
 import Browse from './browse/';
-import AdminApp from './admin/app';
+import AdminAddApp from './admin/add';
+import AdminAddCategory from './admin/category';
 import AdminWrapper from './admin/';
 import {IUser} from 'api/interfaces';
 import * as Cookies from 'cookies-js';
@@ -213,5 +214,5 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
-  Main, AppView, AdminApp, Browse, AdminWrapper,
+  Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory,
 };
