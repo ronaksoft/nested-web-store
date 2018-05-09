@@ -20,8 +20,8 @@ export default (
         <Route path="/apps/:cat" component={Browse}/>
       </Route>
       <Route component={AdminWrapper}>
-        <Route path="/admin/add/app" component={AdminAddApp}/>
-        <Route path="/admin/add/category" component={AdminAddCategory}/>
+        <Route path="/admin/app/add" component={AdminAddApp}/>
+        <Route path="/admin/category/add" component={AdminAddCategory}/>
         {/* <Route path="/admin/add/permission" component={AdminAddPermision}/> */}
       </Route>
       <Route path="/404" component={NotFound}/>
