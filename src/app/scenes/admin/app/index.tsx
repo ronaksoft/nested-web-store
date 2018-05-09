@@ -261,7 +261,10 @@ class AdminApp extends React.Component<IProps, IState> {
     );
     const tabs = {};
     tabs[this.translator._getText('App info')] = (
-      <div>
+      <div className="add-app">
+        <p><Translate>
+          Add your developed app by filling these fields and helping users find your app better.
+        </Translate></p>
         <h4><Translate>App user ID &amp; Logo</Translate></h4>
         <div className="form-row">
           <Upload
@@ -337,7 +340,10 @@ class AdminApp extends React.Component<IProps, IState> {
       </div>
     );
     tabs[this.translator._getText('Pictures')] = (
-      <div>
+      <div className="add-app">
+        <p><Translate>
+          Add your developed app by filling these fields and helping users find your app better.
+        </Translate></p>
         <h4><Translate>Screenshots &amp; Pictures</Translate></h4>
         <div className="images-container">
           {
@@ -375,7 +381,10 @@ class AdminApp extends React.Component<IProps, IState> {
       </div>
     );
     tabs[this.translator._getText('Permissions')] = (
-      <div>
+      <div className="add-app">
+        <p><Translate>
+          Add your developed app by filling these fields and helping users find your app better.
+        </Translate></p>
         <div className="form-row">
           <Select
             name="permission"
@@ -412,12 +421,7 @@ class AdminApp extends React.Component<IProps, IState> {
                 </button>
             </div>
           </div>
-          <div className="add-app">
-            <p><Translate>
-              Add your developed app by filling these fields and helping users find your app better.
-            </Translate></p>
-            <Tab items={tabs}/>
-          </div>
+          <Tab items={tabs}/>
         </div>
       </div>
     );
