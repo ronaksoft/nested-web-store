@@ -125,22 +125,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
   //
   // }
 
-  public categoryOnChange = (_, {newValue}) => {
-    const model = this.state.app;
-    model.categories.push({_id: newValue});
-    this.setState({
-      app: model,
-    });
-  }
-
-  public languageOnChange = (_, {newValue}) => {
-    const model = this.state.app;
-    model.lang = newValue;
-    this.setState({
-      app: model,
-    });
-  }
-
   private getBase64 = (img: any, callback: any) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));

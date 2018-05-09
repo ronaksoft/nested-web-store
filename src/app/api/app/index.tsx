@@ -8,7 +8,7 @@ class AppFactory {
     return axios.post(Const.SERVER_URL + '/admin/app/add', app, {
       headers: '',
     }).then((response) => {
-      return response.data;
+      return response.data.data;
     });
   }
 }

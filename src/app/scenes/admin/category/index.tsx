@@ -1,8 +1,10 @@
 import * as React from 'react';
 import {Translate, IcoN} from 'components';
-import {Modal} from 'antd';
+import {Modal, message} from 'antd';
 import {SortableContainer, SortableElement, arrayMove, SortableHandle} from 'react-sortable-hoc';
 import {ICategory} from 'api/interfaces';
+import {cloneDeep} from 'lodash';
+import {category as CategoryFactory} from '../../../api';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -23,15 +25,17 @@ interface IState {
   categories: ICategory[];
   untouched: boolean;
   addCategoryModal: boolean;
+  model: ICategory;
 }
 
-class AdminApp extends React.Component<IProps, IState> {
+class AdminCategory extends React.Component<IProps, IState> {
   private translator: Translate;
-
+  private categoryFactory: CategoryFactory;
+  private emptyModel: ICategory;
   /**
    * @constructor
    * Creates an instance of AppAdd.
-   * @param {IAdminAppProps} props
+   * @param {IProps} props
    * @memberof Add
    */
   constructor(props: any) {
@@ -41,38 +45,41 @@ class AdminApp extends React.Component<IProps, IState> {
       initData = window;
     }
     this.translator = new Translate();
+    this.emptyModel = {
+      _id: '',
+      slug: '',
+      name: '',
+      order: 0,
+      stared: false,
+      translations: [{
+        locale: 'fa',
+        name: '',
+      }],
+    };
     const state: IState = {
       loading: false,
       addCategoryModal: false,
       untouched: true,
-      categories: [
-        {
-          _id: 'a',
-          name: 'a',
-          stared: false,
-          order: 0,
-          translations : [{
-            name: 's',
-            locale: 'fa',
-          }],
-        },
-        {
-          _id: 'b',
-          name: 'b',
-          stared: false,
-          order: 0,
-          translations : [{
-            name: 'ssss',
-            locale: 'fa',
-          }],
-        },
-      ],
+      categories: [],
+      model: cloneDeep(this.emptyModel),
     };
     this.state = state;
+    this.categoryFactory = new CategoryFactory();
   }
 
-  private onSave() {
+  public componentDidMount() {
+    this.categoryFactory.getCategories().then((data) => {
+      this.setState({
+        categories: data,
+      });
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t fetch categories!'));
+    });
+  }
+
+  private onSave = () => {
     console.log('aaa');
+    console.log(this.state.categories);
   }
 
   private onSortEnd = ({oldIndex, newIndex}) => {
@@ -94,26 +101,55 @@ class AdminApp extends React.Component<IProps, IState> {
     }
   }
 
-  private createCategory = () => {
-    // ssss
-  }
-
   private submitCreateCategoryForm = (e) => {
-    console.log(e);
     e.preventDefault();
     e.stopPropagation();
-    this.toggleAddCategoryModal();
-    // ssss
+    this.categoryFactory.createCategory(this.state.model).then((data) => {
+      const categories: ICategory[] = this.state.categories;
+      categories.push(data);
+      this.setState({
+        categories,
+        model: this.emptyModel,
+        addCategoryModal: false,
+      });
+      message.success(this.translator._getText('Category successfully created!'));
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t create '));
+    });
   }
+
+  private validateForm(model: ICategory) {
+    if (model.slug.length > 0 && model.name.length > 0 && model.translations[0].name.length > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  private bindInputToModel(selector: any, e: any) {
+    const model = this.state.model;
+    if (typeof selector === 'object') {
+      const elem = selector.name.split('[]');
+      model[elem[0]][selector.index][elem[1]] = e.target.value;
+    } else {
+      model[selector] = e.target.value;
+      if (selector === 'slug') {
+        model[selector] = model[selector].toLowerCase();
+      }
+    }
+    this.setState({
+      model,
+    });
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
-   * @memberof AdminApp
+   * @memberof AdminCategory
    * @override
    * @generator
    */
   public render() {
-    const validateForm = false;
+    const validateForm = this.validateForm(this.state.model);
     const DragHandle = SortableHandle(() => <IcoN name="move24" size={24}/>);
     const SortableItem = SortableElement(({value}) => (
       <li className="add-category-sort-item">
@@ -132,9 +168,9 @@ class AdminApp extends React.Component<IProps, IState> {
     const SortableList = SortableContainer(({items}) => {
       return (
         <ul className="categories-list">
-            {items.map((cat, index) => (
-              <SortableItem key={`item-${index}`} index={index} value={cat} onSortEnd={this.onSortEnd}/>
-            ))}
+          {items.map((cat, index) => (
+            <SortableItem key={`item-${index}`} index={index} value={cat} onSortEnd={this.onSortEnd}/>
+          ))}
         </ul>
       );
     });
@@ -144,9 +180,9 @@ class AdminApp extends React.Component<IProps, IState> {
           <div className="page-buttons">
             <div className="page-buttons-inner">
               <h2><Translate>Category Management</Translate></h2>
-                <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
-                  <Translate>Save</Translate>
-                </button>
+              <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
+                <Translate>Save</Translate>
+              </button>
             </div>
           </div>
           <div className="add-category">
@@ -158,26 +194,29 @@ class AdminApp extends React.Component<IProps, IState> {
           </div>
         </div>
         <Modal
-            title="Add or edit a category"
-            wrapClassName="vertical-center-modal"
-            width="466px"
-            visible={this.state.addCategoryModal}
-            onOk={this.createCategory}
-            onCancel={this.toggleAddCategoryModal}
-            footer={[
-              <button key="back" className="butn secondary" onClick={this.toggleAddCategoryModal}>
-                <Translate>Cancel</Translate>
-              </button>,
-              <button key="submit" className="butn butn-primary" onClick={this.createCategory}
-                disabled={!validateForm}>
-                <Translate>Add</Translate>
-              </button>,
-            ]}
-          >
+          title="Add or edit a category"
+          wrapClassName="vertical-center-modal"
+          width="466px"
+          visible={this.state.addCategoryModal}
+          onCancel={this.toggleAddCategoryModal}
+          footer={[
+            <button key="back" className="butn secondary" onClick={this.toggleAddCategoryModal}>
+              <Translate>Cancel</Translate>
+            </button>,
+            <button key="submit" className="butn butn-primary" onClick={this.submitCreateCategoryForm}
+                    disabled={!validateForm}>
+              <Translate>Add</Translate>
+            </button>,
+          ]}
+        >
           <form className="add-category-modal" onSubmit={this.submitCreateCategoryForm}>
-            <input type="text" placeholder={this.translator._getText('Category name (eng)...')}/>
-            <input type="text" placeholder={this.translator._getText('Category name (per)...')}/>
-            <input type="text" placeholder={this.translator._getText('Category slug...')}/>
+            <input type="text" placeholder={this.translator._getText('Category slug...')}
+                   onChange={this.bindInputToModel.bind(this, 'slug')} value={this.state.model.slug}/>
+            <input type="text" placeholder={this.translator._getText('Category name in English...')}
+                   onChange={this.bindInputToModel.bind(this, 'name')} value={this.state.model.name}/>
+            <input type="text" dir="rtl" placeholder={this.translator._getText('Category name in Persian...')}
+                   onChange={this.bindInputToModel.bind(this, {name: 'translations[]name', index: 0})}
+                   value={this.state.model.translations[0].name}/>
             <button className="hidden-submit" type="submit" disabled={!validateForm}/>
           </form>
         </Modal>
@@ -186,4 +225,4 @@ class AdminApp extends React.Component<IProps, IState> {
   }
 }
 
-export default AdminApp;
+export default AdminCategory;

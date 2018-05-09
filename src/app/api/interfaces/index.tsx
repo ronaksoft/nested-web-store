@@ -33,6 +33,7 @@ interface ICategory {
   translations?: ICategoryTrans[];
   stared?: boolean;
   order?: number;
+  slug?: string;
 }
 
 interface ICategoryTrans {
