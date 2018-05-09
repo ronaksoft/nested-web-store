@@ -26,6 +26,7 @@ interface IState {
   app: IApplication;
   loading: boolean;
   preview: boolean;
+  previewModel: IApplication;
   imageUrl: string;
   categories: ISelectOption[];
   languages: ISelectOption[];
@@ -56,6 +57,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
     const state: IState = {
       loading: false,
       preview: false,
+      previewModel: null,
       imageUrl: '',
       selectedCategories: [],
       selectedLanguages: [],
@@ -148,7 +150,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
       return;
     }
     if (info.file.status === 'done') {
-      console.log(info);
       // Get this url from response in real world.
       const app = this.state.app;
       app.logo = info.file.response.data.files[0];
@@ -215,29 +216,43 @@ class AdminAddApp extends React.Component<IProps, IState> {
   }
 
   private preview = () => {
-    this.setState({
-      preview: !this.state.preview,
-    });
+    if (!this.state.preview) {
+      this.setState({
+        preview: true,
+        previewModel: this.getModel(true),
+      });
+    } else {
+      this.setState({
+        preview: false,
+      });
+    }
   }
 
-  private onSubmit = () => {
+  private getModel(details: boolean): IApplication {
     const model: IApplication = cloneDeep(this.state.app);
-    if (model.logo) {
-      model.logo = {
-        _id: model.logo._id,
-      };
+    if (!details) {
+      if (model.logo) {
+        model.logo = {
+          _id: model.logo._id,
+        };
+      }
+      model.screenshots.forEach((val, index) => {
+        model.screenshots[index] = {
+          _id: val._id,
+        };
+      });
     }
+    model.lang = this.state.selectedLanguages.map((lng) => lng.value);
     model.categories = this.state.selectedCategories.map((cat) => {
       return {
         _id: cat.value,
       };
     });
-    model.lang = this.state.selectedLanguages.map((lng) => lng.value);
-    model.screenshots.forEach((val, index) => {
-      model.screenshots[index] = {
-        _id: val._id,
-      };
-    });
+    return model;
+  }
+
+  private onSubmit = () => {
+    const model = this.getModel(false);
     console.log(model);
     this.appFactory.createApp(model).then((data) => {
       console.log(data);
@@ -448,7 +463,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
           onOk={this.preview}
           onCancel={this.preview}
         >
-          <AppView app="test" preview={true}/>
+          <AppView app="test" preview={true} model={this.state.previewModel}/>
         </Modal>
       </div>
     );

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import {Translate, AppList, IcoN, Rating, Tab, RateResult} from 'components';
+import {IApplication} from '../../api/interfaces';
+import Const from '../../api/consts/CServer';
 
 interface IProps {
   app: string;
@@ -11,6 +13,13 @@ interface IProps {
    */
   preview?: boolean;
   /**
+   * @prop previewModel
+   * @desc preview model of app
+   * @type {*}
+   * @memberof IOwnProps
+   */
+  model?: IApplication;
+  /**
    * @prop routeParams
    * @desc The parameters are given by React Router
    * @type {*}
@@ -21,7 +30,7 @@ interface IProps {
 }
 
 interface IState {
-  app: any;
+  app: IApplication;
 }
 
 class AppView extends React.Component<IProps, IState> {
@@ -29,26 +38,53 @@ class AppView extends React.Component<IProps, IState> {
   /**
    * @constructor
    * Creates an instance of Sidebar.
-   * @param {ISidebarProps} props
-   * @memberof Sidebar
+   * @param {any} props
+   * @memberof AppView
    */
   constructor(props: any) {
     super(props);
+    const emptyModel: IApplication = {
+        _id: '',
+        app_id: '',
+        logo: null,
+        name: '',
+        name_fa: '',
+        description: '',
+        description_fa: '',
+        summary: '',
+        screenshots: [],
+        website: '',
+        categories: [],
+        permissions: [],
+        official: false,
+        stared: false,
+        status: 0,
+        lang: [],
+      };
     let initData: any;
     if (typeof window !== 'undefined') {
       initData = window;
     }
     if (initData) {
       this.state = {
-        app: initData.__INITIAL_DATA__.app || {},
+        app: initData.__INITIAL_DATA__.app || this.props.model || emptyModel,
       };
       initData.__INITIAL_DATA__ = {};
     } else {
       this.state = {
-        app: {},
+        app: this.props.model || emptyModel,
       };
     }
     this.translator = new Translate();
+  }
+
+  public componentWillReceiveProps(newProps: IProps) {
+    if (this.props.preview) {
+      console.log(newProps);
+      this.setState({
+        app: newProps.model,
+      });
+    }
   }
 
   /**
@@ -60,10 +96,18 @@ class AppView extends React.Component<IProps, IState> {
    */
   public render() {
     const tabs = {};
-    tabs[this.translator._getText('App info')] = <div>a</div>;
+    tabs[this.translator._getText('App info')] = (
+      <div>{this.state.app.description}</div>
+    );
     tabs[this.translator._getText('Pictures')] = (
       <div className="pictures">
-        <img src="" alt=""/>
+        {
+          this.state.app.screenshots.map((screenshot, index) => {
+            return (
+              <img key={index} src={Const.SERVER_URL + screenshot.path} alt={screenshot.name}/>
+            );
+          })
+        }
       </div>
     );
     tabs[this.translator._getText('Permissions')] = (
@@ -107,7 +151,12 @@ class AppView extends React.Component<IProps, IState> {
         <div className="main-container-inner vertical">
           <div className="app-content">
             <div className="product-hero">
-              <img src="/public/assets/icons/Nested_Logo.svg" alt=""/>
+              {this.state.app.logo && (
+                <img src={Const.SERVER_URL + this.state.app.logo.path} alt={this.state.app.app_id}/>
+              )}
+              {!this.state.app.logo && (
+                <img src="/public/assets/icons/Nested_Logo.svg" alt={this.state.app.app_id}/>
+              )}
               <button className="butn butn-primary full-width"><Translate>Install App</Translate></button>
               <a href="" className="report-butn"><Translate>Report this app</Translate></a>
               <div className="product-her-block categories">
