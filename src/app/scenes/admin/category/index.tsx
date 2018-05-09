@@ -54,7 +54,7 @@ class AdminApp extends React.Component<IProps, IState> {
           translations : [{
             name: 's',
             locale: 'fa',
-          }]
+          }],
         },
         {
           _id: 'b',
@@ -64,7 +64,7 @@ class AdminApp extends React.Component<IProps, IState> {
           translations : [{
             name: 'ssss',
             locale: 'fa',
-          }]
+          }],
         },
       ],
     };
