@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {Translate, Tab, Loading, IcoN} from 'components';
-import {Upload, message} from 'antd';
+import {Upload, message, Modal} from 'antd';
 import Select from 'react-select';
 import {file as FileFactory, app as AppFactory} from './../../../api';
 import {IApplication, ISelectOption} from './../../../api/interfaces';
 import Const from './../../../api/consts/CServer';
 import {cloneDeep} from 'lodash';
+import {AppView} from '../../';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -24,6 +25,7 @@ interface IProps {
 interface IState {
   app: IApplication;
   loading: boolean;
+  preview: boolean;
   imageUrl: string;
   categories: ISelectOption[];
   languages: ISelectOption[];
@@ -53,6 +55,7 @@ class AdminApp extends React.Component<IProps, IState> {
     this.translator = new Translate();
     const state: IState = {
       loading: false,
+      preview: false,
       imageUrl: '',
       selectedCategories: [],
       selectedLanguages: [],
@@ -208,6 +211,12 @@ class AdminApp extends React.Component<IProps, IState> {
     app.screenshots.splice(index, 1);
     this.setState({
       app,
+    });
+  }
+
+  private preview = () => {
+    this.setState({
+      preview: !this.state.preview,
     });
   }
 
@@ -415,7 +424,9 @@ class AdminApp extends React.Component<IProps, IState> {
           <div className="page-buttons">
             <div className="page-buttons-inner">
               <h2><Translate>Add an app to the market</Translate></h2>
-                {/* <button className="butn butn-blue"><Translate>Preview</Translate></button> */}
+                <button className="butn butn-blue" onClick={this.preview}>
+                  <Translate>Preview</Translate>
+                </button>
                 <button className="butn butn-primary" onClick={this.onSubmit}>
                   <Translate>Submit</Translate>
                 </button>
@@ -423,6 +434,16 @@ class AdminApp extends React.Component<IProps, IState> {
           </div>
           <Tab items={tabs}/>
         </div>
+        <Modal
+            title="test"
+            style={{ top: 0 }}
+            width="100%"
+            visible={this.state.preview}
+            onOk={this.preview}
+            onCancel={this.preview}
+          >
+          <AppView app="test" preview={true}/>
+        </Modal>
       </div>
     );
   }

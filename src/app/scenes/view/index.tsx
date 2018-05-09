@@ -4,6 +4,13 @@ import {Translate, AppList, IcoN, Rating, Tab, RateResult} from 'components';
 interface IProps {
   app: string;
   /**
+   * @prop preview
+   * @desc preview mode of app
+   * @type {*}
+   * @memberof IOwnProps
+   */
+  preview?: boolean;
+  /**
    * @prop routeParams
    * @desc The parameters are given by React Router
    * @type {*}
@@ -74,25 +81,27 @@ class AppView extends React.Component<IProps, IState> {
         </ul>
       </div>
     );
-    tabs[this.translator._getText('Reviews')] = (
-      <div>
-        <Rating appId="aaa"/>
-        <ul className="reviews">
-          <li>
-            <div className="rev-logo">
-              <img src="" alt=""/>
-            </div>
-            <div className="rev-info">
-              <h4>
-                Personal Info
-              <RateResult rate={4.2} silver={true}/>
-              </h4>
-              <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-    );
+    if (!this.props.preview) {
+      tabs[this.translator._getText('Reviews')] = (
+        <div>
+          <Rating appId="aaa"/>
+          <ul className="reviews">
+            <li>
+              <div className="rev-logo">
+                <img src="" alt=""/>
+              </div>
+              <div className="rev-info">
+                <h4>
+                  Personal Info
+                <RateResult rate={4.2} silver={true}/>
+                </h4>
+                <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      );
+    }
     return (
       <div className="main-container">
         <div className="main-container-inner vertical">
@@ -120,10 +129,12 @@ class AppView extends React.Component<IProps, IState> {
               <Tab items={tabs}/>
             </div>
           </div>
-          <AppList title={<Translate>Similar apps</Translate>} haveMore={false} items={[{
-            name: 'Google Assisstant',
-            category: 'Social & Fun',
-          }]} mode="mini"/>
+          {!this.props.preview && (
+            <AppList title={<Translate>Similar apps</Translate>} haveMore={false} items={[{
+              name: 'Google Assisstant',
+              category: 'Social & Fun',
+            }]} mode="mini"/>
+          )}
         </div>
       </div>
     );
