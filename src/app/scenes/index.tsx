@@ -16,7 +16,7 @@ import './main.less';
 import AppView from './view/';
 import Main from './main/';
 import Browse from './browse/';
-import AdminAddApp from './admin/add';
+import AdminAddApp from './admin/app/add';
 import AdminAddCategory from './admin/category';
 import AdminWrapper from './admin/';
 import {IUser} from 'api/interfaces';
