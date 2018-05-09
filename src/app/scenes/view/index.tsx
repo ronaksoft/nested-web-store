@@ -35,6 +35,7 @@ interface IState {
 
 class AppView extends React.Component<IProps, IState> {
   private translator: Translate;
+
   /**
    * @constructor
    * Creates an instance of Sidebar.
@@ -44,23 +45,26 @@ class AppView extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);
     const emptyModel: IApplication = {
-        _id: '',
-        app_id: '',
-        logo: null,
+      _id: '',
+      app_id: '',
+      logo: null,
+      name: '',
+      desc: '',
+      summary: '',
+      screenshots: [],
+      website: '',
+      categories: [],
+      translations: [/*{
+        locale: 'fa',
         name: '',
-        name_fa: '',
-        description: '',
-        description_fa: '',
-        summary: '',
-        screenshots: [],
-        website: '',
-        categories: [],
-        permissions: [],
-        official: false,
-        stared: false,
-        status: 0,
-        lang: [],
-      };
+        desc: '',
+      }*/],
+      permissions: [],
+      official: false,
+      stared: false,
+      status: 0,
+      lang: [],
+    };
     let initData: any;
     if (typeof window !== 'undefined') {
       initData = window;
@@ -80,7 +84,6 @@ class AppView extends React.Component<IProps, IState> {
 
   public componentWillReceiveProps(newProps: IProps) {
     if (this.props.preview) {
-      console.log(newProps);
       this.setState({
         app: newProps.model,
       });
@@ -97,7 +100,7 @@ class AppView extends React.Component<IProps, IState> {
   public render() {
     const tabs = {};
     tabs[this.translator._getText('App info')] = (
-      <div>{this.state.app.description}</div>
+      <div>{this.state.app.desc}</div>
     );
     tabs[this.translator._getText('Pictures')] = (
       <div className="pictures">
@@ -137,7 +140,7 @@ class AppView extends React.Component<IProps, IState> {
               <div className="rev-info">
                 <h4>
                   Personal Info
-                <RateResult rate={4.2} silver={true}/>
+                  <RateResult rate={4.2} silver={true}/>
                 </h4>
                 <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
               </div>

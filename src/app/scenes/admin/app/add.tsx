@@ -92,13 +92,16 @@ class AdminAddApp extends React.Component<IProps, IState> {
         app_id: '',
         logo: null,
         name: '',
-        name_fa: '',
-        description: '',
-        description_fa: '',
+        desc: '',
         summary: '',
         screenshots: [],
         website: '',
         categories: [],
+        translations: [{
+          locale: 'fa',
+          name: '',
+          desc: '',
+        }],
         permissions: [],
         official: false,
         stared: false,
@@ -199,9 +202,14 @@ class AdminAddApp extends React.Component<IProps, IState> {
     return isValid && isLt1M;
   }
 
-  private bindInputToModel(name, e: any) {
+  private bindInputToModel(selector: any, e: any) {
     const model = this.state.app;
-    model[name] = e.target.value;
+    if (typeof selector === 'object') {
+      const elem = selector.name.split('[]');
+      model[elem[0]][selector.index][elem[1]] = e.target.value;
+    } else {
+      model[selector] = e.target.value;
+    }
     this.setState({
       app: model,
     });
@@ -289,6 +297,23 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
+    const informationTabs = {};
+    informationTabs[this.translator._getText('English')] = (
+      <div>
+        <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
+               onChange={this.bindInputToModel.bind(this, 'name')}/>
+        <textarea placeholder={this.translator._getText('Description (eng)')} value={this.state.app.desc}
+                  onChange={this.bindInputToModel.bind(this, 'description')}/>
+      </div>
+    );
+    informationTabs[this.translator._getText('Persian')] = (
+      <div>
+        <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)" value={this.state.app.translations[0].name}
+               onChange={this.bindInputToModel.bind(this, {name: 'translations[]name', index: 0})}/>
+        <textarea dir="rtl" placeholder="توضیحات (فارسی)" value={this.state.app.translations[0].desc}
+                  onChange={this.bindInputToModel.bind(this, {name: 'translations[]desc', index: 0})}/>
+      </div>
+    );
     const tabs = {};
     tabs[this.translator._getText('App info')] = (
       <div className="add-app">
@@ -315,21 +340,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
           <input type="text" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
                  onChange={this.bindInputToModel.bind(this, 'website')}/>
         </div>
-        <h4><Translate>Information</Translate></h4>
-        <div className="multi-input-row form-row">
-          <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
-                 onChange={this.bindInputToModel.bind(this, 'name')}/>
-          <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)" value={this.state.app.name_fa}
-                 onChange={this.bindInputToModel.bind(this, 'name_fa')}/>
-        </div>
-        <div className="multi-input-row form-row">
-          <textarea placeholder={this.translator._getText('Description (eng)')} value={this.state.app.description}
-                    onChange={this.bindInputToModel.bind(this, 'description')}/>
-          <textarea dir="rtl" placeholder="توضیحات (فارسی)" value={this.state.app.description_fa}
-                    onChange={this.bindInputToModel.bind(this, 'description_fa')}/>
-        </div>
         <input className="form-row" type="text" placeholder={this.translator._getText('Summery (open graph)')}
                value={this.state.app.summary} onChange={this.bindInputToModel.bind(this, 'summary')}/>
+        <h4><Translate>Information</Translate></h4>
+        <div>
+          <Tab items={informationTabs}/>
+        </div>
         <h4><Translate>Category</Translate></h4>
         <div className="form-row">
           <Select
@@ -344,14 +360,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
             value={this.state.selectedCategories}
           />
         </div>
-        {/* <ul className="selected-categories">
-          {this.state.app.categories.map((cat) => (
-            <li key={cat._id}>
-              <span>{cat.name}</span>
-              <IcoN name="negativeXCross24" size={24}/>
-            </li>
-          ))}
-        </ul> */}
         <h4><Translate>Languages</Translate></h4>
         <div className="form-row">
           <Select

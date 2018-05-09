@@ -2,13 +2,12 @@ interface IApplication {
   _id: string;
   app_id: string;
   name: string;
-  name_fa: string;
   summary: string;
   logo: IFile;
-  description: string;
-  description_fa: string;
+  desc: string;
   website: string;
   screenshots: IFile[];
+  translations?: IApplicationTrans[];
   permissions: number[];
   categories: ICategory[];
   official: boolean;
@@ -31,9 +30,14 @@ interface IFile {
 interface ICategory {
   _id: string;
   name?: string;
-  name_fa?: string;
+  translations?: ICategoryTrans[];
   stared?: boolean;
   order?: number;
+}
+
+interface ICategoryTrans {
+  locale: string;
+  name: string;
 }
 
 interface IPermission {
@@ -41,14 +45,10 @@ interface IPermission {
   value: number;
   name?: string;
   description?: string;
-  translations: ITranslations;
+  translations?: IPermissionTrans[];
 }
 
-interface ITranslations {
-  fa: ITranslation;
-  ar?: ITranslation;
-}
-interface ITranslation {
+interface IPermissionTrans {
   name?: string;
   description?: string;
 }
@@ -79,4 +79,10 @@ interface IApp {
   created_by: number;
 }
 
-export {IApplication, IFile, ICategory, IUser, IApp, ISelectOption, IPermission};
+interface IApplicationTrans {
+  locale: string;
+  name: string;
+  desc: string;
+}
+
+export {IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission};
