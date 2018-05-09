@@ -30,9 +30,27 @@ interface IFile {
 interface ICategory {
   _id: string;
   name?: string;
-  name_fa?: string;
+  translations?: ICategoryTrans[];
   stared?: boolean;
   order?: number;
+}
+
+interface ICategoryTrans {
+  locale: string;
+  name: string;
+}
+
+interface IPermission {
+  _id: string;
+  value: number;
+  name?: string;
+  description?: string;
+  translations?: IPermissionTrans[];
+}
+
+interface IPermissionTrans {
+  name?: string;
+  description?: string;
 }
 
 interface ISelectOption {
@@ -67,4 +85,4 @@ interface IApplicationTrans {
   desc: string;
 }
 
-export {IApplication, IFile, ICategory, IUser, IApp, ISelectOption};
+export {IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission};
