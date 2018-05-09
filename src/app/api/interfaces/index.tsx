@@ -36,6 +36,23 @@ interface ICategory {
   order?: number;
 }
 
+interface IPermission {
+  _id: string;
+  value: number;
+  name?: string;
+  description?: string;
+  translations: ITranslations;
+}
+
+interface ITranslations {
+  fa: ITranslation;
+  ar?: ITranslation;
+}
+interface ITranslation {
+  name?: string;
+  description?: string;
+}
+
 interface ISelectOption {
   value: string;
   label: string;
@@ -62,4 +79,4 @@ interface IApp {
   created_by: number;
 }
 
-export {IApplication, IFile, ICategory, IUser, IApp, ISelectOption};
+export {IApplication, IFile, ICategory, IUser, IApp, ISelectOption, IPermission};

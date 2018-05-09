@@ -854,37 +854,6 @@ footer {
   }
 }
 .tabs-content {
-  .permissions {
-    li {
-      display: flex;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(50, 61, 71, 0.06);
-      .per-icon {
-        display: flex;
-        flex: none;
-        padding: 3px 16px 0 0;
-      }
-      .per-remove {
-        display: flex;
-        flex: none;
-      }
-      .per-info {
-        padding-left: 6px;
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        border-left: 1px solid @color-wind-new;
-        h4 {
-          font-weight: bold;
-          font-size: 16px;
-          margin-bottom: 4px;
-        }
-        p {
-          font-size: 12px;
-        }
-      }
-    }
-  }
   .reviews {
     li {
       display: flex;
@@ -1018,7 +987,24 @@ textarea::-webkit-input-placeholder{
   width: 100%;
   border-radius: 10px;
   height: 100%;
-  .add-cat {
+  ul {
+    list-style: none;
+    position: relative;
+    z-index: 0;
+    outline: none;
+    width: 100%;
+    .dragger {
+      opacity: .32;
+    }
+  }
+}
+.permissions-scene, .add-category {
+  flex: 1;
+  background-color: @color-white;
+  width: 100%;
+  border-radius: 10px;
+  height: 100%;
+  .add {
     height: 48px;
     display: flex;
     align-items: center;
@@ -1034,14 +1020,21 @@ textarea::-webkit-input-placeholder{
       color: #508EE6;
     }
   }
-  ul {
-    list-style: none;
-    position: relative;
-    z-index: 0;
-    outline: none;
-    width: 100%;
-    .dragger {
-      opacity: .32;
+}
+.permissions-scene {
+  .permissions-list {
+    li {
+      padding: 0 8px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-bottom: none;
+      border-top: 1px solid rgba(50, 61, 71, 0.06);
+      &:first-of-type {
+        margin: 0;
+      }
+      .per-icon {
+        padding: 0 8px;
+      }
     }
   }
 }
@@ -1084,6 +1077,41 @@ textarea::-webkit-input-placeholder{
     height: 0px;
     visibility: hidden;
     width: 0px;
+  }
+}
+
+.permissions-list {
+  li {
+    display: flex;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(50, 61, 71, 0.06);
+    .per-icon {
+      display: flex;
+      flex: none;
+      padding: 3px 16px 0 0;
+    }
+    .per-remove {
+      display: flex;
+      flex: none;
+    }
+    .per-info {
+      padding-left: 6px;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      border-left: 1px solid @color-wind-new;
+      h4 {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+    .edit-button, .remove-button {
+      margin: 0 8px;
+    }
   }
 }
 
