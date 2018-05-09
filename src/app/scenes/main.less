@@ -23,6 +23,9 @@
 	margin: 0;
 	padding: 0;
 }
+html {
+  overflow-y: scroll;
+}
 body {
   background-color: #E5E5E5;
 }
@@ -211,7 +214,7 @@ a:-webkit-any-link {
   }
   &.admin {
     max-width: 640px;
-    padding: 32px 0;
+    padding: 0 0 80px;
   }
 }
 .add-app {
@@ -229,10 +232,6 @@ a:-webkit-any-link {
   }
   .form-row {
     margin-bottom: 16px;
-  }
-  h2 {
-    font-size: 24px;
-    margin-bottom: 8px;
   }
   p {
     font-size: 14px;
@@ -985,6 +984,32 @@ textarea::-webkit-input-placeholder{
   }
 }
 
+
+.page-buttons {
+  position: relative;
+  height: 80px;
+  width: 100%;
+  .page-buttons-inner {
+    position: fixed;
+    top: 64px;
+    display: flex;
+    background-color: #F7F7F7;
+    width: 100%;
+    align-items: center;
+    height: 64px;
+    max-width: 640px;
+    padding: 0 16px;
+    z-index: 4;
+    h2 {
+      flex: 1;
+      line-height: normal;
+      font-size: 24px;
+    }
+    button {
+      margin: 0;
+    }
+  }
+}
 @import "../containers/404/style";
 
 @import "../../../node_modules/antd/dist/antd.min.css";

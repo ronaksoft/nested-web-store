@@ -299,13 +299,6 @@ class AdminApp extends React.Component<IProps, IState> {
                value={this.state.app.summary} onChange={this.bindInputToModel.bind(this, 'summary')}/>
         <h4><Translate>Category</Translate></h4>
         <div className="form-row">
-          {/* <Select
-            name="category"
-            multi={true}
-            className="mulit-selector"
-            options={this.state.categories}
-            placeholder={this.translator._getText('Select from the list of categories')}
-          /> */}
           <Select
             isMulti={true}
             onChange={this.handleSelectChangeCategories}
@@ -410,16 +403,20 @@ class AdminApp extends React.Component<IProps, IState> {
     return (
       <div className="main-container">
         <div className="main-container-inner vertical admin">
+          <div className="page-buttons">
+            <div className="page-buttons-inner">
+              <h2><Translate>Add an app to the market</Translate></h2>
+                {/* <button className="butn butn-blue"><Translate>Preview</Translate></button> */}
+                <button className="butn butn-primary" onClick={this.onSubmit}>
+                  <Translate>Submit</Translate>
+                </button>
+            </div>
+          </div>
           <div className="add-app">
-            <h2><Translate>Add an app to the market</Translate></h2>
             <p><Translate>
               Add your developed app by filling these fields and helping users find your app better.
             </Translate></p>
             <Tab items={tabs}/>
-              {/* <button className="butn butn-blue"><Translate>Preview</Translate></button> */}
-            <button className="butn butn-primary full-width" onClick={this.onSubmit}>
-              <Translate>Submit</Translate>
-            </button>
           </div>
         </div>
       </div>
