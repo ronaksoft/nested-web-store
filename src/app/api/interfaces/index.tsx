@@ -43,16 +43,16 @@ interface ICategoryTrans {
 
 interface IPermission {
   _id: string;
-  value: number;
+  code: number;
   name?: string;
-  description?: string;
+  desc?: string;
   translations?: IPermissionTrans[];
 }
 
 interface IPermissionTrans {
   locale: string;
   name?: string;
-  description?: string;
+  desc?: string;
 }
 
 interface ISelectOption {

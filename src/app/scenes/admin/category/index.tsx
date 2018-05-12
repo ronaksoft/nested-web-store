@@ -65,7 +65,7 @@ class AdminCategory extends React.Component<IProps, IState> {
   }
 
   public componentDidMount() {
-    this.categoryFactory.getCategories().then((data) => {
+    this.categoryFactory.getAll().then((data) => {
       if (data === null) {
         return;
       }
@@ -86,7 +86,7 @@ class AdminCategory extends React.Component<IProps, IState> {
         order: index,
       });
     });
-    this.categoryFactory.setCategoriesOrder(models).then(() => {
+    this.categoryFactory.setOrder(models).then(() => {
       message.success(this.translator._getText('Categories order successfully updated'));
       this.setState({
         untouched: false,
@@ -131,7 +131,7 @@ class AdminCategory extends React.Component<IProps, IState> {
 
   private onRemove = (id) => {
     const categories: ICategory[] = this.state.categories;
-    this.categoryFactory.removeCategory(id).then(() => {
+    this.categoryFactory.remove(id).then(() => {
       const index = _.findIndex(categories, {
         _id: id,
       });
@@ -154,7 +154,7 @@ class AdminCategory extends React.Component<IProps, IState> {
     e.stopPropagation();
     const categories: ICategory[] = this.state.categories;
     if (this.state.model._id === '') {
-      this.categoryFactory.createCategory(this.state.model).then((data) => {
+      this.categoryFactory.create(this.state.model).then((data) => {
         categories.push(data);
         this.setState({
           categories,
@@ -166,7 +166,7 @@ class AdminCategory extends React.Component<IProps, IState> {
         message.error(this.translator._getText('Can\'t create category!'));
       });
     } else {
-      this.categoryFactory.editCategory(this.state.model).then((data) => {
+      this.categoryFactory.edit(this.state.model).then((data) => {
         const index = _.findIndex(categories, {
           _id: data._id,
         });

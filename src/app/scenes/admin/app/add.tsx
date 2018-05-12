@@ -106,7 +106,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
   }
 
   public componentDidMount() {
-    this.categoryFactory.getCategories().then((data) => {
+    this.categoryFactory.getAll().then((data) => {
       if (data == null) {
         return;
       }
@@ -244,7 +244,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
 
   private onSubmit = () => {
     const model = this.getModel(false);
-    this.appFactory.createApp(model).then(() => {
+    this.appFactory.create(model).then(() => {
       message.success(this.translator._getText('Application successfully created'));
     }).catch((error) => {
       message.error(this.translator._getText('Can\'t create Application!'));

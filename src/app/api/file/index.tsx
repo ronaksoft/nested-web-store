@@ -3,7 +3,7 @@ import Const from '../consts/CServer';
 
 class FileFactory {
 
-  public createFile(formData: any) {
+  public create(formData: any) {
     return axios.post(Const.SERVER_URL + '/admin/file/add', formData, {
       headers: '',
     }).then((response) => {

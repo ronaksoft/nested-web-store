@@ -3,19 +3,19 @@ import {ICategory} from '../interfaces';
 import Const from '../consts/CServer';
 
 class CategoryFactory {
-  public createCategory(category: ICategory) {
+  public create(category: ICategory) {
     return axios.post(Const.SERVER_URL + '/admin/category/add', category).then((response) => {
       return response.data.data;
     });
   }
 
-  public editCategory(category: ICategory) {
+  public edit(category: ICategory) {
     return axios.post(Const.SERVER_URL + '/admin/category/edit', category).then((response) => {
       return response.data.data;
     });
   }
 
-  public removeCategory(id: string) {
+  public remove(id: string) {
     return axios.post(Const.SERVER_URL + '/admin/category/remove', {
       id,
     }).then((response) => {
@@ -23,13 +23,13 @@ class CategoryFactory {
     });
   }
 
-  public setCategoriesOrder(categories: ICategory[]) {
+  public setOrder(categories: ICategory[]) {
     return axios.post(Const.SERVER_URL + '/admin/category/setorder', categories).then((response) => {
       return response.data.data;
     });
   }
 
-  public getCategories(): Promise<ICategory[]> {
+  public getAll(): Promise<ICategory[]> {
     return axios.post(Const.SERVER_URL + '/category/get', {}).then((response) => {
       return response.data.data.categories;
     });

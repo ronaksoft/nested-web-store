@@ -50,7 +50,7 @@ class Main extends React.Component<any, IState> {
 
   public componentDidMount() {
     if (this.state.categories.length === 0) {
-      this.categoryFactory.getCategories().then((data) => {
+      this.categoryFactory.getAll().then((data) => {
         if (data === null) {
           return;
         }
@@ -62,7 +62,7 @@ class Main extends React.Component<any, IState> {
       });
     }
     if (this.state.recentApps.length === 0) {
-      this.appFactory.getApps('recent').then((data) => {
+      this.appFactory.getAll('recent').then((data) => {
         if (data === null) {
           return;
         }

@@ -99,7 +99,7 @@ class AppView extends React.Component<IProps, IState> {
 
   public componentDidMount() {
     if (!this.props.preview) {
-      this.appFactory.getApp(this.state.appId).then((data) => {
+      this.appFactory.get(this.state.appId).then((data) => {
         if (data === null) {
           return;
         }
