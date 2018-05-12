@@ -51,10 +51,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
    */
   constructor(props: any) {
     super(props);
-    let initData: any;
-    if (typeof window !== 'undefined') {
-      initData = window;
-    }
     this.translator = new Translate();
     const state: IState = {
       loading: false,
@@ -102,12 +98,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
         lang: [],
       },
     };
-    // if (initData) {
-    //   state.app = initData.__INITIAL_DATA__.app || {};
-    //   initData.__INITIAL_DATA__ = {};
-    // } else {
-    //   state.app = {};
-    // }
     this.state = state;
     this.appFactory = new AppFactory();
     this.fileFactory = new FileFactory();
@@ -296,7 +286,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
                onChange={this.bindInputToModel.bind(this, 'name')}/>
         <textarea placeholder={this.translator._getText('Description (eng)')} value={this.state.app.desc}
-                  onChange={this.bindInputToModel.bind(this, 'description')}/>
+                  onChange={this.bindInputToModel.bind(this, 'desc')}/>
       </div>
     );
     informationTabs[this.translator._getText('Persian')] = (
@@ -333,8 +323,9 @@ class AdminAddApp extends React.Component<IProps, IState> {
           <input type="text" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
                  onChange={this.bindInputToModel.bind(this, 'website')}/>
         </div>
-        <input className="form-row" type="text" placeholder={this.translator._getText('Summery (open graph)')}
-               value={this.state.app.summary} onChange={this.bindInputToModel.bind(this, 'summary')}/>
+        <input className="form-row form-block" type="text"
+               placeholder={this.translator._getText('Summery (open graph)')} value={this.state.app.summary}
+               onChange={this.bindInputToModel.bind(this, 'summary')}/>
         <h4><Translate>Information</Translate></h4>
         <div>
           <Tab items={informationTabs}/>

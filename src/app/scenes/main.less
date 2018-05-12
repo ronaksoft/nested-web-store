@@ -262,6 +262,9 @@ a:-webkit-any-link {
   }
   input.form-row {
     width: ~'calc(50% - 4px)';
+    &.form-block {
+      width: ~'calc(100% - 4px)';
+    }
   }
   .images-container {
     display: inline-flex;
@@ -360,6 +363,9 @@ a:-webkit-any-link {
   display: flex;
   flex: 1;
   flex-direction: column;
+  &.hide {
+    display: none;
+  }
 }
 .sidebar {
   width: 256px;
@@ -488,6 +494,9 @@ a:-webkit-any-link {
       font-size: 14px;
       font-weight: 400;
       line-height: 17px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 }
@@ -531,6 +540,9 @@ a:-webkit-any-link {
       font-size: 14px;
       font-weight: 400;
       line-height: 17px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 }

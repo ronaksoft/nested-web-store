@@ -12,13 +12,13 @@ class AppFactory {
 
   public getApps(type: string): Promise<IApplication[]> {
     return axios.post(Const.SERVER_URL + '/app/' + type, {}).then((response) => {
-      return response.data.data;
+      return response.data.data.apps;
     });
   }
 
   public getApp(id: string): Promise<IApplication> {
-    return axios.post(Const.SERVER_URL + '/app/get/' + id, {}).then((response) => {
-      return response.data.data;
+    return axios.post(Const.SERVER_URL + '/app/' + id, {}).then((response) => {
+      return response.data.data.app;
     });
   }
 }

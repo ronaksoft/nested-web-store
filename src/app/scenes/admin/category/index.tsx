@@ -200,7 +200,7 @@ class AdminCategory extends React.Component<IProps, IState> {
     } else {
       model[selector] = e.target.value;
       if (selector === 'slug') {
-        model[selector] = model[selector].toLowerCase();
+        model[selector] = model[selector].toLowerCase().split(' ').join('_');
       }
     }
     this.setState({

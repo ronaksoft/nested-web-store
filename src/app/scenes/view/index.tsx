@@ -2,6 +2,8 @@ import * as React from 'react';
 import {Translate, IcoN, Rating, Tab, RateResult} from 'components';
 import {IApplication} from '../../api/interfaces';
 import Const from '../../api/consts/CServer';
+import {message} from 'antd';
+import {app as AppFactory} from '../../api';
 
 interface IProps {
   app: string;
@@ -30,11 +32,13 @@ interface IProps {
 }
 
 interface IState {
+  appId: string;
   app: IApplication;
 }
 
 class AppView extends React.Component<IProps, IState> {
   private translator: Translate;
+  private appFactory: AppFactory;
 
   /**
    * @constructor
@@ -72,14 +76,17 @@ class AppView extends React.Component<IProps, IState> {
     if (initData) {
       this.state = {
         app: initData.__INITIAL_DATA__.app || this.props.model || emptyModel,
+        appId: this.props.routeParams ? this.props.routeParams.appid : '',
       };
       initData.__INITIAL_DATA__ = {};
     } else {
       this.state = {
         app: this.props.model || emptyModel,
+        appId: this.props.routeParams ? this.props.routeParams.appid : '',
       };
     }
     this.translator = new Translate();
+    this.appFactory = new AppFactory();
   }
 
   public componentWillReceiveProps(newProps: IProps) {
@@ -90,10 +97,25 @@ class AppView extends React.Component<IProps, IState> {
     }
   }
 
+  public componentDidMount() {
+    if (!this.props.preview) {
+      this.appFactory.getApp(this.state.appId).then((data) => {
+        if (data === null) {
+          return;
+        }
+        this.setState({
+          app: data,
+        });
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t fetch app!'));
+      });
+    }
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
-   * @memberof Sidebar
+   * @memberof AppView
    * @override
    * @generator
    */
@@ -164,19 +186,22 @@ class AppView extends React.Component<IProps, IState> {
               <a href="" className="report-butn"><Translate>Report this app</Translate></a>
               <div className="product-her-block categories">
                 <h4><Translate>Categories</Translate>:</h4>
-                <a href="">Music &amp; Fun</a>
-                <a href="">Social Networks</a>
-                <a href="">Music &amp; Fun</a>
-                <a href="">Social Networks</a>
+                {this.state.app.categories.map((category, index) => {
+                  return (
+                    <a key={'category-' + index} href={category.slug}>{category.name}</a>
+                  );
+                })}
               </div>
               <div className="product-her-block languages">
                 <h4><Translate>Languages Support</Translate>:</h4>
-                <a className="en"><Translate>English</Translate></a>
-                <a className="fa"><Translate>Persian</Translate></a>
+                {this.state.app.lang.indexOf('en') > -1 &&
+                <a className="en"><Translate>English</Translate></a>}
+                {this.state.app.lang.indexOf('en') > -1 &&
+                <a className="fa"><Translate>Persian</Translate></a>}
               </div>
             </div>
             <div className="product-info">
-              <h1>Google Play Music</h1>
+              <h1>{this.state.app.name}</h1>
               <RateResult rate={4.2}/>
               <Tab items={tabs}/>
             </div>

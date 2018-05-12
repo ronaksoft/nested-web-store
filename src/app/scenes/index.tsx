@@ -18,7 +18,7 @@ import Main from './main/';
 import Browse from './browse/';
 import AdminAddApp from './admin/app/add';
 import AdminAddCategory from './admin/category';
-import AdminPermissions from './admin/permissions';
+import AdminPermission from './admin/permission';
 import AdminWrapper from './admin/';
 import {IUser} from 'api/interfaces';
 import * as Cookies from 'cookies-js';
@@ -215,5 +215,5 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
-  Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory, AdminPermissions,
+  Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory, AdminPermission,
 };
