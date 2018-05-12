@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {Translate, IcoN} from 'components';
-import {Modal, message} from 'antd';
+import {Modal, message, Popconfirm} from 'antd';
 import {SortableContainer, SortableElement, arrayMove, SortableHandle} from 'react-sortable-hoc';
 import {ICategory} from 'api/interfaces';
-import {cloneDeep} from 'lodash';
+import * as _ from 'lodash';
 import {category as CategoryFactory} from '../../../api';
 
 // import {Row, Col, Input, Upload} from 'antd';
@@ -32,6 +32,7 @@ class AdminCategory extends React.Component<IProps, IState> {
   private translator: Translate;
   private categoryFactory: CategoryFactory;
   private emptyModel: ICategory;
+
   /**
    * @constructor
    * Creates an instance of AppAdd.
@@ -40,10 +41,6 @@ class AdminCategory extends React.Component<IProps, IState> {
    */
   constructor(props: any) {
     super(props);
-    let initData: any;
-    if (typeof window !== 'undefined') {
-      initData = window;
-    }
     this.translator = new Translate();
     this.emptyModel = {
       _id: '',
@@ -61,7 +58,7 @@ class AdminCategory extends React.Component<IProps, IState> {
       addCategoryModal: false,
       untouched: true,
       categories: [],
-      model: cloneDeep(this.emptyModel),
+      model: _.cloneDeep(this.emptyModel),
     };
     this.state = state;
     this.categoryFactory = new CategoryFactory();
@@ -69,6 +66,9 @@ class AdminCategory extends React.Component<IProps, IState> {
 
   public componentDidMount() {
     this.categoryFactory.getCategories().then((data) => {
+      if (data === null) {
+        return;
+      }
       this.setState({
         categories: data,
       });
@@ -78,8 +78,22 @@ class AdminCategory extends React.Component<IProps, IState> {
   }
 
   private onSave = () => {
-    console.log('aaa');
     console.log(this.state.categories);
+    const models: ICategory[] = [];
+    this.state.categories.forEach((model, index) => {
+      models.push({
+        _id: model._id,
+        order: index,
+      });
+    });
+    this.categoryFactory.setCategoriesOrder(models).then(() => {
+      message.success(this.translator._getText('Categories order successfully updated'));
+      this.setState({
+        untouched: false,
+      });
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t fetch categories!'));
+    });
   }
 
   private onSortEnd = ({oldIndex, newIndex}) => {
@@ -101,21 +115,74 @@ class AdminCategory extends React.Component<IProps, IState> {
     }
   }
 
-  private submitCreateCategoryForm = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    this.categoryFactory.createCategory(this.state.model).then((data) => {
-      const categories: ICategory[] = this.state.categories;
-      categories.push(data);
+  private onEdit = (id) => {
+    const index = _.findIndex(this.state.categories, {
+      _id: id,
+    });
+    if (index === -1) {
+      return;
+    }
+    const model = this.state.categories[index];
+    this.setState({
+      model,
+      addCategoryModal: true,
+    });
+  }
+
+  private onRemove = (id) => {
+    const categories: ICategory[] = this.state.categories;
+    this.categoryFactory.removeCategory(id).then(() => {
+      const index = _.findIndex(categories, {
+        _id: id,
+      });
+      if (index > -1) {
+        categories.splice(index, 1);
+      }
       this.setState({
         categories,
         model: this.emptyModel,
         addCategoryModal: false,
       });
-      message.success(this.translator._getText('Category successfully created!'));
+      message.success(this.translator._getText('Category successfully removed'));
     }).catch(() => {
-      message.error(this.translator._getText('Can\'t create '));
+      message.error(this.translator._getText('Can\'t remove category!'));
     });
+  }
+
+  private submitCreateCategoryForm = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const categories: ICategory[] = this.state.categories;
+    if (this.state.model._id === '') {
+      this.categoryFactory.createCategory(this.state.model).then((data) => {
+        categories.push(data);
+        this.setState({
+          categories,
+          model: this.emptyModel,
+          addCategoryModal: false,
+        });
+        message.success(this.translator._getText('Category successfully created'));
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t create category!'));
+      });
+    } else {
+      this.categoryFactory.editCategory(this.state.model).then((data) => {
+        const index = _.findIndex(categories, {
+          _id: data._id,
+        });
+        if (index > -1) {
+          categories[index] = data;
+        }
+        this.setState({
+          categories,
+          model: this.emptyModel,
+          addCategoryModal: false,
+        });
+        message.success(this.translator._getText('Category successfully edited'));
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t edit category!'));
+      });
+    }
   }
 
   private validateForm(model: ICategory) {
@@ -151,25 +218,31 @@ class AdminCategory extends React.Component<IProps, IState> {
   public render() {
     const validateForm = this.validateForm(this.state.model);
     const DragHandle = SortableHandle(() => <IcoN name="move24" size={24}/>);
-    const SortableItem = SortableElement(({value}) => (
+    const SortableItem = SortableElement(({value, onEdit, onRemove}) => (
       <li className="add-category-sort-item">
         <div className="dragger">
           <DragHandle/>
         </div>
         <span>{value.name}</span>
-        <div className="edit-button">
+        <a className="edit-button" onClick={() => {
+          onEdit(value._id);
+        }}>
           <IcoN name="pencil24" size={24}/>
-        </div>
-        <div className="remove-button">
-          <IcoN name="negativeXCross24" size={24}/>
-        </div>
+        </a>
+        <Popconfirm title="Are you sure about removing this Category?" onConfirm={onRemove.bind(this, value._id)}
+                    okText="Yes" cancelText="No">
+          <div className="remove-button">
+            <IcoN name="negativeXCross24" size={24}/>
+          </div>
+        </Popconfirm>
       </li>
     ));
     const SortableList = SortableContainer(({items}) => {
       return (
         <ul className="categories-list">
           {items.map((cat, index) => (
-            <SortableItem key={`item-${index}`} index={index} value={cat} onSortEnd={this.onSortEnd}/>
+            <SortableItem key={`item-${index}`} index={index} value={cat} onEdit={this.onEdit} onRemove={this.onRemove}
+                          onSortEnd={this.onSortEnd}/>
           ))}
         </ul>
       );
@@ -190,7 +263,7 @@ class AdminCategory extends React.Component<IProps, IState> {
               <IcoN name="cross24" size={24}/>
               <span>Add a category</span>
             </a>
-            <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} lockAxis="Y"/>
+            <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} distance={2} lockAxis="Y"/>
           </div>
         </div>
         <Modal

@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {Translate} from 'components';
 import { Link } from 'react-router';
+import {IApplication, ICategory} from '../../api/interfaces';
 interface IProps {
-    items: any[];
+    items: IApplication[];
     mode?: string;
     title: any;
     haveMore: boolean;
 }
 
 interface IState {
-    items: any[];
+    items: IApplication[];
 }
 
 export default class AppList extends React.Component<IProps, IState> {
@@ -20,10 +21,16 @@ export default class AppList extends React.Component<IProps, IState> {
         items: props.items,
     };
     this.translator = new Translate();
+    console.log(props.items);
     // this.translator._getText('Search for apps...')
   }
   public render() {
     const isMini = this.props.mode === 'mini';
+    const getCategoriesName = (categories: ICategory[]) => {
+      return categories.slice(0, 2).map((item) => {
+        return item.name;
+      }).join(', ');
+    };
     // Finally, render it!
     return (
         <div className="apps-wrapper">
@@ -35,18 +42,18 @@ export default class AppList extends React.Component<IProps, IState> {
             </div>
             <div className="list-body">
                 {this.state.items.map((item, index) => (
-                    <Link to={'/app/' + item.id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
+                    <Link to={'/app/' + item._id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
                         <div className="app-image">
-                            <img src={require('../../assets/icons/absents_place.svg')} alt=""/>
+                            <img src={item.logo.path} alt=""/>
                             {!isMini && (
                                 <div className="app-image-bg">
-                                    <img src={require('../../assets/icons/absents_place.svg')} alt=""/>
+                                    <img src={item.logo.path} alt=""/>
                                 </div>
                             )}
                         </div>
                         <div className="app-data">
                             <h4>{item.name}</h4>
-                            <aside><Translate>{item.category}</Translate></aside>
+                            <aside>{getCategoriesName(item.categories)}</aside>
                         </div>
                     </Link>
                 ))}

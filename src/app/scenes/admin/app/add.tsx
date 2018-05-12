@@ -7,6 +7,7 @@ import {IApplication, ISelectOption} from 'api/interfaces';
 import Const from 'api/consts/CServer';
 import {cloneDeep} from 'lodash';
 import {AppView} from 'scenes';
+import {category as CategoryFactory} from '../../../api';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -40,6 +41,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
   private customRequest: any;
   private appFactory: AppFactory;
   private fileFactory: FileFactory;
+  private categoryFactory: CategoryFactory;
 
   /**
    * @constructor
@@ -61,16 +63,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       imageUrl: '',
       selectedCategories: [],
       selectedLanguages: [],
-      categories: [
-        {
-          label: 'aaa',
-          value: 'aaa',
-        },
-        {
-          label: 'bbb',
-          value: 'bbb',
-        },
-      ],
+      categories: [],
       languages: [
         {
           label: 'farsi',
@@ -118,12 +111,28 @@ class AdminAddApp extends React.Component<IProps, IState> {
     this.state = state;
     this.appFactory = new AppFactory();
     this.fileFactory = new FileFactory();
+    this.categoryFactory = new CategoryFactory();
     this.customRequest = this.fileFactory.customRequest.bind(this);
   }
 
-  // public componentWillUpdate(nextProps) {
-  //
-  // }
+  public componentDidMount() {
+    this.categoryFactory.getCategories().then((data) => {
+      if (data == null) {
+        return;
+      }
+      const categories: ISelectOption[] = data.map((category) => {
+        return {
+          value: category._id,
+          label: category.name,
+        };
+      });
+      this.setState({
+        categories,
+      });
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t fetch categories!'));
+    });
+  }
 
   private getBase64 = (img: any, callback: any) => {
     const reader = new FileReader();
@@ -245,10 +254,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
 
   private onSubmit = () => {
     const model = this.getModel(false);
-    console.log(model);
-    this.appFactory.createApp(model).then((data) => {
-      console.log(data);
+    this.appFactory.createApp(model).then(() => {
+      message.success(this.translator._getText('Application successfully created'));
     }).catch((error) => {
+      message.error(this.translator._getText('Can\'t create Application!'));
       message.error(error);
     });
   }

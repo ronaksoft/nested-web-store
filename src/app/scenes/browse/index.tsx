@@ -1,23 +1,24 @@
 import * as React from 'react';
 import AppSearch from 'components/app-search';
 interface IState {
-  slides: any[];
-  recentApps: any[];
-  featuredApps: any[];
-  categories: any[];
+  slides: IApplication[];
+  recentApps: IApplication[];
+  featuredApps: IApplication[];
+  categories: ICategory[];
 }
 
 // import {sortBy} from 'lodash';
 // import {IcoN, Loading, InfiniteScroll} from 'components';
 
 import {Translate, AppList} from 'components';
+import {IApplication, ICategory} from '../../api/interfaces';
 class Browse extends React.Component<any, IState> {
 
   /**
    * @constructor
    * Creates an instance of Sidebar.
    * @param {ISidebarProps} props
-   * @memberof Sidebar
+   * @memberof Browse
    */
   constructor(props: any) {
     super(props);
@@ -46,7 +47,7 @@ class Browse extends React.Component<any, IState> {
   /**
    * renders the component
    * @returns {ReactElement} markup
-   * @memberof Sidebar
+   * @memberof Browse
    * @override
    * @generator
    */
@@ -63,40 +64,8 @@ class Browse extends React.Component<any, IState> {
           </div>
           <div className="apps-wrapper">
             <AppSearch/>
-            <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={[
-              {
-                id: 'a',
-                name: 'Google Assisstant',
-                category: 'Customer Support',
-              },
-              {
-                id: 'b',
-                name: 'Google Assisstant',
-                category: 'Customer Support',
-              },
-              {
-                id: 'v',
-                name: 'Google Assisstant',
-                category: 'Customer Support',
-              },
-            ]}/>
-            <AppList title={<Translate>Most Recents</Translate>} haveMore={true} items={[
-              {
-                id: 'a',
-                name: 'Google Assisstant',
-                category: 'Customer Support',
-              },
-              {
-                id: 'b',
-                name: 'Google Assisstant',
-                category: 'Customer Support',
-              },
-              {
-                id: 'v',
-                name: 'Google Assisstant',
-                category: 'Customer Support',
-              },
-            ]}/>
+            <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={this.state.featuredApps}/>
+            <AppList title={<Translate>Most Recent Apps</Translate>} haveMore={true} items={this.state.recentApps}/>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, AppList, IcoN, Rating, Tab, RateResult} from 'components';
+import {Translate, IcoN, Rating, Tab, RateResult} from 'components';
 import {IApplication} from '../../api/interfaces';
 import Const from '../../api/consts/CServer';
 
@@ -181,12 +181,12 @@ class AppView extends React.Component<IProps, IState> {
               <Tab items={tabs}/>
             </div>
           </div>
-          {!this.props.preview && (
+          {/*{!this.props.preview && (
             <AppList title={<Translate>Similar apps</Translate>} haveMore={false} items={[{
               name: 'Google Assisstant',
               category: 'Social & Fun',
             }]} mode="mini"/>
-          )}
+          )}*/}
         </div>
       </div>
     );
