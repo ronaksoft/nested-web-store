@@ -62,6 +62,19 @@ class AdminPermission extends React.Component<IProps, IState> {
     this.permissionFactory = new PermissionFactory();
   }
 
+  public componentDidMount() {
+    this.permissionFactory.getAll().then((data) => {
+      if (data === null) {
+        return;
+      }
+      this.setState({
+        permissions: data,
+      });
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t fetch permissions!'));
+    });
+  }
+
   private toggleAddModal = () => {
     if (!this.state.addModal) {
       this.setState({
@@ -160,7 +173,11 @@ class AdminPermission extends React.Component<IProps, IState> {
       const elem = selector.name.split('[]');
       model[elem[0]][selector.index][elem[1]] = e.target.value;
     } else {
-      model[selector] = e.target.value;
+      if (selector === 'code') {
+        model[selector] = parseInt(e.target.value, 10);
+      } else {
+        model[selector] = e.target.value;
+      }
     }
     this.setState({
       model,
@@ -201,9 +218,6 @@ class AdminPermission extends React.Component<IProps, IState> {
           <div className="page-buttons">
             <div className="page-buttons-inner">
               <h2><Translate>Permission Management</Translate></h2>
-              <button className="butn butn-primary">
-                <Translate>Save</Translate>
-              </button>
             </div>
           </div>
           <div className="permissions-scene">
@@ -248,7 +262,10 @@ class AdminPermission extends React.Component<IProps, IState> {
             </button>,
             <button key="submit" className="butn butn-primary" onClick={this.submitCreatePermissionForm}
                     disabled={!validateForm}>
-              <Translate>Add</Translate>
+              {this.state.model._id === '' &&
+              <Translate>Add</Translate>}
+              {this.state.model._id !== '' &&
+              <Translate>Edit</Translate>}
             </button>,
           ]}
         >

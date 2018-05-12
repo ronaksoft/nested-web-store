@@ -8,7 +8,7 @@ interface IApplication {
   website: string;
   screenshots: IFile[];
   translations?: IApplicationTrans[];
-  permissions: number[];
+  permissions: IPermission[];
   categories: ICategory[];
   official: boolean;
   stared: boolean;
@@ -43,9 +43,10 @@ interface ICategoryTrans {
 
 interface IPermission {
   _id: string;
-  code: number;
+  code?: number;
   name?: string;
   desc?: string;
+  icon?: IFile;
   translations?: IPermissionTrans[];
 }
 

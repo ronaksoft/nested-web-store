@@ -278,7 +278,10 @@ class AdminCategory extends React.Component<IProps, IState> {
             </button>,
             <button key="submit" className="butn butn-primary" onClick={this.submitCreateCategoryForm}
                     disabled={!validateForm}>
-              <Translate>Add</Translate>
+              {this.state.model._id === '' &&
+              <Translate>Add</Translate>}
+              {this.state.model._id !== '' &&
+              <Translate>Edit</Translate>}
             </button>,
           ]}
         >

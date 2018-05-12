@@ -2,12 +2,16 @@ import * as React from 'react';
 import {Translate, Tab, Loading, IcoN} from 'components';
 import {Upload, message, Modal} from 'antd';
 import Select from 'react-select';
-import {file as FileFactory, app as AppFactory} from 'api';
+import {
+  file as FileFactory,
+  app as AppFactory,
+  category as CategoryFactory,
+  permission as PermissionFactory,
+} from 'api';
 import {IApplication, ISelectOption} from 'api/interfaces';
 import Const from 'api/consts/CServer';
 import {cloneDeep} from 'lodash';
 import {AppView} from 'scenes';
-import {category as CategoryFactory} from '../../../api';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -31,9 +35,10 @@ interface IState {
   imageUrl: string;
   categories: ISelectOption[];
   languages: ISelectOption[];
+  permissions: ISelectOption[];
   selectedCategories: ISelectOption[];
   selectedLanguages: ISelectOption[];
-  suggestions: any[];
+  selectedPermissions: ISelectOption[];
 }
 
 class AdminAddApp extends React.Component<IProps, IState> {
@@ -42,16 +47,39 @@ class AdminAddApp extends React.Component<IProps, IState> {
   private appFactory: AppFactory;
   private fileFactory: FileFactory;
   private categoryFactory: CategoryFactory;
+  private permissionFactory: PermissionFactory;
+  private emptyModel: IApplication;
 
   /**
    * @constructor
    * Creates an instance of AppAdd.
-   * @param {IAdminAppProps} props
+   * @param {IProps} props
    * @memberof Add
    */
   constructor(props: any) {
     super(props);
     this.translator = new Translate();
+    this.emptyModel = {
+      _id: '',
+      app_id: '',
+      logo: null,
+      name: '',
+      desc: '',
+      summary: '',
+      screenshots: [],
+      website: '',
+      categories: [],
+      translations: [{
+        locale: 'fa',
+        name: '',
+        desc: '',
+      }],
+      permissions: [],
+      official: false,
+      stared: false,
+      status: 0,
+      lang: [],
+    };
     const state: IState = {
       loading: false,
       preview: false,
@@ -59,10 +87,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
       imageUrl: '',
       selectedCategories: [],
       selectedLanguages: [],
+      selectedPermissions: [],
       categories: [],
+      permissions: [],
       languages: [
         {
-          label: 'farsi',
+          label: 'Farsi',
           value: 'fa',
         },
         {
@@ -70,38 +100,13 @@ class AdminAddApp extends React.Component<IProps, IState> {
           value: 'en',
         },
       ],
-      suggestions: [
-        {
-          label: 'Form Builder',
-          value: 'form_builder',
-        },
-      ],
-      app: {
-        _id: '',
-        app_id: '',
-        logo: null,
-        name: '',
-        desc: '',
-        summary: '',
-        screenshots: [],
-        website: '',
-        categories: [],
-        translations: [{
-          locale: 'fa',
-          name: '',
-          desc: '',
-        }],
-        permissions: [],
-        official: false,
-        stared: false,
-        status: 0,
-        lang: [],
-      },
+      app: cloneDeep(this.emptyModel),
     };
     this.state = state;
     this.appFactory = new AppFactory();
     this.fileFactory = new FileFactory();
     this.categoryFactory = new CategoryFactory();
+    this.permissionFactory = new PermissionFactory();
     this.customRequest = this.fileFactory.customRequest.bind(this);
   }
 
@@ -121,6 +126,22 @@ class AdminAddApp extends React.Component<IProps, IState> {
       });
     }).catch(() => {
       message.error(this.translator._getText('Can\'t fetch categories!'));
+    });
+    this.permissionFactory.getAll().then((data) => {
+      if (data == null) {
+        return;
+      }
+      const permissions: ISelectOption[] = data.map((permission) => {
+        return {
+          value: permission._id,
+          label: permission.name,
+        };
+      });
+      this.setState({
+        permissions,
+      });
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t fetch permissions!'));
     });
   }
 
@@ -233,10 +254,15 @@ class AdminAddApp extends React.Component<IProps, IState> {
         };
       });
     }
-    model.lang = this.state.selectedLanguages.map((lng) => lng.value);
-    model.categories = this.state.selectedCategories.map((cat) => {
+    model.lang = this.state.selectedLanguages.map((lang) => lang.value);
+    model.categories = this.state.selectedCategories.map((category) => {
       return {
-        _id: cat.value,
+        _id: category.value,
+      };
+    });
+    model.permissions = this.state.selectedPermissions.map((permissions) => {
+      return {
+        _id: permissions.value,
       };
     });
     return model;
@@ -261,6 +287,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
   public handleSelectChangeLanguage = (selectedLanguages) => {
     this.setState({
       selectedLanguages,
+    });
+  }
+
+  public handleSelectChangePermission = (selectedPermissions) => {
+    this.setState({
+      selectedPermissions,
     });
   }
 
@@ -410,9 +442,15 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <div className="form-row">
           <Select
             name="permission"
-            className="suggester"
-            options={this.state.suggestions}
+            isMulti={true}
+            onChange={this.handleSelectChangePermission}
+            options={this.state.permissions}
             placeholder={this.translator._getText('Select from the list of permissions')}
+            removeSelected={true}
+            rtl={true}
+            simpleValue={true}
+            className="multi-selector"
+            value={this.state.selectedPermissions}
           />
         </div>
         <ul className="permissions-list">
