@@ -27,12 +27,14 @@ import {Translate} from 'components';
 import {reactTranslateChangeLanguage} from 'components/';
 import Const from './../api/consts/CServer';
 import axios from 'axios';
-import {message} from 'antd';
+import {message, Modal} from 'antd';
 
 interface IState {
   isLogin: boolean;
+  openSignInModal: boolean;
   user: any[];
   lang: string;
+  signin: any;
 }
 
 interface IProps {
@@ -44,9 +46,11 @@ interface IProps {
 }
 
 class Container extends React.Component<IProps, IState> {
+  private translator: Translate;
 
   public constructor(props: IProps) {
     super(props);
+    this.translator = new Translate();
     let initData: any;
     if (typeof window !== 'undefined') {
       initData = window;
@@ -59,12 +63,22 @@ class Container extends React.Component<IProps, IState> {
     if (initData) {
       this.state = {
         isLogin: false,
+        signin: {
+          username: '',
+          password: '',
+        },
+        openSignInModal: false,
         user: initData.__INITIAL_DATA__.user || [],
         lang: initData.__INITIAL_DATA__.locale || Cookies.get('locale') || 'en', // from browser
       };
     } else {
       this.state = {
         isLogin: false,
+        signin: {
+          username: '',
+          password: '',
+        },
+        openSignInModal: false,
         user: [],
         lang: 'en',
       };
@@ -75,7 +89,13 @@ class Container extends React.Component<IProps, IState> {
     reactTranslateChangeLanguage(this.state.lang);
   }
 
-  public signIn = () => {
+  public toggleSignInModal = () => {
+    this.setState({
+      openSignInModal: !this.state.openSignInModal,
+    });
+  }
+
+  public signInWithNested = () => {
     const websiteUrl = Const.SERVER_URL;
     const strWindowFeatures = 'location=yes,height=570,width=520,scrollbars=yes,status=yes';
     const oauthWindow: any = window.open('', '_blank', strWindowFeatures);
@@ -108,6 +128,28 @@ class Container extends React.Component<IProps, IState> {
     });
   }
 
+  private submitLoginForm = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // tODO
+  }
+
+  private bindInputToModel(selector: any, e: any) {
+    const signin = this.state.signin;
+    if (typeof selector === 'object') {
+      const elem = selector.name.split('[]');
+      signin[elem[0]][selector.index][elem[1]] = e.target.value;
+    } else {
+      signin[selector] = e.target.value;
+      if (selector === 'username') {
+        signin[selector] = signin[selector].toLowerCase();
+      }
+    }
+    this.setState({
+      signin,
+    });
+  }
+
   /**
    * renders the component if the credentials are valid
    * @returns {ReactElement} markup
@@ -116,6 +158,7 @@ class Container extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
+    const validateForm = false;
     return (
       <div>
         <nav className="navbar-wrapper">
@@ -131,7 +174,7 @@ class Container extends React.Component<IProps, IState> {
             </Link>
             <div className="filler"/>
             <Link to="/apps"><Translate>Browse</Translate></Link>
-            <button className="butn" onClick={this.signIn}><Translate>Sign in</Translate></button>
+            <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>
           </div>
         </nav>
         {this.props.children}
@@ -182,6 +225,44 @@ class Container extends React.Component<IProps, IState> {
             </div>
           </div>
         </footer>
+        <Modal
+          wrapClassName="vertical-center-modal"
+          className="signin-modal"
+          width="360px"
+          visible={this.state.openSignInModal}
+          onCancel={this.toggleSignInModal}
+          maskClosable={true}
+        >
+          <div className="nst-vertical-logo">
+            <img src="/public/assets/icons/Nested_Logo.svg" height="32" alt="Nested" className="logo"/>
+            <img src="/public/assets/icons/Nested_EnglishType.svg" height="32" alt="Nested"
+                className="logo-type"/>
+            <img src="/public/assets/icons/Nested_PersianType.svg" height="32" alt="Nested"
+                className="logo-type fa"/>
+          </div>
+          <div className="login-des">
+            <h2><Translate>Sign in to Nested App Store</Translate></h2>
+            <p><Translate>
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+              sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+              Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip
+              ex ea commodo consequat. suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+            </Translate></p>
+            <button className="butn butn-primary secondary full-width" type="submit" onClick={this.signInWithNested}>
+            <img src="/public/assets/icons/Nested_Logo.svg" height="24" alt="Nested"/> Sign in with Nested
+            </button>
+            <div className="seperator"><Translate>Or</Translate></div>
+            <form onSubmit={this.submitLoginForm}>
+              <input type="text" placeholder={this.translator._getText('Username')}
+                    onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.signin.username}/>
+              <input type="text" placeholder={this.translator._getText('Password')}
+                    onChange={this.bindInputToModel.bind(this, 'password')} value={this.state.signin.password}/>
+              <button className="butn butn-store-login full-width" type="submit" disabled={!validateForm}>
+                <Translate>Sign in</Translate>
+              </button>
+            </form>
+          </div>
+        </Modal>
       </div>
     );
   }

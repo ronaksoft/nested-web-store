@@ -6,14 +6,15 @@ interface IState {
   featuredApps: IApplication[];
   categories: ICategory[];
 }
-
-// import {sortBy} from 'lodash';
-// import {IcoN, Loading, InfiniteScroll} from 'components';
-
+import {message} from 'antd';
+import {category as CategoryFactory, app as AppFactory} from '../../api';
+import {Link} from 'react-router';
 import {Translate, AppList} from 'components';
 import {IApplication, ICategory} from '../../api/interfaces';
 class Browse extends React.Component<any, IState> {
-
+  private translator: Translate;
+  private categoryFactory: CategoryFactory;
+  private appFactory: AppFactory;
   /**
    * @constructor
    * Creates an instance of Sidebar.
@@ -42,8 +43,37 @@ class Browse extends React.Component<any, IState> {
         categories: [],
       };
     }
+    this.translator = new Translate();
+    this.categoryFactory = new CategoryFactory();
+    this.appFactory = new AppFactory();
   }
 
+  public componentDidMount() {
+    if (this.state.categories.length === 0) {
+      this.categoryFactory.getAll().then((data) => {
+        if (data === null) {
+          return;
+        }
+        this.setState({
+          categories: data,
+        });
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t fetch categories!'));
+      });
+    }
+    if (this.state.recentApps.length === 0) {
+      this.appFactory.getAll('recent').then((data) => {
+        if (data === null) {
+          return;
+        }
+        this.setState({
+          recentApps: data,
+        });
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t fetch recent apps!'));
+      });
+    }
+  }
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -56,11 +86,18 @@ class Browse extends React.Component<any, IState> {
       <div className="main-container">
         <div className="main-container-inner">
           <div className="sidebar">
-            <h3><Translate>Categories</Translate></h3>
-            <ul>
-              <li>Bots</li>
-              <li>Communication</li>
-            </ul>
+          <h3><Translate>Categories</Translate></h3>
+          <ul>
+            {
+              this.state.categories.map((category, index) => {
+                return (
+                  <li key={'category-' + index}>
+                    <Link to={'apps/' + category.slug}>{category.name}</Link>
+                  </li>
+                );
+              })
+            }
+          </ul>
           </div>
           <div className="content-wrapper">
             <AppSearch/>

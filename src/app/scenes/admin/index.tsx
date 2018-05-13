@@ -95,9 +95,9 @@ class AdminWrapper extends React.Component<IProps, IState> {
               <div className="sidebar">
                 <h3><Translate>Dashboard</Translate></h3>
                 <ul>
-                  <li><Link to="/admin/app" activeClassName="active"><Translate>Applications</Translate></Link></li>
+                  <li><Link to="/admin/app"><Translate>Applications</Translate></Link></li>
                   <li><Link to="/admin/category"><Translate>Categories</Translate></Link></li>
-                  <li><Link to="/admin/permission" activeClassName="active">
+                  <li><Link to="/admin/permission">
                     <Translate>Permissions</Translate></Link>
                   </li>
                   {/* <li><Link to="/admin/reviews" activeClassName="active"><Translate>Reviews</Translate></Link></li>

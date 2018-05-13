@@ -6,6 +6,7 @@ interface IState {
   featuredApps: IApplication[];
   categories: ICategory[];
 }
+import {Link} from 'react-router';
 
 import {Translate, AppList} from 'components';
 import {category as CategoryFactory, app as AppFactory} from '../../api';
@@ -124,7 +125,9 @@ class Main extends React.Component<any, IState> {
                 {
                   this.state.categories.map((category, index) => {
                     return (
-                      <li key={'category-' + index}>{category.name}</li>
+                      <li key={'category-' + index}>
+                        <Link to={'apps/' + category.slug}>{category.name}</Link>
+                      </li>
                     );
                   })
                 }
