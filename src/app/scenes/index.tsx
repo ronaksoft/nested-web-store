@@ -16,6 +16,7 @@ import './main.less';
 import AppView from './view/';
 import Main from './main/';
 import Browse from './browse/';
+import AdminApp from './admin/app';
 import AdminAddApp from './admin/app/add';
 import AdminAddCategory from './admin/category';
 import AdminPermission from './admin/permission';
@@ -215,5 +216,6 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
-  Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory, AdminPermission,
+  Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory,
+  AdminPermission, AdminApp,
 };

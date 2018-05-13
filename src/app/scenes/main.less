@@ -202,30 +202,22 @@ a:-webkit-any-link {
 .main-container-inner {
   display: flex;
   margin: 0 auto;
-  padding: 56px 0;
+  padding: 32px 0;
   min-height: ~'calc(100vh - 360px)';
   max-width: 928px;
   &.vertical{
     flex-direction: column;
     padding-top: 0;
   }
-  &.admin {
-    max-width: 640px;
-    padding: 0 0 80px;
-    .tabs {
-      margin-bottom: 0;
-      border: 1px solid rgba(50, 61, 71, 0.08);
-      border-radius: 10px 10px 0px 0px;
-    }
-  }
+}
+.admin-wrapper {
+  border-radius: 10px;
+  flex: 1;
+  width: 100%;
+  width: 100%;
+  background-color: @color-white;
 }
 .add-app {
-  padding: 16px;
-  flex: 1;
-  background-color: @color-white;
-  width: 100%;
-  border-radius: 0px 0px 10px 10px;
-  height: 100%;
   .ant-upload {
     img {
       max-height: 156px;
@@ -359,7 +351,7 @@ a:-webkit-any-link {
     }
   }
 }
-.apps-wrapper {
+.content-wrapper {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -380,14 +372,20 @@ a:-webkit-any-link {
     padding: 16px 26px;
     list-style: none;
     li {
-      padding: 0 6px;
-      line-height: 24px;
       margin-bottom: 8px;
-      cursor: pointer;
-      &:hover, &.active {
-        background: #FFFFFF;
-        box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.16);
-        border-radius: 6px;
+      a {
+        padding: 0 6px;
+        line-height: 24px;
+        width: 100%;
+        flex: 1;
+        display: flex;
+        transition: all @animation-dur;
+        cursor: pointer;
+        &:hover, &.active {
+          background: #FFFFFF;
+          box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.16);
+          border-radius: 6px;
+        }
       }
     }
   }
@@ -701,6 +699,11 @@ footer {
     margin: 0;
     padding: 0;
   }
+  &.no-option {
+    .suggester__menu {
+      display: none;
+    }
+  }
 }
 .multi-selector {
   width: 100%;
@@ -978,15 +981,15 @@ textarea::-webkit-input-placeholder{
   width: 100%;
   .page-buttons-inner {
     position: fixed;
-    top: 64px;
+    top: 96px;
     display: flex;
-    background-color: #F7F7F7;
+    background-color: @color-white;
     width: 100%;
     align-items: center;
     height: 64px;
-    max-width: 640px;
-    padding: 0 16px;
+    max-width: 608px;
     z-index: 4;
+    border-bottom: 2px solid @color-solid-48;
     h2 {
       flex: 1;
       line-height: normal;
@@ -998,11 +1001,6 @@ textarea::-webkit-input-placeholder{
   }
 }
 .add-category {
-  flex: 1;
-  background-color: @color-white;
-  width: 100%;
-  border-radius: 10px;
-  height: 100%;
   ul {
     list-style: none;
     position: relative;
@@ -1015,11 +1013,7 @@ textarea::-webkit-input-placeholder{
   }
 }
 .permissions-scene, .add-category {
-  flex: 1;
-  background-color: @color-white;
-  width: 100%;
-  border-radius: 10px;
-  height: 100%;
+  padding: 0 16px;
   .add {
     height: 48px;
     display: flex;
@@ -1093,6 +1087,61 @@ textarea::-webkit-input-placeholder{
     height: 0px;
     visibility: hidden;
     width: 0px;
+  }
+}
+
+.app-vertical-list {
+  li {
+    display: flex;
+    padding-bottom: 16px;
+    border-bottom: 1px solid @color-breeze-new;
+    .app-icon {
+      display: flex;
+      flex: none;
+      padding: 0 8px;
+      img {
+        border-radius: 6px;
+        width: 64px;
+        height: 64px;
+      }
+    }
+    .app-remove {
+      display: flex;
+      flex: none;
+    }
+    .app-info {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      flex-direction: column;
+      h4 {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      p {
+        font-size: 14px;
+      }
+    }
+    .feature-button {
+      path {
+        fill: @color-solid-64;
+      }
+      &.active {
+        path {
+          fill : @color-shine;
+        }
+      }
+    }
+    .edit-button, .remove-button, .feature-button {
+      margin: 0 8px;
+    }
+    .edit-button{
+      opacity: .72;
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 }
 

@@ -62,7 +62,7 @@ class Browse extends React.Component<any, IState> {
               <li>Communication</li>
             </ul>
           </div>
-          <div className="apps-wrapper">
+          <div className="content-wrapper">
             <AppSearch/>
             <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={this.state.featuredApps}/>
             <AppList title={<Translate>Most Recent Apps</Translate>} haveMore={true} items={this.state.recentApps}/>

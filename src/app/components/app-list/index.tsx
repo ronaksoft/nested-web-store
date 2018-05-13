@@ -43,7 +43,7 @@ export default class AppList extends React.Component<IProps, IState> {
     };
     // Finally, render it!
     return (
-        <div className={'apps-wrapper' + enable ? '' : ' hide'}>
+        <div className={'content-wrapper' + enable ? '' : ' hide'}>
           {enable && (
           <div className="app-list">
             <div className="list-head">

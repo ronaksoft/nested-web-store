@@ -83,14 +83,33 @@ class AdminWrapper extends React.Component<IProps, IState> {
                   className="logo-type fa"/>
               </Link>
               <div className="devider"/>
-              <Link to="/">
+              <Link to="/admin/app/add">
                 <Translate>Add an App</Translate>
               </Link>
               <div className="filler"/>
               <div className="user-wrapper"/>
             </div>
           </nav>
-          {this.props.children}
+          <div className="main-container">
+            <div className="main-container-inner">
+              <div className="sidebar">
+                <h3><Translate>Dashboard</Translate></h3>
+                <ul>
+                  <li><Link to="/admin/app" activeClassName="active"><Translate>Applications</Translate></Link></li>
+                  <li><Link to="/admin/category"><Translate>Categories</Translate></Link></li>
+                  <li><Link to="/admin/permission" activeClassName="active">
+                    <Translate>Permissions</Translate></Link>
+                  </li>
+                  {/* <li><Link to="/admin/reviews" activeClassName="active"><Translate>Reviews</Translate></Link></li>
+                  <li><Link to="/admin/reports" activeClassName="active"><Translate>Reports</Translate></Link></li>
+                  <li><Link to="/admin/users" activeClassName="active"><Translate>Users List</Translate></Link></li> */}
+                </ul>
+              </div>
+              <div className="content-wrapper">
+                {this.props.children}
+              </div>
+            </div>
+          </div>
           <footer>
             <div className="footer-inner">
               <div className="_aic">

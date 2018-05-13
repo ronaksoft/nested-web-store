@@ -26,7 +26,7 @@ export default class Tab extends React.Component<IProps, IState> {
       const hashLinks = Object.keys(this.props.items);
       const {activeTab} = this.state;
     return (
-        <div className="apps-wrapper">
+        <div className="content-wrapper">
             <div className="tabs">
                 {hashLinks.map((title, index) => (
                     <a key={title} onClick={this.setTab.bind(this, index)}

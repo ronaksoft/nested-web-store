@@ -248,8 +248,8 @@ class AdminCategory extends React.Component<IProps, IState> {
       );
     });
     return (
-      <div className="main-container">
-        <div className="main-container-inner vertical admin">
+      <div className="admin-wrapper">
+        <div className="add-category">
           <div className="page-buttons">
             <div className="page-buttons-inner">
               <h2><Translate>Category Management</Translate></h2>
@@ -258,13 +258,11 @@ class AdminCategory extends React.Component<IProps, IState> {
               </button>
             </div>
           </div>
-          <div className="add-category">
-            <a className="add" onClick={this.toggleAddCategoryModal}>
-              <IcoN name="cross24" size={24}/>
-              <span>Add a category</span>
-            </a>
-            <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} distance={2} lockAxis="Y"/>
-          </div>
+          <a className="add" onClick={this.toggleAddCategoryModal}>
+            <IcoN name="cross24" size={24}/>
+            <span>Add a category</span>
+          </a>
+          <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} distance={2} lockAxis="Y"/>
         </div>
         <Modal
           title="Add or edit a category"

@@ -1,77 +1,55 @@
 import * as React from 'react';
 import Select from 'react-select';
+import {ISelectOption} from 'api/interfaces';
 import {IcoN, Translate} from 'components';
 import Highlighter from 'react-highlight-words';
+import {app as AppFactory} from 'api';
 
 interface IState {
     value: string;
-    suggestions: any[];
+    inputValue: string;
+    suggestions: ISelectOption[];
 }
 
 export default class AppSearch extends React.Component<any, IState> {
   private translator: Translate;
+  private appFactory: AppFactory;
+
   constructor(props: any) {
     super(props);
     this.state = {
+      inputValue: '',
         value: '',
-        suggestions: [
-            {
-              label: 'Form Builder',
-              value: 'form_builder',
-            },
-            {
-              label: 'Poll',
-              value: 'poll',
-            },
-            {
-              label: 'Form Builder',
-              value: 'form_builder',
-            },
-            {
-              label: 'Poll',
-              value: 'poll',
-            },
-            {
-              label: 'Form Builder',
-              value: 'form_builder',
-            },
-            {
-              label: 'Poll',
-              value: 'poll',
-            },
-            {
-              label: 'Form Builder',
-              value: 'form_builder',
-            },
-            {
-              label: 'Poll',
-              value: 'poll',
-            },
-            {
-              label: 'Form Builder',
-              value: 'form_builder',
-            },
-            {
-              label: 'Poll',
-              value: 'poll',
-            },
-            {
-              label: 'Form Builder',
-              value: 'form_builder',
-            },
-            {
-              label: 'Poll',
-              value: 'poll',
-            },
-        ],
+        suggestions: [],
     };
     this.translator = new Translate();
+    this.appFactory = new AppFactory();
   }
   public onChange = (event, { newValue }) => {
-    console.log(event);
+    console.log(event, newValue);
     this.setState({
       value: newValue,
     });
+  }
+  public onInputChange = (newValue) => {
+    this.setState({
+      inputValue: newValue,
+    });
+    if (newValue) {
+      this.appFactory.search(newValue).then((apps) => {
+        if (apps === null) {
+          return;
+        }
+        this.setState({
+          suggestions: apps.map((app) => {
+            return {
+              value: app._id,
+              label: app.name,
+            };
+          }),
+        });
+      });
+    }
   }
 
   // Autosuggest will call this function every time you need to clear suggestions.
@@ -104,6 +82,9 @@ export default class AppSearch extends React.Component<any, IState> {
   public componentWillUnmount() {
     window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
   }
+  private onOpen() {
+    console.log('onOpen');
+  }
 
   /**
    * @function render
@@ -112,8 +93,7 @@ export default class AppSearch extends React.Component<any, IState> {
    * @memberof IcoN
    */
   public render() {
-    const { value, suggestions } = this.state;
-
+    const {value, suggestions} = this.state;
     // Finally, render it!
     return (
         <div className="search-box">
@@ -122,7 +102,11 @@ export default class AppSearch extends React.Component<any, IState> {
                 name="form-field-name"
                 value={value}
                 onChange={this.onChange}
-                className="suggester"
+                onInputChange={this.onInputChange}
+                menuContainerStyle={this.onOpen}
+                className={this.state.suggestions.length === 0 && !this.state.inputValue
+                  ? 'no-option suggester'
+                  : 'suggester'}
                 optionRenderer={this.renderOption}
                 options={suggestions}
                 placeholder={this.translator._getText('Search for apps...')}

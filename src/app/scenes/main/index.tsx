@@ -116,28 +116,27 @@ class Main extends React.Component<any, IState> {
             </div>
           </div>
         </div>
-
         <div className="main-container">
-            <div className="main-container-inner">
-              <div className="sidebar">
-                <h3><Translate>Categories</Translate></h3>
-                <ul>
-                  {
-                    this.state.categories.map((category, index) => {
-                      return (
-                        <li key={'category-' + index}>{category.name}</li>
-                      );
-                    })
-                  }
-                </ul>
-              </div>
-              <div className="apps-wrapper">
-                <AppSearch/>
-                <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={this.state.featuredApps}/>
-                <AppList title={<Translate>Most Recent Apps</Translate>} haveMore={true} items={this.state.recentApps}/>
-              </div>
+          <div className="main-container-inner">
+            <div className="sidebar">
+              <h3><Translate>Categories</Translate></h3>
+              <ul>
+                {
+                  this.state.categories.map((category, index) => {
+                    return (
+                      <li key={'category-' + index}>{category.name}</li>
+                    );
+                  })
+                }
+              </ul>
+            </div>
+            <div className="content-wrapper">
+              <AppSearch/>
+              <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={this.state.featuredApps}/>
+              <AppList title={<Translate>Most Recent Apps</Translate>} haveMore={true} items={this.state.recentApps}/>
             </div>
           </div>
+        </div>
       </div>
     );
   }

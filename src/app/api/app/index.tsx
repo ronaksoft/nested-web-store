@@ -20,6 +20,18 @@ class AppFactory {
       return response.data.data.app;
     });
   }
+
+  public remove(appId: string): Promise<IApplication> {
+    return axios.post(Const.SERVER_URL + '/admin/app/remove/', {appId}).then((response) => {
+      return response.data.data.app;
+    });
+  }
+
+  public search(query: string, skip: number = 0, limit: number = 20): Promise<IApplication[]> {
+    return axios.post(Const.SERVER_URL + '/app/search/', {query, skip, limit}).then((response) => {
+      return response.data.data.apps;
+    });
+  }
 }
 
 export default AppFactory;

@@ -213,42 +213,40 @@ class AdminPermission extends React.Component<IProps, IState> {
       </div>
     );
     return (
-      <div className="main-container">
-        <div className="main-container-inner vertical admin">
+      <div className="admin-wrapper">
+        <div className="permissions-scene">
           <div className="page-buttons">
             <div className="page-buttons-inner">
               <h2><Translate>Permission Management</Translate></h2>
             </div>
           </div>
-          <div className="permissions-scene">
-            <a className="add" onClick={this.toggleAddModal}>
-              <IcoN name="cross24" size={24}/>
-              <span>Add a permission control</span>
-            </a>
-            <ul className="permissions-list">
-              {this.state.permissions.map((permission) => (
-                <li key={permission._id}>
-                  <div className="per-icon">
-                    <IcoN name="filter16" size={16}/>
+          <a className="add" onClick={this.toggleAddModal}>
+            <IcoN name="cross24" size={24}/>
+            <span>Add a permission control</span>
+          </a>
+          <ul className="permissions-list">
+            {this.state.permissions.map((permission) => (
+              <li key={permission._id}>
+                <div className="per-icon">
+                  <IcoN name="filter16" size={16}/>
+                </div>
+                <div className="per-info">
+                  <h4>{permission.name}</h4>
+                  <p>{permission.desc}</p>
+                </div>
+                <div className="edit-button" onClick={this.onEdit.bind(this, permission._id)}>
+                  <IcoN name="pencil24" size={24}/>
+                </div>
+                <Popconfirm title="Are you sure about removing this Permission?"
+                            onConfirm={this.onRemove.bind(this, permission._id)}
+                            okText="Yes" cancelText="No">
+                  <div className="remove-button">
+                    <IcoN name="negativeXCross24" size={24}/>
                   </div>
-                  <div className="per-info">
-                    <h4>{permission.name}</h4>
-                    <p>{permission.desc}</p>
-                  </div>
-                  <div className="edit-button" onClick={this.onEdit.bind(this, permission._id)}>
-                    <IcoN name="pencil24" size={24}/>
-                  </div>
-                  <Popconfirm title="Are you sure about removing this Permission?"
-                              onConfirm={this.onRemove.bind(this, permission._id)}
-                              okText="Yes" cancelText="No">
-                    <div className="remove-button">
-                      <IcoN name="negativeXCross24" size={24}/>
-                    </div>
-                  </Popconfirm>
-                </li>
-              ))}
-            </ul>
-          </div>
+                </Popconfirm>
+              </li>
+            ))}
+          </ul>
         </div>
         <Modal
           title="Add or edit a permission"

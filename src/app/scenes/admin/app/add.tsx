@@ -470,21 +470,19 @@ class AdminAddApp extends React.Component<IProps, IState> {
       </div>
     );
     return (
-      <div className="main-container">
-        <div className="main-container-inner vertical admin">
-          <div className="page-buttons">
-            <div className="page-buttons-inner">
-              <h2><Translate>Add an app to the market</Translate></h2>
-              <button className="butn butn-blue" onClick={this.preview}>
-                <Translate>Preview</Translate>
-              </button>
-              <button className="butn butn-primary" onClick={this.onSubmit}>
-                <Translate>Submit</Translate>
-              </button>
-            </div>
+      <div className="admin-wrapper">
+        <div className="page-buttons">
+          <div className="page-buttons-inner">
+            <h2><Translate>Add an app to the market</Translate></h2>
+            <button className="butn butn-blue" onClick={this.preview}>
+              <Translate>Preview</Translate>
+            </button>
+            <button className="butn butn-primary" onClick={this.onSubmit}>
+              <Translate>Submit</Translate>
+            </button>
           </div>
-          <Tab items={tabs}/>
         </div>
+        <Tab items={tabs}/>
         <Modal
           title="test"
           wrapClassName="vertical-center-modal"
