@@ -1,7 +1,9 @@
 .RichEditor-root {
   background: #fff;
   font-size: 14px;
+  border: 1px solid @color-breeze-new;
   flex-direction: column-reverse;
+  padding: 8px;
   display: flex;
   &.rtl {
     direction: rtl;
@@ -15,7 +17,16 @@
   font-size: 16px;
 }
 
-.RichEditor-editor .public-DraftEditorPlaceholder-root,
+.RichEditor-editor .public-DraftEditorPlaceholder-root{
+  margin: 0;
+  position: absolute;
+  padding: 0;
+}
+.public-DraftEditorPlaceholder-inner {
+  line-height: 21px;
+  font-size: 14px;
+  color: @color-wind-new;
+}
 .RichEditor-editor .public-DraftEditor-content {
   margin: 0 -15px -15px;
   padding: 15px;

@@ -231,10 +231,16 @@ a:-webkit-any-link {
 .add-app {
   padding: 0 16px;
   .ant-upload {
+    width: 112px;
+    height: 112px;
+    margin-right: 16px;
     img {
       max-height: 156px;
       max-width: 100%;
     }
+  }
+  input {
+    height: 32px;
   }
   .form-row {
     margin-bottom: 16px;
@@ -250,12 +256,12 @@ a:-webkit-any-link {
   }
   .multi-input-row {
     display: flex;
-    margin-right: -4px;
-    margin-left: -4px;
+    flex-direction: column;
+    flex: 1;
     input, textarea {
       display: flex;
-      flex: 1;
-      margin: 0 4px;
+      max-width: 300px;
+      margin: 0 4px 16px;
     }
     textarea {
       height: 96px;

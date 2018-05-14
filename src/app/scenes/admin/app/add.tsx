@@ -408,7 +408,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
           Add your developed app by filling these fields and helping users find your app better.
         </Translate></p>
         <h4><Translate>App user ID &amp; Logo</Translate></h4>
-        <div className="form-row">
+        <div className="form-row _df">
           <Upload
             name="avatar"
             listType="picture-card"
@@ -420,12 +420,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
           >
             {imageUrl ? <img src={imageUrl} alt=""/> : uploadButton}
           </Upload>
-        </div>
-        <div className="multi-input-row form-row">
-          <input type="text" placeholder={this.translator._getText('App user ID')} value={this.state.app.app_id}
-                 onChange={this.bindInputToModel.bind(this, 'app_id')}/>
-          <input type="text" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
-                 onChange={this.bindInputToModel.bind(this, 'website')}/>
+          <div className="multi-input-row">
+            <input type="text" placeholder={this.translator._getText('App user ID')} value={this.state.app.app_id}
+                  onChange={this.bindInputToModel.bind(this, 'app_id')}/>
+            <input type="text" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
+                  onChange={this.bindInputToModel.bind(this, 'website')}/>
+          </div>
         </div>
         <input className="form-row form-block" type="text"
                placeholder={this.translator._getText('Summery (open graph)')} value={this.state.app.summary}
@@ -561,7 +561,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <Affixer offsetTop={72} zIndex={4} height={80}>
           <div className="page-buttons">
             <h2><Translate>Add an app to the market</Translate></h2>
-            <button className="butn butn-blue" onClick={this.preview}>
+            <button className="butn butn-blue secondary" onClick={this.preview}>
               <Translate>Preview</Translate>
             </button>
             <button className="butn butn-primary" onClick={this.onSubmit}>
