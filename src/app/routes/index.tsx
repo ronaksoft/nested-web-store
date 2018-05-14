@@ -22,7 +22,8 @@ export default (
       </Route>
       <Route component={AdminWrapper}>
         <Route path="/admin/app" component={AdminApp}/>
-        <Route path="/admin/app/add" component={AdminAddApp}/>
+        <Route path="/admin/app/create" component={AdminAddApp}/>
+        <Route path="/admin/app/edit/:id" component={AdminAddApp}/>
         <Route path="/admin/category" component={AdminAddCategory}/>
         <Route path="/admin/permission" component={AdminPermission}/>
       </Route>

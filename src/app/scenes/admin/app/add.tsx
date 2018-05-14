@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Translate, Tab, Loading, IcoN, Affixer, RichEditor, NstCrop} from 'components';
 import {Upload, message, Modal} from 'antd';
-import {EditorState} from 'draft-js';
+import {EditorState, convertFromHTML, ContentState} from 'draft-js';
 import Select from 'react-select';
 import {
   file as FileFactory,
@@ -11,9 +11,10 @@ import {
 } from 'api';
 import {IApplication, ISelectOption} from 'api/interfaces';
 // import Const from 'api/consts/CServer';
-import {cloneDeep} from 'lodash';
+import {cloneDeep, merge} from 'lodash';
 import {AppView} from 'scenes';
 import {stateToHTML} from 'draft-js-export-html';
+import {browserHistory} from 'react-router';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -164,6 +165,59 @@ class AdminAddApp extends React.Component<IProps, IState> {
     }).catch(() => {
       message.error(this.translator._getText('Can\'t fetch permissions!'));
     });
+    if (this.props.location.pathname.indexOf('/admin/app/edit/') > -1 && this.props.routeParams.id) {
+      this.appFactory.getById(this.props.routeParams.id).then((data) => {
+        console.log(data);
+        data = merge(this.emptyModel, data);
+        let selectedCategories: ISelectOption[] = [];
+        if (data.categories) {
+          selectedCategories = data.categories.map((item): ISelectOption => {
+            return {
+              value: item._id,
+              label: item.name,
+            };
+          });
+        }
+        let selectedPermissions: ISelectOption[] = [];
+        if (data.permissions) {
+          selectedPermissions = data.permissions.map((item): ISelectOption => {
+            return {
+              value: item._id,
+              label: item.name,
+            };
+          });
+        }
+        let selectedLanguages: ISelectOption[] = [];
+        if (data.lang) {
+          selectedLanguages = data.lang.map((item): ISelectOption => {
+            return {
+              value: item,
+              label: item,
+            };
+          });
+        }
+        const blocksFromHTMLEn = convertFromHTML(data.desc || '');
+        const editorStateEn = EditorState.createWithContent(ContentState.createFromBlockArray(
+          blocksFromHTMLEn.contentBlocks,
+          blocksFromHTMLEn.entityMap,
+        ));
+        const blocksFromHTMLFa = convertFromHTML(data.translations[0].desc || '');
+        const editorStateFa = EditorState.createWithContent(ContentState.createFromBlockArray(
+          blocksFromHTMLFa.contentBlocks,
+          blocksFromHTMLFa.entityMap,
+        ));
+        this.setState({
+          app: data,
+          editorStateEn,
+          editorStateFa,
+          selectedPermissions,
+          selectedCategories,
+          selectedLanguages,
+        });
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t fetch application!'));
+      });
+    }
   }
 
   private getBase64 = (img: any, callback: any) => {
@@ -307,12 +361,22 @@ class AdminAddApp extends React.Component<IProps, IState> {
   private onSubmit = () => {
     const model = this.getModel(false);
     this.bindDescriptionsToModel();
-    this.appFactory.create(model).then(() => {
-      message.success(this.translator._getText('Application successfully created'));
-    }).catch((error) => {
-      message.error(this.translator._getText('Can\'t create Application!'));
-      message.error(error);
-    });
+    if (model._id.length === 24) {
+      this.appFactory.edit(model).then(() => {
+        message.success(this.translator._getText('Application successfully edited'));
+      }).catch((error) => {
+        message.error(this.translator._getText('Can\'t edit the Application!'));
+        message.error(error);
+      });
+    } else {
+      this.appFactory.create(model).then(() => {
+        message.success(this.translator._getText('Application successfully created'));
+        browserHistory.push('/admin/app');
+      }).catch((error) => {
+        message.error(this.translator._getText('Can\'t create the Application!'));
+        message.error(error);
+      });
+    }
   }
 
   public handleSelectChangeCategories = (selectedCategories) => {
@@ -565,7 +629,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
               <Translate>Preview</Translate>
             </button>
             <button className="butn butn-primary" onClick={this.onSubmit}>
-              <Translate>Submit</Translate>
+              {this.state.app._id === '' &&
+              <Translate>Submit</Translate>}
+              {this.state.app._id !== '' &&
+              <Translate>Edit</Translate>}
             </button>
           </div>
         </Affixer>

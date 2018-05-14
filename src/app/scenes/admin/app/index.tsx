@@ -24,7 +24,6 @@ interface IProps {
 interface IState {
   loading: boolean;
   apps: IApplication[];
-  untouched: boolean;
 }
 
 class AdminApp extends React.Component<IProps, IState> {
@@ -42,7 +41,6 @@ class AdminApp extends React.Component<IProps, IState> {
     this.translator = new Translate();
     const state: IState = {
       loading: false,
-      untouched: true,
       apps: [],
     };
     this.state = state;
@@ -62,16 +60,7 @@ class AdminApp extends React.Component<IProps, IState> {
     });
   }
 
-  private onSave = () => {
-    console.log(this.state.apps);
-  }
-
   private makeFeature = (id) => {
-    console.log(id);
-    // todo
-  }
-
-  private onEdit = (id) => {
     console.log(id);
     // todo
   }
@@ -88,9 +77,9 @@ class AdminApp extends React.Component<IProps, IState> {
       this.setState({
         apps,
       });
-      message.success(this.translator._getText('Category successfully removed'));
+      message.success(this.translator._getText('Application successfully removed'));
     }).catch(() => {
-      message.error(this.translator._getText('Can\'t remove category!'));
+      message.error(this.translator._getText('Can\'t remove application!'));
     });
   }
 
@@ -108,12 +97,9 @@ class AdminApp extends React.Component<IProps, IState> {
           <Affixer offsetTop={72} zIndex={4} height={80}>
             <div className="page-buttons">
               <h2><Translate>Applications</Translate></h2>
-              <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
-                <Translate>Submit</Translate>
-              </button>
             </div>
           </Affixer>
-          <Link className="add" to="/admin/app/add">
+          <Link className="add" to="/admin/app/create">
             <IcoN name="cross24" size={24}/>
             <span>Build an application</span>
           </Link>
@@ -122,20 +108,20 @@ class AdminApp extends React.Component<IProps, IState> {
             {this.state.apps.map((app) => (
               <li key={app._id}>
                 <div className="app-icon">
-                <img src={Const.SERVER_URL + app.logo.path} alt=""/>
+                  <img src={Const.SERVER_URL + app.logo.path} alt=""/>
                 </div>
                 <div className="app-info">
                   <h4>{app.name}</h4>
-                  <p>{app.categories[0].name}</p>
+                  <p>{app.categories && app.categories.length > 0 ? app.categories[0].name : ''}</p>
                 </div>
                 <div className={app.stared ? 'feature-button active' : 'feature-button'}
-                  onClick={this.makeFeature.bind(this, app._id)}>
+                     onClick={this.makeFeature.bind(this, app._id)}>
                   <IcoN name="star24" size={24}/>
                 </div>
-                <div className="edit-button" onClick={this.onEdit.bind(this, app._id)}>
+                <Link className="edit-button" to={'/admin/app/edit/' + app._id}>
                   <IcoN name="pencil24" size={24}/>
-                </div>
-                <Popconfirm title="Are you sure about removing this Permission?"
+                </Link>
+                <Popconfirm title="Are you sure about removing this Application?"
                             onConfirm={this.onRemove.bind(this, app._id)}
                             okText="Yes" cancelText="No">
                   <div className="remove-button">
@@ -145,7 +131,7 @@ class AdminApp extends React.Component<IProps, IState> {
               </li>
             ))}
           </ul>
-          </div>
+        </div>
       </div>
     );
   }

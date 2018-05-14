@@ -4,7 +4,7 @@ import Const from '../consts/CServer';
 
 class CategoryFactory {
   public create(category: ICategory) {
-    return axios.post(Const.SERVER_URL + '/admin/category/add', category).then((response) => {
+    return axios.post(Const.SERVER_URL + '/admin/category/create', category).then((response) => {
       return response.data.data;
     });
   }

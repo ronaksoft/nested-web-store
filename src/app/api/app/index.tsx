@@ -4,8 +4,19 @@ import Const from '../consts/CServer';
 
 class AppFactory {
   public create(app: IApplication) {
-    return axios.post(Const.SERVER_URL + '/admin/app/add', app).then((response) => {
+    return axios.post(Const.SERVER_URL + '/admin/app/create', app).then((response) => {
       return response.data.data;
+    });
+  }
+  public edit(app: IApplication) {
+    return axios.post(Const.SERVER_URL + '/admin/app/edit', app).then((response) => {
+      return response.data.data;
+    });
+  }
+
+  public remove(id: string): Promise<IApplication> {
+    return axios.post(Const.SERVER_URL + '/admin/app/remove', {id}).then((response) => {
+      return response.data.data.app;
     });
   }
 
@@ -21,8 +32,8 @@ class AppFactory {
     });
   }
 
-  public remove(appId: string): Promise<IApplication> {
-    return axios.post(Const.SERVER_URL + '/admin/app/remove/', {appId}).then((response) => {
+  public getById(id: string): Promise<IApplication> {
+    return axios.post(Const.SERVER_URL + '/admin/app/' + id, {}).then((response) => {
       return response.data.data.app;
     });
   }
