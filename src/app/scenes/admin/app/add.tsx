@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {Translate, Tab, Loading, IcoN, Affixer} from 'components';
+import {Translate, Tab, Loading, IcoN, Affixer, RichEditor} from 'components';
 import {Upload, message, Modal} from 'antd';
+import {EditorState} from 'draft-js';
 import Select from 'react-select';
 import {
   file as FileFactory,
@@ -12,6 +13,7 @@ import {IApplication, ISelectOption} from 'api/interfaces';
 import Const from 'api/consts/CServer';
 import {cloneDeep} from 'lodash';
 import {AppView} from 'scenes';
+import {stateToHTML} from 'draft-js-export-html';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -30,6 +32,8 @@ interface IProps {
 interface IState {
   app: IApplication;
   loading: boolean;
+  editorStateFa: any;
+  editorStateEn: any;
   preview: boolean;
   previewModel: IApplication;
   imageUrl: string;
@@ -90,6 +94,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
       selectedPermissions: [],
       categories: [],
       permissions: [],
+      editorStateFa: EditorState.createEmpty(), // this.state.app.desc
+      editorStateEn: EditorState.createEmpty(), // this.state.app.translations[0].desc
       languages: [
         {
           label: 'Farsi',
@@ -108,6 +114,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
     this.categoryFactory = new CategoryFactory();
     this.permissionFactory = new PermissionFactory();
     this.customRequest = this.fileFactory.customRequest.bind(this);
+    // EditorState.createWithContent(ContentState.createFromBlockArray(
+    //     convertFromHTML(props.message.body).contentBlocks,
+    //     convertFromHTML(props.message.body).entityMap
+    // ))
   }
 
   public componentDidMount() {
@@ -219,6 +229,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
   }
 
+  private bindDescriptionsToModel() {
+    const model = this.state.app;
+    model.desc = stateToHTML(this.state.editorStateEn.getCurrentContent());
+    model.translations[0].desc = stateToHTML(this.state.editorStateFa.getCurrentContent());
+  }
+
   private removePictures(index) {
     const app = this.state.app;
     app.screenshots.splice(index, 1);
@@ -270,6 +286,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
 
   private onSubmit = () => {
     const model = this.getModel(false);
+    this.bindDescriptionsToModel();
     this.appFactory.create(model).then(() => {
       message.success(this.translator._getText('Application successfully created'));
     }).catch((error) => {
@@ -296,6 +313,15 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
   }
 
+  private onChangeEnglishDesc = (editorStateEn: EditorState) => {
+    console.log(editorStateEn);
+    // this.setState({editorStateEn});
+  }
+
+  private onChangeFarsiDesc = (editorStateFa: EditorState) => {
+    console.log(editorStateFa);
+    // this.setState({editorStateFa});
+  }
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -317,16 +343,16 @@ class AdminAddApp extends React.Component<IProps, IState> {
       <div className="app-translations">
         <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
                onChange={this.bindInputToModel.bind(this, 'name')}/>
-        <textarea placeholder={this.translator._getText('Description (eng)')} value={this.state.app.desc}
-                  onChange={this.bindInputToModel.bind(this, 'desc')}/>
+        <RichEditor initialState={this.state.editorStateEn} onStateChange={this.onChangeEnglishDesc}
+          placeholder={this.translator._getText('Description (eng)')}/>
       </div>
     );
     informationTabs[this.translator._getText('Persian')] = (
       <div className="app-translations">
         <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)" value={this.state.app.translations[0].name}
                onChange={this.bindInputToModel.bind(this, {name: 'translations[]name', index: 0})}/>
-        <textarea dir="rtl" placeholder="توضیحات (فارسی)" value={this.state.app.translations[0].desc}
-                  onChange={this.bindInputToModel.bind(this, {name: 'translations[]desc', index: 0})}/>
+        <RichEditor initialState={this.state.editorStateFa} onStateChange={this.onChangeFarsiDesc}
+          placeholder="توضیحات (فارسی)"/>
       </div>
     );
     const tabs = {};

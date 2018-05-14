@@ -10,5 +10,6 @@ import Rating from './rating';
 import Tab from './tab';
 import RateResult from './rate-result';
 import Affixer from './affixer';
+import RichEditor from './editor';
 
-export {RTLDetector, AppSearch, AppList, Rating, Tab, RateResult, Affixer};
+export {RTLDetector, AppSearch, AppList, Rating, Tab, RateResult, Affixer, RichEditor};
