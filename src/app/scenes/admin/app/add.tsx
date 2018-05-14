@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, Tab, Loading, IcoN, Affixer, RichEditor} from 'components';
+import {Translate, Tab, Loading, IcoN, Affixer, RichEditor, NstCrop} from 'components';
 import {Upload, message, Modal} from 'antd';
 import {EditorState} from 'draft-js';
 import Select from 'react-select';
@@ -10,7 +10,7 @@ import {
   permission as PermissionFactory,
 } from 'api';
 import {IApplication, ISelectOption} from 'api/interfaces';
-import Const from 'api/consts/CServer';
+// import Const from 'api/consts/CServer';
 import {cloneDeep} from 'lodash';
 import {AppView} from 'scenes';
 import {stateToHTML} from 'draft-js-export-html';
@@ -32,8 +32,10 @@ interface IProps {
 interface IState {
   app: IApplication;
   loading: boolean;
+  cropIndex: number;
   editorStateFa: any;
   editorStateEn: any;
+  pickedImage: any;
   preview: boolean;
   previewModel: IApplication;
   imageUrl: string;
@@ -43,6 +45,9 @@ interface IState {
   selectedCategories: ISelectOption[];
   selectedLanguages: ISelectOption[];
   selectedPermissions: ISelectOption[];
+  croppedFiles: File[];
+  base64Files: string[];
+  showCropModalCounter: number;
 }
 
 class AdminAddApp extends React.Component<IProps, IState> {
@@ -53,6 +58,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
   private categoryFactory: CategoryFactory;
   private permissionFactory: PermissionFactory;
   private emptyModel: IApplication;
+  private originalFiles: File[] = [];
 
   /**
    * @constructor
@@ -87,13 +93,18 @@ class AdminAddApp extends React.Component<IProps, IState> {
     const state: IState = {
       loading: false,
       preview: false,
+      cropIndex: null,
       previewModel: null,
       imageUrl: '',
       selectedCategories: [],
+      croppedFiles: [],
+      base64Files: [],
+      showCropModalCounter: 0,
       selectedLanguages: [],
       selectedPermissions: [],
       categories: [],
       permissions: [],
+      pickedImage: '',
       editorStateFa: EditorState.createEmpty(), // this.state.app.desc
       editorStateEn: EditorState.createEmpty(), // this.state.app.translations[0].desc
       languages: [
@@ -213,7 +224,16 @@ class AdminAddApp extends React.Component<IProps, IState> {
     if (!isLt1M) {
       message.error('Image must smaller than 1MB!');
     }
-    return isValid && isLt1M;
+    if (isValid && isLt1M) {
+      this.originalFiles.push(file);
+      this.getBase64(file, (base64) => {
+        this.setState({
+          croppedFiles: [...this.state.croppedFiles, file],
+          base64Files: [...this.state.base64Files, base64],
+        });
+      });
+    }
+    return false;
   }
 
   private bindInputToModel(selector: any, e: any) {
@@ -320,6 +340,34 @@ class AdminAddApp extends React.Component<IProps, IState> {
   private onChangeFarsiDesc = (editorStateFa: EditorState) => {
     this.setState({editorStateFa});
   }
+
+  private onCropped = (file: any) => {
+    // const formData = new FormData();
+    // formData.append('blob', file, file.name);
+    const croppedFiles = this.state.croppedFiles;
+    const base64Files = this.state.base64Files;
+    croppedFiles[this.state.cropIndex] = file;
+    this.getBase64(file, (base64) => {
+      base64Files[this.state.cropIndex] = base64;
+      this.setState({
+        croppedFiles,
+        base64Files,
+      });
+    });
+    // todo : upload file
+  }
+
+  private cropImage = (index: number) => {
+    if (index === this.state.cropIndex) {
+      return this.setState({
+        showCropModalCounter: this.state.showCropModalCounter + 1,
+      });
+    }
+    this.setState({
+      cropIndex: index,
+      pickedImage: this.originalFiles[index],
+    });
+  }
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -425,15 +473,15 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <h4><Translate>Screenshots &amp; Pictures</Translate></h4>
         <div className="images-container">
           {
-            this.state.app.screenshots.map((val, index) => {
+            this.state.base64Files.map((val, index) => {
               return (
                 <div key={index} className="image-handler">
-                  <img src={Const.SERVER_URL + val.path} alt=""/>
+                  <img src={val} alt=""/>
                   <div className="image-buttons">
                     <div onClick={this.removePictures.bind(this, index)}>
                       <IcoN name="xcross16Red" size={16}/>
                     </div>
-                    <div>
+                    <div onClick={this.cropImage.bind(this, index)}>
                       <IcoN name="pencil16" size={16}/>
                     </div>
                   </div>
@@ -441,6 +489,21 @@ class AdminAddApp extends React.Component<IProps, IState> {
               );
             })
           }
+            {/* this.state.app.screenshots.map((val, index) => {
+              return (
+                <div key={index} className="image-handler">
+                  <img src={Const.SERVER_URL + val.path} alt=""/>
+                  <div className="image-buttons">
+                    <div onClick={this.removePictures.bind(this, index)}>
+                      <IcoN name="xcross16Red" size={16}/>
+                    </div>
+                    <div onClick={this.cropImage.bind(this, index)}>
+                      <IcoN name="pencil16" size={16}/>
+                    </div>
+                  </div>
+                </div>
+              );
+            }) */}
           <div className="upload-box">
             <Upload
               name="avatar"
@@ -517,6 +580,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
         >
           <AppView app="test" preview={true} model={this.state.previewModel}/>
         </Modal>
+        <NstCrop avatar={this.state.pickedImage} forceUpdateCounter={this.state.showCropModalCounter}
+                        onCropped={this.onCropped}/>
       </div>
     );
   }

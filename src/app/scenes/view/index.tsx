@@ -137,7 +137,7 @@ class AppView extends React.Component<IProps, IState> {
     );
     tabs[this.translator._getText('Permissions')] = (
       <div>
-        <ul className="permissions">
+        <ul className="permissions-list">
           <li>
             <div className="per-icon">
               <IcoN name="filter16" size={16}/>

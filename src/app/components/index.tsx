@@ -11,5 +11,6 @@ import Tab from './tab';
 import RateResult from './rate-result';
 import Affixer from './affixer';
 import RichEditor from './editor';
+import NstCrop from './crop';
 
-export {RTLDetector, AppSearch, AppList, Rating, Tab, RateResult, Affixer, RichEditor};
+export {RTLDetector, AppSearch, AppList, Rating, Tab, RateResult, Affixer, RichEditor, NstCrop};
