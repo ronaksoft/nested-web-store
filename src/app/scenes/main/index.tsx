@@ -126,7 +126,7 @@ class Main extends React.Component<any, IState> {
                   this.state.categories.map((category, index) => {
                     return (
                       <li key={'category-' + index}>
-                        <Link to={'apps/' + category.slug}>{category.name}</Link>
+                        <Link to={'/apps/' + category.slug}>{category.name}</Link>
                       </li>
                     );
                   })

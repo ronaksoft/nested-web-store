@@ -241,6 +241,19 @@ a:-webkit-any-link {
   }
   input {
     height: 32px;
+    font-size: 12px;
+  }
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    font-size: 12px;
+    opacity: 1; /* Firefox */
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    font-size: 12px;
+  }
+
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    font-size: 12px;
   }
   .form-row {
     margin-bottom: 16px;
@@ -1038,7 +1051,6 @@ textarea::-webkit-input-placeholder{
 
 .add-category {
   ul {
-    padding: 0 16px;
     list-style: none;
     position: relative;
     z-index: 0;
@@ -1054,11 +1066,10 @@ textarea::-webkit-input-placeholder{
   .add {
     height: 48px;
     display: flex;
-    padding: 0 16px;
     align-items: center;
     i {
       flex: none;
-      margin: 0 20px;
+      margin: 0 16px;
       svg {
         fill: #508EE6;
       }
@@ -1130,11 +1141,10 @@ textarea::-webkit-input-placeholder{
 }
 
 .app-vertical-list {
-  padding: 0 16px;
   li {
     display: flex;
-    padding-bottom: 16px;
-    border-bottom: 1px solid @color-breeze-new;
+    padding: 13px 4px;
+    border-top: 1px solid @color-breeze-new;
     .app-icon {
       display: flex;
       flex: none;
