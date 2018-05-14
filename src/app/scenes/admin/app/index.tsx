@@ -6,6 +6,7 @@ import {IApplication} from 'api/interfaces';
 import * as _ from 'lodash';
 import {app as AppFactory} from '../../../api';
 import Const from 'api/consts/CServer';
+const ReactPaginate = require('react-paginate');
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -24,6 +25,7 @@ interface IProps {
 interface IState {
   loading: boolean;
   apps: IApplication[];
+  pageCount: number;
 }
 
 class AdminApp extends React.Component<IProps, IState> {
@@ -42,6 +44,7 @@ class AdminApp extends React.Component<IProps, IState> {
     const state: IState = {
       loading: false,
       apps: [],
+      pageCount: 23,
     };
     this.state = state;
     this.appFactory = new AppFactory();
@@ -83,6 +86,10 @@ class AdminApp extends React.Component<IProps, IState> {
     });
   }
 
+  private handlePageClick = (data: any) => {
+    console.log(data.selected);
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -92,46 +99,58 @@ class AdminApp extends React.Component<IProps, IState> {
    */
   public render() {
     return (
-      <div className="admin-wrapper">
-        <div className="add-category">
-          <Affixer offsetTop={72} zIndex={4} height={80}>
-            <div className="page-buttons">
-              <h2><Translate>Applications</Translate></h2>
-            </div>
-          </Affixer>
-          <Link className="add" to="/admin/app/create">
-            <IcoN name="cross24" size={24}/>
-            <span>Build an application</span>
-          </Link>
+      <div className="admin-wrapper admin-app-list-scene">
+        <Affixer offsetTop={72} zIndex={4} height={80}>
+          <div className="page-buttons">
+            <h2><Translate>Applications</Translate></h2>
+          </div>
+        </Affixer>
+        <Link className="add" to="/admin/app/create">
+          <IcoN name="cross24" size={24}/>
+          <span>Build an application</span>
+        </Link>
 
-          <ul className="app-vertical-list">
-            {this.state.apps.map((app) => (
-              <li key={app._id}>
-                <div className="app-icon">
-                  <img src={Const.SERVER_URL + app.logo.path} alt=""/>
+        <ul className="app-vertical-list">
+          {this.state.apps.map((app) => (
+            <li key={app._id}>
+              <div className="app-icon">
+                <img src={Const.SERVER_URL + app.logo.path} alt=""/>
+              </div>
+              <div className="app-info">
+                <h4>
+                  {app.name}
+                  <span className="app-badge"><Translate>PUBLISHED</Translate></span>
+                </h4>
+                <p>{app.categories && app.categories.length > 0 ? app.categories[0].name : ''}</p>
+              </div>
+              <div className={app.stared ? 'feature-button active' : 'feature-button'}
+                  onClick={this.makeFeature.bind(this, app._id)}>
+                <IcoN name="star24" size={24}/>
+              </div>
+              <Link className="edit-button" to={'/admin/app/edit/' + app._id}>
+                <IcoN name="pencil24" size={24}/>
+              </Link>
+              <Popconfirm title="Are you sure about removing this Application?"
+                          onConfirm={this.onRemove.bind(this, app._id)}
+                          okText="Yes" cancelText="No">
+                <div className="remove-button">
+                  <IcoN name="negativeXCross24" size={24}/>
                 </div>
-                <div className="app-info">
-                  <h4>{app.name}</h4>
-                  <p>{app.categories && app.categories.length > 0 ? app.categories[0].name : ''}</p>
-                </div>
-                <div className={app.stared ? 'feature-button active' : 'feature-button'}
-                     onClick={this.makeFeature.bind(this, app._id)}>
-                  <IcoN name="star24" size={24}/>
-                </div>
-                <Link className="edit-button" to={'/admin/app/edit/' + app._id}>
-                  <IcoN name="pencil24" size={24}/>
-                </Link>
-                <Popconfirm title="Are you sure about removing this Application?"
-                            onConfirm={this.onRemove.bind(this, app._id)}
-                            okText="Yes" cancelText="No">
-                  <div className="remove-button">
-                    <IcoN name="negativeXCross24" size={24}/>
-                  </div>
-                </Popconfirm>
-              </li>
-            ))}
-          </ul>
-        </div>
+              </Popconfirm>
+            </li>
+          ))}
+        </ul>
+
+        <ReactPaginate
+          breakLabel={<a href="">...</a>}
+          breakClassName="reak-me"
+          pageCount={this.state.pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.handlePageClick}
+          containerClassName="pagination"
+          subContainerClassName="pages pagination"
+          activeClassName="active" />
       </div>
     );
   }
