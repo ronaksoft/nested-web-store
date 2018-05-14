@@ -119,7 +119,7 @@ class AdminApp extends React.Component<IProps, IState> {
               <div className="app-info">
                 <h4>
                   {app.name}
-                  <span className="app-badge"><Translate>PUBLISHED</Translate></span>
+                  <span className="app-badge published"><Translate>PUBLISHED</Translate></span>
                 </h4>
                 <p>{app.categories && app.categories.length > 0 ? app.categories[0].name : ''}</p>
               </div>

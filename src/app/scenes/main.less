@@ -1198,6 +1198,30 @@ textarea::-webkit-input-placeholder{
       }
     }
   }
+  .app-badge {
+    margin: 0 8px;
+    border-radius: 3px;
+    padding: 1px 2px;
+    line-height: 14px;
+    font-size: 10px;
+    font-weight: bold;
+    color: @color-white;
+    &.published {
+      background: #2FB492;
+    }
+    &.pending {
+      background: #2D8FF5;;
+    }
+    &.suspended {
+      background: #FDAB1C;
+    }
+    &.declined {
+      background: #EE3759;
+    }
+    &.unpublished {
+      background: @color-wind-new;
+    }
+  }
 }
 
 .permissions-list {
