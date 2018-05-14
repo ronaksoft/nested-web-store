@@ -1207,6 +1207,32 @@ textarea::-webkit-input-placeholder{
     resize: none;
     min-height: 128px;
   }
+  .avatar-uploader {
+    img {
+      max-height: 80px;
+      max-width: 80px;
+    }
+  }
+  .ant-upload.ant-upload-select-picture-card {
+    width: 72px;
+    height: 72px;
+    margin-top: 44px;
+  }
+  form {
+    display: flex;
+    flex: 1;
+    input {
+      display: flex;
+      width: 100%;
+      margin: 0 0 16px;
+    }
+    button {
+      opacity: 0;
+      height: 0px;
+      visibility: hidden;
+      width: 0px;
+    }
+  }
 }
 
 // Antd modal

@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {Translate, IcoN, Tab, Affixer} from 'components';
-import {message, Modal, Popconfirm} from 'antd';
+import {Translate, IcoN, Tab, Affixer, Loading} from 'components';
+import {message, Modal, Popconfirm, Upload} from 'antd';
 import {IPermission} from 'api/interfaces';
 import * as _ from 'lodash';
-import {permission as PermissionFactory} from '../../../api';
-
+import {
+  file as FileFactory,
+  permission as PermissionFactory,
+} from 'api';
 // import {Row, Col, Input, Upload} from 'antd';
 
 interface IProps {
@@ -25,10 +27,13 @@ interface IState {
   permissions: IPermission[];
   untouched: boolean;
   addModal: boolean;
+  imageUrl: string;
 }
 
 class AdminPermission extends React.Component<IProps, IState> {
   private translator: Translate;
+  private customRequest: any;
+  private fileFactory: FileFactory;
   private permissionFactory: PermissionFactory;
   private emptyModel: IPermission;
 
@@ -42,7 +47,7 @@ class AdminPermission extends React.Component<IProps, IState> {
     super(props);
     this.emptyModel = {
       _id: '',
-      code: 0,
+      code: null,
       name: '',
       desc: '',
       translations: [{
@@ -57,9 +62,12 @@ class AdminPermission extends React.Component<IProps, IState> {
       addModal: false,
       untouched: true,
       permissions: [],
+      imageUrl: '',
       model: _.cloneDeep(this.emptyModel),
     };
     this.permissionFactory = new PermissionFactory();
+    this.fileFactory = new FileFactory();
+    this.customRequest = this.fileFactory.customRequest.bind(this);
   }
 
   public componentDidMount() {
@@ -184,6 +192,40 @@ class AdminPermission extends React.Component<IProps, IState> {
     });
   }
 
+  private beforeUploadLogo = (file: any) => {
+    const isSVG = file.type === 'image/svg+xml';
+    if (!isSVG) {
+      message.error('You can only upload SVG file!');
+    }
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('Image must smaller than 1MB!');
+    }
+    return isSVG && isLt1M;
+  }
+
+  private getBase64 = (img: any, callback: any) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+
+  private logoChangeHandler = (info) => {
+    if (info.file.status === 'uploading') {
+      this.setState({loading: true});
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      const permission = this.state.model;
+      permission.icon = info.file.response.data.files[0];
+      this.getBase64(info.file.originFileObj, (imageUrl) => this.setState({
+        imageUrl,
+        loading: false,
+        model: permission,
+      }));
+    }
+  }
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -193,7 +235,15 @@ class AdminPermission extends React.Component<IProps, IState> {
    */
   public render() {
     const validateForm = this.validateForm(this.state.model);
+    const {imageUrl} = this.state;
     const tabs = {};
+    const uploadButton = (
+      <div>
+        {this.state.loading && <Loading active={true}/>}
+        {!this.state.loading && <IcoN name="cross24" size={24}/>}
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
     tabs[this.translator._getText('English')] = (
       <div key="English">
         <input name="name_en" type="text" placeholder={this.translator._getText('Permission name...')}
@@ -270,10 +320,23 @@ class AdminPermission extends React.Component<IProps, IState> {
           <div className="add-permission-modal">
             <input type="number" placeholder={this.translator._getText('Permission Value')}
                    onChange={this.bindInputToModel.bind(this, 'code')} value={this.state.model.code}/>
-            <form className="add-category-modal" onSubmit={this.submitCreatePermissionForm}>
-              <Tab items={tabs}/>
-              <button className="hidden-submit" type="submit" disabled={!validateForm}/>
-            </form>
+            <div className="_df">
+              <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                beforeUpload={this.beforeUploadLogo}
+                onChange={this.logoChangeHandler}
+                customRequest={this.customRequest}
+              >
+                {imageUrl ? <img src={imageUrl} alt=""/> : uploadButton}
+              </Upload>
+              <form onSubmit={this.submitCreatePermissionForm}>
+                <Tab items={tabs}/>
+                <button className="hidden-submit" type="submit" disabled={!validateForm}/>
+              </form>
+            </div>
           </div>
         </Modal>
       </div>
