@@ -314,13 +314,11 @@ class AdminAddApp extends React.Component<IProps, IState> {
   }
 
   private onChangeEnglishDesc = (editorStateEn: EditorState) => {
-    console.log(editorStateEn);
-    // this.setState({editorStateEn});
+    this.setState({editorStateEn});
   }
 
   private onChangeFarsiDesc = (editorStateFa: EditorState) => {
-    console.log(editorStateFa);
-    // this.setState({editorStateFa});
+    this.setState({editorStateFa});
   }
   /**
    * renders the component
@@ -344,7 +342,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
                onChange={this.bindInputToModel.bind(this, 'name')}/>
         <RichEditor initialState={this.state.editorStateEn} onStateChange={this.onChangeEnglishDesc}
-          placeholder={this.translator._getText('Description (eng)')}/>
+          placeholder={this.translator._getText('Description (eng)')} textAlignment={'left'}/>
       </div>
     );
     informationTabs[this.translator._getText('Persian')] = (
@@ -352,7 +350,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)" value={this.state.app.translations[0].name}
                onChange={this.bindInputToModel.bind(this, {name: 'translations[]name', index: 0})}/>
         <RichEditor initialState={this.state.editorStateFa} onStateChange={this.onChangeFarsiDesc}
-          placeholder="توضیحات (فارسی)"/>
+          placeholder="توضیحات (فارسی)" textAlignment={'right'}/>
       </div>
     );
     const tabs = {};

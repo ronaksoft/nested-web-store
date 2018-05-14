@@ -4,18 +4,30 @@ import StyleButton from './styleButton';
 interface IProps {
   initialState: any;
   placeholder: string;
+  textAlignment: any;
   onStateChange: (s: EditorState) => void;
 }
 
 interface IState {
   editorState: EditorState;
+  textAlignment: any;
 }
 
 export default class RichEditor extends React.Component<IProps, IState> {
   public editor: any;
   constructor(props: IProps) {
     super(props);
-    this.state = {editorState: this.props.initialState};
+    this.state = {
+      editorState: props.initialState,
+      textAlignment: props,
+    };
+  }
+
+  public componentWillReceiveProps(props: IProps) {
+    this.setState({
+      editorState: props.initialState,
+      textAlignment: props.textAlignment,
+    });
   }
 
   private focus = () => this.editor.focus();
@@ -63,7 +75,8 @@ export default class RichEditor extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const {editorState} = this.state;
+    const {editorState, textAlignment} = this.state;
+    const rtlClass = (textAlignment === 'right' ? ' rtl' : '');
 
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
@@ -75,7 +88,7 @@ export default class RichEditor extends React.Component<IProps, IState> {
       }
     }
     return (
-      <div className="RichEditor-root">
+      <div className={'RichEditor-root' + rtlClass}>
         <BlockStyleControls
           editorState={editorState}
           onToggle={this.toggleBlockType}
@@ -89,6 +102,7 @@ export default class RichEditor extends React.Component<IProps, IState> {
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
             editorState={editorState}
+            textAlignment={textAlignment}
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.onChange}
             onTab={this.onTab}
