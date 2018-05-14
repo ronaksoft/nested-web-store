@@ -274,6 +274,7 @@ a:-webkit-any-link {
     display: inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
+    padding-right: 8px;
     width: 100%;
     .image-handler {
       display: flex;
@@ -776,6 +777,27 @@ footer {
   }
   .multi-selector__option--isFocused {
     background: rgba(80, 142, 230, 0.32);
+  }
+  .multi-selector__multi-value {
+    background: #FFFFFF;
+    border: 1px solid @color-wind;
+    border-radius: 4px;
+    margin: 0 4px;
+    height: 24px;
+  }
+  .multi-selector__multi-value__label {
+    padding: 5px 0 5px 5px;
+    line-height: 14px;
+    font-size: 12px;
+    color: @color-solid-64;
+  }
+  .multi-selector__multi-value__remove {
+    padding: 0 2px;
+    svg {
+    height: 16px;
+    width: 16px;
+    fill: @color-force;
+    }
   }
   .css-rsyb7x {
     margin: 0;
