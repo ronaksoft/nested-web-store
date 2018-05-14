@@ -9,5 +9,6 @@ import AppList from './app-list';
 import Rating from './rating';
 import Tab from './tab';
 import RateResult from './rate-result';
+import Affixer from './affixer';
 
-export {RTLDetector, AppSearch, AppList, Rating, Tab, RateResult};
+export {RTLDetector, AppSearch, AppList, Rating, Tab, RateResult, Affixer};

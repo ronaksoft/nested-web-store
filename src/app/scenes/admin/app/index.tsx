@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, IcoN} from 'components';
+import {Translate, IcoN, Affixer} from 'components';
 import {Link} from 'react-router';
 import {message, Popconfirm} from 'antd';
 import {IApplication} from 'api/interfaces';
@@ -105,14 +105,14 @@ class AdminApp extends React.Component<IProps, IState> {
     return (
       <div className="admin-wrapper">
         <div className="add-category">
-          <div className="page-buttons">
-            <div className="page-buttons-inner">
+          <Affixer offsetTop={72} zIndex={4} height={80}>
+            <div className="page-buttons">
               <h2><Translate>Applications</Translate></h2>
               <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
                 <Translate>Submit</Translate>
               </button>
             </div>
-          </div>
+          </Affixer>
           <Link className="add" to="/admin/app/add">
             <IcoN name="cross24" size={24}/>
             <span>Build an application</span>

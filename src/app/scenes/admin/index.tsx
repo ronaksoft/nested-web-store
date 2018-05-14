@@ -15,7 +15,7 @@ import {login, logout} from 'redux/app/actions';
 import {IUser} from 'api/interfaces';
 import * as Cookies from 'cookies-js';
 
-import {Translate} from 'components';
+import {Translate, Affixer} from 'components';
 import {reactTranslateChangeLanguage} from 'components/';
 interface IState {
   isLogin: boolean;
@@ -92,19 +92,25 @@ class AdminWrapper extends React.Component<IProps, IState> {
           </nav>
           <div className="main-container">
             <div className="main-container-inner">
-              <div className="sidebar">
-                <h3><Translate>Dashboard</Translate></h3>
-                <ul>
-                  <li><Link to="/admin/app"><Translate>Applications</Translate></Link></li>
-                  <li><Link to="/admin/category"><Translate>Categories</Translate></Link></li>
-                  <li><Link to="/admin/permission">
-                    <Translate>Permissions</Translate></Link>
-                  </li>
-                  {/* <li><Link to="/admin/reviews" activeClassName="active"><Translate>Reviews</Translate></Link></li>
-                  <li><Link to="/admin/reports" activeClassName="active"><Translate>Reports</Translate></Link></li>
-                  <li><Link to="/admin/users" activeClassName="active"><Translate>Users List</Translate></Link></li> */}
-                </ul>
-              </div>
+              <Affixer offsetTop={72} zIndex={4} height={80}>
+                <div className="sidebar">
+                  <h3><Translate>Dashboard</Translate></h3>
+                  <ul>
+                    <li><Link to="/admin/app"><Translate>Applications</Translate></Link></li>
+                    <li><Link to="/admin/category"><Translate>Categories</Translate></Link></li>
+                    <li><Link to="/admin/permission">
+                      <Translate>Permissions</Translate></Link>
+                    </li>
+                {/* <li><Link to="/admin/reviews" activeClassName="active">
+                <Translate>Reviews</Translate></Link>
+                </li>
+                <li><Link to="/admin/reports" activeClassName="active">
+                <Translate>Reports</Translate></Link></li>
+                <li><Link to="/admin/users" activeClassName="active">
+                <Translate>Users List</Translate></Link></li> */}
+                  </ul>
+                </div>
+              </Affixer>
               <div className="content-wrapper">
                 {this.props.children}
               </div>

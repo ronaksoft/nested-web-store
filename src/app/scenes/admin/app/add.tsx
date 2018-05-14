@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, Tab, Loading, IcoN} from 'components';
+import {Translate, Tab, Loading, IcoN, Affixer} from 'components';
 import {Upload, message, Modal} from 'antd';
 import Select from 'react-select';
 import {
@@ -470,9 +470,9 @@ class AdminAddApp extends React.Component<IProps, IState> {
       </div>
     );
     return (
-      <div className="admin-wrapper">
-        <div className="page-buttons">
-          <div className="page-buttons-inner">
+      <div className="admin-wrapper add-app-scene">
+        <Affixer offsetTop={72} zIndex={4} height={80}>
+          <div className="page-buttons">
             <h2><Translate>Add an app to the market</Translate></h2>
             <button className="butn butn-blue" onClick={this.preview}>
               <Translate>Preview</Translate>
@@ -481,7 +481,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
               <Translate>Submit</Translate>
             </button>
           </div>
-        </div>
+        </Affixer>
         <Tab items={tabs}/>
         <Modal
           title="test"

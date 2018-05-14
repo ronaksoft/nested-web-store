@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, IcoN} from 'components';
+import {Translate, IcoN, Affixer} from 'components';
 import {Modal, message, Popconfirm} from 'antd';
 import {SortableContainer, SortableElement, arrayMove, SortableHandle} from 'react-sortable-hoc';
 import {ICategory} from 'api/interfaces';
@@ -250,14 +250,14 @@ class AdminCategory extends React.Component<IProps, IState> {
     return (
       <div className="admin-wrapper">
         <div className="add-category">
-          <div className="page-buttons">
-            <div className="page-buttons-inner">
+          <Affixer offsetTop={72} zIndex={4} height={80}>
+            <div className="page-buttons">
               <h2><Translate>Category Management</Translate></h2>
               <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
                 <Translate>Save</Translate>
               </button>
             </div>
-          </div>
+          </Affixer>
           <a className="add" onClick={this.toggleAddCategoryModal}>
             <IcoN name="cross24" size={24}/>
             <span>Add a category</span>

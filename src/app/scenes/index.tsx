@@ -169,7 +169,7 @@ class Container extends React.Component<IProps, IState> {
             <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
                  className="logo-type fa"/>
             <div className="devider"/>
-            <Link to="/">
+            <Link to="/admin/app">
               <Translate>App Store</Translate>
             </Link>
             <div className="filler"/>

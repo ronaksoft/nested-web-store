@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, IcoN, Tab} from 'components';
+import {Translate, IcoN, Tab, Affixer} from 'components';
 import {message, Modal, Popconfirm} from 'antd';
 import {IPermission} from 'api/interfaces';
 import * as _ from 'lodash';
@@ -215,11 +215,11 @@ class AdminPermission extends React.Component<IProps, IState> {
     return (
       <div className="admin-wrapper">
         <div className="permissions-scene">
-          <div className="page-buttons">
-            <div className="page-buttons-inner">
+          <Affixer offsetTop={72} zIndex={4} height={80}>
+            <div className="page-buttons">
               <h2><Translate>Permission Management</Translate></h2>
             </div>
-          </div>
+          </Affixer>
           <a className="add" onClick={this.toggleAddModal}>
             <IcoN name="cross24" size={24}/>
             <span>Add a permission control</span>
