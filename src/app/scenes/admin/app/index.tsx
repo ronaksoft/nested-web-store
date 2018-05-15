@@ -6,6 +6,7 @@ import {IApplication} from 'api/interfaces';
 import * as _ from 'lodash';
 import {app as AppFactory} from '../../../api';
 import Const from 'api/consts/CServer';
+
 const ReactPaginate = require('react-paginate');
 
 // import {Row, Col, Input, Upload} from 'antd';
@@ -31,6 +32,7 @@ interface IState {
 class AdminApp extends React.Component<IProps, IState> {
   private translator: Translate;
   private appFactory: AppFactory;
+  private pagination: any;
 
   /**
    * @constructor
@@ -44,28 +46,48 @@ class AdminApp extends React.Component<IProps, IState> {
     const state: IState = {
       loading: false,
       apps: [],
-      pageCount: 23,
+      pageCount: 1,
     };
     this.state = state;
     this.appFactory = new AppFactory();
+    this.pagination = {
+      skip: 0,
+      limit: 10,
+    };
   }
 
   public componentDidMount() {
-    this.appFactory.getAll('recent').then((data) => {
-      if (data === null) {
-        return;
-      }
-      this.setState({
-        apps: data,
-      });
-    }).catch(() => {
+    this.loadApps();
+  }
+
+  private loadApps() {
+    this.appFactory
+      .searchAll('', 0, this.pagination.skip, this.pagination.limit)
+      .then((data) => {
+        if (data.apps === null) {
+          message.warning(this.translator._getText('Reached the end!'));
+          return;
+        }
+        this.setState({
+          apps: data.apps,
+          pageCount: Math.floor(data.count / this.pagination.limit) + 1,
+        });
+      }).catch(() => {
       message.error(this.translator._getText('Can\'t fetch apps!'));
     });
   }
 
   private makeFeature = (id) => {
-    console.log(id);
-    // todo
+    this.appFactory.star(id).then((data) => {
+      const apps = this.state.apps;
+      const index = _.findIndex(this.state.apps, {_id: data._id});
+      if (index > -1) {
+        apps[index].stared = !apps[index].stared;
+      }
+      this.setState({
+        apps,
+      });
+    });
   }
 
   private onRemove = (id) => {
@@ -87,7 +109,8 @@ class AdminApp extends React.Component<IProps, IState> {
   }
 
   private handlePageClick = (data: any) => {
-    console.log(data.selected);
+    this.pagination.skip = this.pagination.limit * data.selected;
+    this.loadApps();
   }
 
   /**
@@ -124,7 +147,7 @@ class AdminApp extends React.Component<IProps, IState> {
                 <p>{app.categories && app.categories.length > 0 ? app.categories[0].name : ''}</p>
               </div>
               <div className={app.stared ? 'feature-button active' : 'feature-button'}
-                  onClick={this.makeFeature.bind(this, app._id)}>
+                   onClick={this.makeFeature.bind(this, app._id)}>
                 <IcoN name="star24" size={24}/>
               </div>
               <Link className="edit-button" to={'/admin/app/edit/' + app._id}>
@@ -140,7 +163,7 @@ class AdminApp extends React.Component<IProps, IState> {
             </li>
           ))}
         </ul>
-
+        {this.state.pageCount > 1 &&
         <ReactPaginate
           nextLabel={<IcoN name="arrow24" size={24}/>}
           previousLabel={<IcoN name="arrow24" size={24}/>}
@@ -152,7 +175,7 @@ class AdminApp extends React.Component<IProps, IState> {
           onPageChange={this.handlePageClick}
           containerClassName="pagination"
           subContainerClassName="pages pagination"
-          activeClassName="active" />
+          activeClassName="active"/>}
       </div>
     );
   }

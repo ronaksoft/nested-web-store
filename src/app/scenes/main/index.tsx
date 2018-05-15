@@ -74,6 +74,18 @@ class Main extends React.Component<any, IState> {
         message.error(this.translator._getText('Can\'t fetch recent apps!'));
       });
     }
+    if (this.state.featuredApps.length === 0) {
+      this.appFactory.getAll('featured').then((data) => {
+        if (data === null) {
+          return;
+        }
+        this.setState({
+          featuredApps: data,
+        });
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t fetch recent apps!'));
+      });
+    }
   }
 
   /**

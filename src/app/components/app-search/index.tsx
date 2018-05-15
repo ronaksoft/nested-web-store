@@ -36,12 +36,12 @@ export default class AppSearch extends React.Component<any, IState> {
       inputValue: newValue,
     });
     if (newValue) {
-      this.appFactory.search(newValue).then((apps) => {
-        if (apps === null) {
+      this.appFactory.search(newValue).then((data) => {
+        if (data === null) {
           return;
         }
         this.setState({
-          suggestions: apps.map((app) => {
+          suggestions: data.apps.map((app) => {
             return {
               value: app._id,
               label: app.name,
