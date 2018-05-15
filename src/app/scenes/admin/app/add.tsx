@@ -632,7 +632,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
               {this.state.app._id === '' &&
               <Translate>Submit</Translate>}
               {this.state.app._id !== '' &&
-              <Translate>Edit</Translate>}
+              <Translate>Apply</Translate>}
             </button>
           </div>
         </Affixer>
