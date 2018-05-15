@@ -142,6 +142,8 @@ class AdminApp extends React.Component<IProps, IState> {
         </ul>
 
         <ReactPaginate
+          nextLabel={<IcoN name="arrow24" size={24}/>}
+          previousLabel={<IcoN name="arrow24" size={24}/>}
           breakLabel={<a href="">...</a>}
           breakClassName="reak-me"
           pageCount={this.state.pageCount}
