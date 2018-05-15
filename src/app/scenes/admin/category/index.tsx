@@ -219,7 +219,7 @@ class AdminCategory extends React.Component<IProps, IState> {
     const validateForm = this.validateForm(this.state.model);
     const DragHandle = SortableHandle(() => <IcoN name="move24" size={24}/>);
     const SortableItem = SortableElement(({value, onEdit, onRemove}) => (
-      <li className="add-category-sort-item">
+      <li className="category-sort-item">
         <div className="dragger">
           <DragHandle/>
         </div>
@@ -248,22 +248,20 @@ class AdminCategory extends React.Component<IProps, IState> {
       );
     });
     return (
-      <div className="admin-wrapper">
-        <div className="add-category">
-          <Affixer offsetTop={72} zIndex={4} height={80}>
-            <div className="page-buttons">
-              <h2><Translate>Category Management</Translate></h2>
-              <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
-                <Translate>Save</Translate>
-              </button>
-            </div>
-          </Affixer>
-          <a className="add" onClick={this.toggleAddCategoryModal}>
-            <IcoN name="cross24" size={24}/>
-            <span>Add a category</span>
-          </a>
-          <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} distance={2} lockAxis="Y"/>
-        </div>
+      <div className="admin-wrapper category-scene">
+        <Affixer offsetTop={72} zIndex={4} height={80}>
+          <div className="page-buttons">
+            <h2><Translate>Category Management</Translate></h2>
+            <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
+              <Translate>Save</Translate>
+            </button>
+          </div>
+        </Affixer>
+        <a className="add" onClick={this.toggleAddCategoryModal}>
+          <IcoN name="cross24" size={24}/>
+          <span>Add a category</span>
+        </a>
+        <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} distance={2} lockAxis="Y"/>
         <Modal
           title="Add or edit a category"
           wrapClassName="vertical-center-modal"
