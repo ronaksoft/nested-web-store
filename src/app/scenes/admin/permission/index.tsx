@@ -274,7 +274,7 @@ class AdminPermission extends React.Component<IProps, IState> {
             <IcoN name="cross24" size={24}/>
             <span>Add a permission control</span>
           </a>
-          <ul className="permissions-list">
+          <ul className="permissions-list admin-list">
             {this.state.permissions.map((permission) => (
               <li key={permission._id}>
                 <div className="per-icon">

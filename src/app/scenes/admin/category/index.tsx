@@ -239,7 +239,7 @@ class AdminCategory extends React.Component<IProps, IState> {
     ));
     const SortableList = SortableContainer(({items}) => {
       return (
-        <ul className="categories-list">
+        <ul className="categories-list admin-list">
           {items.map((cat, index) => (
             <SortableItem key={`item-${index}`} index={index} value={cat} onEdit={this.onEdit} onRemove={this.onRemove}
                           onSortEnd={this.onSortEnd}/>

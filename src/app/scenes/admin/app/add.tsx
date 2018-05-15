@@ -604,7 +604,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
             value={this.state.selectedPermissions}
           />
         </div>
-        <ul className="permissions-list">
+        <ul className="permissions-list admin-list">
           <li>
             <div className="per-icon">
               <IcoN name="filter16" size={16}/>

@@ -110,7 +110,7 @@ class AdminApp extends React.Component<IProps, IState> {
           <span>Build an application</span>
         </Link>
 
-        <ul className="app-vertical-list">
+        <ul className="app-vertical-list admin-list">
           {this.state.apps.map((app) => (
             <li key={app._id}>
               <div className="app-icon">

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import AppWrapper, {
   Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory,
-  AdminPermission, AdminApp,
+  AdminPermission, AdminApp, AdminUsers,
 } from 'scenes';
 import NotFound from 'containers/404';
 import {Provider} from 'react-redux';
@@ -26,6 +26,7 @@ export default (
         <Route path="/admin/app/edit/:id" component={AdminAddApp}/>
         <Route path="/admin/category" component={AdminAddCategory}/>
         <Route path="/admin/permission" component={AdminPermission}/>
+        <Route path="/admin/user" component={AdminUsers}/>
       </Route>
       <Route path="/404" component={NotFound}/>
       <Route path="*" component={NotFound}/>
