@@ -122,14 +122,14 @@ class AppView extends React.Component<IProps, IState> {
   public render() {
     const tabs = {};
     tabs[this.translator._getText('App info')] = (
-      <div>{this.state.app.desc}</div>
+      <div dangerouslySetInnerHTML={{__html: this.state.app.desc}}/>
     );
     tabs[this.translator._getText('Pictures')] = (
       <div className="pictures">
         {
           this.state.app.screenshots.map((screenshot, index) => {
             return (
-              <img key={index} src={Const.SERVER_URL + screenshot.path} alt={screenshot.name}/>
+              <img key={index} src={(screenshot.tmp ? '' : Const.SERVER_URL) + screenshot.path} alt={screenshot.name}/>
             );
           })
         }

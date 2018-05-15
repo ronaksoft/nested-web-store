@@ -277,7 +277,7 @@ class AdminCategory extends React.Component<IProps, IState> {
               {this.state.model._id === '' &&
               <Translate>Add</Translate>}
               {this.state.model._id !== '' &&
-              <Translate>Edit</Translate>}
+              <Translate>Apply</Translate>}
             </button>,
           ]}
         >

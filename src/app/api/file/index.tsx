@@ -4,10 +4,8 @@ import Const from '../consts/CServer';
 class FileFactory {
 
   public create(formData: any) {
-    return axios.post(Const.SERVER_URL + '/admin/file/add', formData, {
-      headers: '',
-    }).then((response) => {
-      return response.data;
+    return axios.post(Const.SERVER_URL + '/admin/file/add', formData).then((response) => {
+      return response.data.data.files;
     });
   }
 
@@ -16,7 +14,6 @@ class FileFactory {
     formData.append('file-' + uploadData.filename, uploadData.file);
     axios
       .post(Const.SERVER_URL + '/admin/file/add', formData, {
-        headers: '',
         onUploadProgress: ({total, loaded}) => {
           uploadData.onProgress({percent: Math.round(loaded / total * 100).toFixed(2)}, uploadData.file);
         },

@@ -9,9 +9,9 @@ import {
   category as CategoryFactory,
   permission as PermissionFactory,
 } from 'api';
-import {IApplication, ISelectOption} from 'api/interfaces';
-// import Const from 'api/consts/CServer';
-import {cloneDeep, merge} from 'lodash';
+import {IApplication, ISelectOption, IFile, ICategory, IPermission} from 'api/interfaces';
+import Const from 'api/consts/CServer';
+import * as _ from 'lodash';
 import {AppView} from 'scenes';
 import {stateToHTML} from 'draft-js-export-html';
 import {browserHistory} from 'react-router';
@@ -47,7 +47,7 @@ interface IState {
   selectedLanguages: ISelectOption[];
   selectedPermissions: ISelectOption[];
   croppedFiles: File[];
-  base64Files: string[];
+  base64Files: any[];
   showCropModalCounter: number;
 }
 
@@ -60,6 +60,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
   private permissionFactory: PermissionFactory;
   private emptyModel: IApplication;
   private originalFiles: File[] = [];
+  private categories: ICategory[] = [];
+  private permissions: IPermission[] = [];
 
   /**
    * @constructor
@@ -118,7 +120,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
           value: 'en',
         },
       ],
-      app: cloneDeep(this.emptyModel),
+      app: _.cloneDeep(this.emptyModel),
     };
     this.state = state;
     this.appFactory = new AppFactory();
@@ -137,6 +139,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       if (data == null) {
         return;
       }
+      this.categories = data;
       const categories: ISelectOption[] = data.map((category) => {
         return {
           value: category._id,
@@ -153,6 +156,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       if (data == null) {
         return;
       }
+      this.permissions = data;
       const permissions: ISelectOption[] = data.map((permission) => {
         return {
           value: permission._id,
@@ -167,63 +171,72 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
     if (this.props.location.pathname.indexOf('/admin/app/edit/') > -1 && this.props.routeParams.id) {
       this.appFactory.getById(this.props.routeParams.id).then((data) => {
-        console.log(data);
-        data = merge(this.emptyModel, data);
-        let selectedCategories: ISelectOption[] = [];
-        if (data.categories) {
-          selectedCategories = data.categories.map((item): ISelectOption => {
-            return {
-              value: item._id,
-              label: item.name,
-            };
-          });
-        }
-        let selectedPermissions: ISelectOption[] = [];
-        if (data.permissions) {
-          selectedPermissions = data.permissions.map((item): ISelectOption => {
-            return {
-              value: item._id,
-              label: item.name,
-            };
-          });
-        }
-        let selectedLanguages: ISelectOption[] = [];
-        if (data.lang) {
-          selectedLanguages = data.lang.map((item): ISelectOption => {
-            return {
-              value: item,
-              label: item,
-            };
-          });
-        }
-        const blocksFromHTMLEn = convertFromHTML(data.desc || '');
-        const editorStateEn = EditorState.createWithContent(ContentState.createFromBlockArray(
-          blocksFromHTMLEn.contentBlocks,
-          blocksFromHTMLEn.entityMap,
-        ));
-        const blocksFromHTMLFa = convertFromHTML(data.translations[0].desc || '');
-        const editorStateFa = EditorState.createWithContent(ContentState.createFromBlockArray(
-          blocksFromHTMLFa.contentBlocks,
-          blocksFromHTMLFa.entityMap,
-        ));
-        this.setState({
-          app: data,
-          editorStateEn,
-          editorStateFa,
-          selectedPermissions,
-          selectedCategories,
-          selectedLanguages,
-        });
+        this.fillModel(data);
       }).catch(() => {
         message.error(this.translator._getText('Can\'t fetch application!'));
       });
     }
   }
 
-  private getBase64 = (img: any, callback: any) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
+  private fillModel(data: IApplication) {
+    data = _.merge(this.emptyModel, data);
+    let selectedCategories: ISelectOption[] = [];
+    if (data.categories) {
+      selectedCategories = data.categories.map((item): ISelectOption => {
+        return {
+          value: item._id,
+          label: item.name,
+        };
+      });
+    }
+    let selectedPermissions: ISelectOption[] = [];
+    if (data.permissions) {
+      selectedPermissions = data.permissions.map((item): ISelectOption => {
+        return {
+          value: item._id,
+          label: item.name,
+          data: item,
+        };
+      });
+    }
+    let selectedLanguages: ISelectOption[] = [];
+    if (data.lang) {
+      selectedLanguages = data.lang.map((item): ISelectOption => {
+        return {
+          value: item,
+          label: item,
+        };
+      });
+    }
+    const blocksFromHTMLEn = convertFromHTML(data.desc || '');
+    const editorStateEn = EditorState.createWithContent(ContentState.createFromBlockArray(
+      blocksFromHTMLEn.contentBlocks,
+      blocksFromHTMLEn.entityMap,
+    ));
+    const blocksFromHTMLFa = convertFromHTML(data.translations[0].desc || '');
+    const editorStateFa = EditorState.createWithContent(ContentState.createFromBlockArray(
+      blocksFromHTMLFa.contentBlocks,
+      blocksFromHTMLFa.entityMap,
+    ));
+    // this.getBase64().then((res) => {
+    //   console.log(res);
+    // });
+    this.setState({
+      app: data,
+      editorStateEn,
+      editorStateFa,
+      selectedPermissions,
+      selectedCategories,
+      selectedLanguages,
+    });
+  }
+
+  private getBase64 = (img: any): Promise<any> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => resolve(reader.result));
+      reader.readAsDataURL(img);
+    });
   }
 
   private logoChangeHandler = (info) => {
@@ -235,11 +248,13 @@ class AdminAddApp extends React.Component<IProps, IState> {
       // Get this url from response in real world.
       const app = this.state.app;
       app.logo = info.file.response.data.files[0];
-      this.getBase64(info.file.originFileObj, (imageUrl) => this.setState({
-        imageUrl,
-        loading: false,
-        app,
-      }));
+      this.getBase64(info.file.originFileObj).then((imageUrl) => {
+        this.setState({
+          imageUrl,
+          loading: false,
+          app,
+        });
+      });
     }
   }
 
@@ -280,7 +295,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
     }
     if (isValid && isLt1M) {
       this.originalFiles.push(file);
-      this.getBase64(file, (base64) => {
+      this.getBase64(file).then((base64) => {
         this.setState({
           croppedFiles: [...this.state.croppedFiles, file],
           base64Files: [...this.state.base64Files, base64],
@@ -303,12 +318,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
   }
 
-  private bindDescriptionsToModel() {
-    const model = this.state.app;
-    model.desc = stateToHTML(this.state.editorStateEn.getCurrentContent());
-    model.translations[0].desc = stateToHTML(this.state.editorStateFa.getCurrentContent());
-  }
-
   private removePictures(index) {
     const app = this.state.app;
     app.screenshots.splice(index, 1);
@@ -317,11 +326,30 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
   }
 
+  private removeCropPictures(index) {
+    this.originalFiles.splice(index);
+    const croppedFiles = this.state.croppedFiles;
+    croppedFiles.splice(index, 1);
+    this.setState({
+      croppedFiles,
+    });
+  }
+
+  private removePermission(index) {
+    const selectedPermissions = this.state.selectedPermissions;
+    selectedPermissions.splice(index, 1);
+    this.setState({
+      selectedPermissions,
+    });
+  }
+
   private preview = () => {
     if (!this.state.preview) {
-      this.setState({
-        preview: true,
-        previewModel: this.getModel(true),
+      this.getModel(true, this.state.croppedFiles).then((model) => {
+        this.setState({
+          preview: true,
+          previewModel: model,
+        });
       });
     } else {
       this.setState({
@@ -330,53 +358,100 @@ class AdminAddApp extends React.Component<IProps, IState> {
     }
   }
 
-  private getModel(details: boolean): IApplication {
-    const model: IApplication = cloneDeep(this.state.app);
-    if (!details) {
-      if (model.logo) {
-        model.logo = {
-          _id: model.logo._id,
-        };
+  private getModel(details: boolean, files: any[]): Promise<IApplication> {
+    return new Promise((resolve) => {
+      const model: IApplication = _.cloneDeep(this.state.app);
+      model.lang = this.state.selectedLanguages.map((lang) => lang.value);
+      model.desc = stateToHTML(this.state.editorStateEn.getCurrentContent());
+      model.translations[0].desc = stateToHTML(this.state.editorStateFa.getCurrentContent());
+      if (!details) {
+        if (model.logo) {
+          model.logo = {_id: model.logo._id};
+        }
+        const defFiles = model.screenshots = model.screenshots.map((file): IFile => {
+          return {_id: file._id};
+        });
+        if (files.length > 0) {
+          model.screenshots = files.map((val): IFile => {
+            return {_id: val._id};
+          });
+          model.screenshots = [...defFiles, ...model.screenshots];
+        } else {
+          model.screenshots = defFiles;
+        }
+        model.categories = this.state.selectedCategories.map((category) => {
+          return {_id: category.value};
+        });
+        model.permissions = this.state.selectedPermissions.map((permission) => {
+          return {_id: permission.value};
+        });
+        resolve(model);
+      } else {
+        model.categories = this.state.selectedCategories.map((category) => {
+          return _.find(this.categories, {_id: category.value});
+        });
+        model.permissions = this.state.selectedPermissions.map((permission) => {
+          return _.find(this.permissions, {_id: permission.value});
+        });
+        if (files.length > 0) {
+          const promises = [];
+          files.forEach((file) => {
+            promises.push(this.getBase64(file));
+          });
+          Promise.all(promises).then((base64s) => {
+            model.screenshots = base64s.map((base64) => {
+              return {
+                _id: _.uniqueId(),
+                path: base64,
+                name: 'temp',
+                tmp: true,
+              };
+            });
+            model.screenshots = [...this.state.app.screenshots, ...model.screenshots];
+            resolve(model);
+          });
+        } else {
+          resolve(model);
+        }
       }
-      model.screenshots.forEach((val, index) => {
-        model.screenshots[index] = {
-          _id: val._id,
-        };
-      });
+    });
+  }
+
+  private uploadScreenShots = (): Promise<any> => {
+    if (this.state.croppedFiles.length === 0) {
+      return Promise.resolve([]);
     }
-    model.lang = this.state.selectedLanguages.map((lang) => lang.value);
-    model.categories = this.state.selectedCategories.map((category) => {
-      return {
-        _id: category.value,
-      };
+    const data = new FormData();
+    this.state.croppedFiles.forEach((file) => {
+      data.append(_.uniqueId('file-'), file, file.name);
     });
-    model.permissions = this.state.selectedPermissions.map((permissions) => {
-      return {
-        _id: permissions.value,
-      };
-    });
-    return model;
+    return this.fileFactory.create(data);
   }
 
   private onSubmit = () => {
-    const model = this.getModel(false);
-    this.bindDescriptionsToModel();
-    if (model._id.length === 24) {
-      this.appFactory.edit(model).then(() => {
-        message.success(this.translator._getText('Application successfully edited'));
-      }).catch((error) => {
-        message.error(this.translator._getText('Can\'t edit the Application!'));
-        message.error(error);
-      });
-    } else {
-      this.appFactory.create(model).then(() => {
-        message.success(this.translator._getText('Application successfully created'));
-        browserHistory.push('/admin/app');
-      }).catch((error) => {
-        message.error(this.translator._getText('Can\'t create the Application!'));
-        message.error(error);
-      });
+    if (this.state.croppedFiles.length !== 0) {
+      message.loading(this.translator._getText('Files are being uploaded...'));
     }
+    this.uploadScreenShots().then((files) => {
+      return this.getModel(false, files);
+    }).then((model) => {
+      if (model._id.length === 24) {
+        this.appFactory.edit(model).then(() => {
+          message.success(this.translator._getText('Application successfully edited'));
+        }).catch((error) => {
+          message.error(this.translator._getText('Can\'t edit the Application!'));
+          message.error(error);
+        });
+      } else {
+        this.appFactory.create(model).then(() => {
+          message.success(this.translator._getText('Application successfully created'));
+          browserHistory.push('/admin/app');
+        }).catch((error) => {
+          message.error(this.translator._getText('Can\'t create the Application!'));
+          message.error(error);
+        });
+      }
+    });
   }
 
   public handleSelectChangeCategories = (selectedCategories) => {
@@ -391,9 +466,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
   }
 
-  public handleSelectChangePermission = (selectedPermissions) => {
+  public handleSelectChangePermission = (selectedPermission) => {
+    selectedPermission.data = _.find(this.permissions, {_id: selectedPermission.value});
     this.setState({
-      selectedPermissions,
+      selectedPermissions: [...this.state.selectedPermissions, selectedPermission],
     });
   }
 
@@ -406,19 +482,16 @@ class AdminAddApp extends React.Component<IProps, IState> {
   }
 
   private onCropped = (file: any) => {
-    // const formData = new FormData();
-    // formData.append('blob', file, file.name);
     const croppedFiles = this.state.croppedFiles;
     const base64Files = this.state.base64Files;
     croppedFiles[this.state.cropIndex] = file;
-    this.getBase64(file, (base64) => {
+    this.getBase64(file).then((base64) => {
       base64Files[this.state.cropIndex] = base64;
       this.setState({
         croppedFiles,
         base64Files,
       });
     });
-    // todo : upload file
   }
 
   private cropImage = (index: number) => {
@@ -432,6 +505,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
       pickedImage: this.originalFiles[index],
     });
   }
+
+  public getPermissions() {
+    const permissions = _.differenceBy(this.state.permissions, this.state.selectedPermissions, '_id');
+    return permissions;
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -441,6 +520,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
    */
   public render() {
     const {imageUrl} = this.state;
+    const permissions = this.getPermissions();
     const uploadButton = (
       <div>
         {this.state.loading && <Loading active={true}/>}
@@ -454,7 +534,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
                onChange={this.bindInputToModel.bind(this, 'name')}/>
         <RichEditor initialState={this.state.editorStateEn} onStateChange={this.onChangeEnglishDesc}
-          placeholder={this.translator._getText('Description (eng)')} textAlignment={'left'}/>
+                    placeholder={this.translator._getText('Description (eng)')} textAlignment={'left'}/>
       </div>
     );
     informationTabs[this.translator._getText('Persian')] = (
@@ -462,7 +542,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)" value={this.state.app.translations[0].name}
                onChange={this.bindInputToModel.bind(this, {name: 'translations[]name', index: 0})}/>
         <RichEditor initialState={this.state.editorStateFa} onStateChange={this.onChangeFarsiDesc}
-          placeholder="توضیحات (فارسی)" textAlignment={'right'}/>
+                    placeholder="توضیحات (فارسی)" textAlignment={'right'}/>
       </div>
     );
     const tabs = {};
@@ -482,13 +562,14 @@ class AdminAddApp extends React.Component<IProps, IState> {
             onChange={this.logoChangeHandler}
             customRequest={this.customRequest}
           >
-            {imageUrl ? <img src={imageUrl} alt=""/> : uploadButton}
+            {imageUrl ? <img src={imageUrl} alt=""/> : this.state.app.logo ?
+              <img src={Const.SERVER_URL + this.state.app.logo.path} alt=""/> : uploadButton}
           </Upload>
           <div className="multi-input-row">
             <input type="text" placeholder={this.translator._getText('App user ID')} value={this.state.app.app_id}
-                  onChange={this.bindInputToModel.bind(this, 'app_id')}/>
+                   onChange={this.bindInputToModel.bind(this, 'app_id')}/>
             <input type="text" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
-                  onChange={this.bindInputToModel.bind(this, 'website')}/>
+                   onChange={this.bindInputToModel.bind(this, 'website')}/>
           </div>
         </div>
         <input className="form-row form-block" type="text"
@@ -536,38 +617,33 @@ class AdminAddApp extends React.Component<IProps, IState> {
         </Translate></p>
         <h4><Translate>Screenshots &amp; Pictures</Translate></h4>
         <div className="images-container">
-          {
-            this.state.base64Files.map((val, index) => {
-              return (
-                <div key={index} className="image-handler">
-                  <img src={val} alt=""/>
-                  <div className="image-buttons">
-                    <div onClick={this.removePictures.bind(this, index)}>
-                      <IcoN name="xcross16Red" size={16}/>
-                    </div>
-                    <div onClick={this.cropImage.bind(this, index)}>
-                      <IcoN name="pencil16" size={16}/>
-                    </div>
+          {this.state.app.screenshots.map((val, index) => {
+            return (
+              <div key={index} className="image-handler">
+                <img src={Const.SERVER_URL + val.path} alt=""/>
+                <div className="image-buttons">
+                  <div onClick={this.removePictures.bind(this, index)}>
+                    <IcoN name="xcross16Red" size={16}/>
                   </div>
                 </div>
-              );
-            })
-          }
-            {/* this.state.app.screenshots.map((val, index) => {
-              return (
-                <div key={index} className="image-handler">
-                  <img src={Const.SERVER_URL + val.path} alt=""/>
-                  <div className="image-buttons">
-                    <div onClick={this.removePictures.bind(this, index)}>
-                      <IcoN name="xcross16Red" size={16}/>
-                    </div>
-                    <div onClick={this.cropImage.bind(this, index)}>
-                      <IcoN name="pencil16" size={16}/>
-                    </div>
+              </div>
+            );
+          })}
+          {this.state.base64Files.map((val, index) => {
+            return (
+              <div key={index} className="image-handler">
+                <img src={val} alt=""/>
+                <div className="image-buttons">
+                  <div onClick={this.removeCropPictures.bind(this, index)}>
+                    <IcoN name="xcross16Red" size={16}/>
+                  </div>
+                  <div onClick={this.cropImage.bind(this, index)}>
+                    <IcoN name="pencil16" size={16}/>
                   </div>
                 </div>
-              );
-            }) */}
+              </div>
+            );
+          })}
           <div className="upload-box">
             <Upload
               name="avatar"
@@ -593,30 +669,32 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <div className="form-row">
           <Select
             name="permission"
-            isMulti={true}
             onChange={this.handleSelectChangePermission}
-            options={this.state.permissions}
+            options={permissions}
             placeholder={this.translator._getText('Select from the list of permissions')}
-            removeSelected={true}
             rtl={true}
             simpleValue={true}
             className="multi-selector"
-            value={this.state.selectedPermissions}
+            value={[]}
           />
         </div>
         <ul className="permissions-list admin-list">
-          <li>
-            <div className="per-icon">
-              <IcoN name="filter16" size={16}/>
-            </div>
-            <div className="per-info">
-              <h4>Personal Info</h4>
-              <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
-            </div>
-            <div className="per-remove">
-              <IcoN name="negativeXCross24" size={24}/>
-            </div>
-          </li>
+          {this.state.selectedPermissions.map((permission, index) => {
+            return (
+              <li key={'permission-' + index}>
+                <div className="per-icon">
+                  <IcoN name="filter16" size={16}/>
+                </div>
+                <div className="per-info">
+                  <h4>{permission.data.name}</h4>
+                  <p>{permission.data.desc}</p>
+                </div>
+                <div className="per-remove" onClick={this.removePermission.bind(this, index)}>
+                  <IcoN name="negativeXCross24" size={24}/>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
     );
@@ -648,7 +726,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
           <AppView app="test" preview={true} model={this.state.previewModel}/>
         </Modal>
         <NstCrop avatar={this.state.pickedImage} forceUpdateCounter={this.state.showCropModalCounter}
-                        onCropped={this.onCropped}/>
+                 onCropped={this.onCropped}/>
       </div>
     );
   }

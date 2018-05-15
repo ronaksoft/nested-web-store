@@ -83,7 +83,7 @@ class AdminWrapper extends React.Component<IProps, IState> {
                   className="logo-type fa"/>
               </Link>
               <div className="devider"/>
-              <Link to="/admin/app/add">
+              <Link to="/admin/app/create">
                 <Translate>Add an App</Translate>
               </Link>
               <div className="filler"/>

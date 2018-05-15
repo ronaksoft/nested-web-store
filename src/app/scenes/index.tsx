@@ -214,7 +214,7 @@ class Container extends React.Component<IProps, IState> {
               <a href=""><Translate>Help center</Translate></a>
               <a href=""><Translate>Contact us</Translate></a>
               <a href=""><Translate>Terms &amp; Conditions</Translate></a>
-              <Link to={'/admin/app/add'}>admin</Link>
+              <Link to={'/admin/app/create'}>admin</Link>
             </div>
             <div>
               {/* <h6><Translate>SOCIAL NETWORKS</Translate></h6> */}

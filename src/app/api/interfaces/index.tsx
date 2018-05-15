@@ -25,6 +25,7 @@ interface IFile {
   path?: string;
   type?: string;
   created_at?: number;
+  tmp?: boolean;
 }
 
 interface ICategory {
@@ -59,6 +60,7 @@ interface IPermissionTrans {
 interface ISelectOption {
   value: string;
   label: string;
+  data?: any;
 }
 
 interface IUser {
