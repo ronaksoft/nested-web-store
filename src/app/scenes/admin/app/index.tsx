@@ -157,7 +157,7 @@ class AdminApp extends React.Component<IProps, IState> {
                           onConfirm={this.onRemove.bind(this, app._id)}
                           okText="Yes" cancelText="No">
                 <div className="remove-button">
-                  <IcoN name="negativeXCross24" size={24}/>
+                  <IcoN name="binRed24" size={24}/>
                 </div>
               </Popconfirm>
             </li>
