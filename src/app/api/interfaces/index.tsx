@@ -106,7 +106,7 @@ interface IApp {
   id: string;
   name: string;
   token: string;
-  created_by: number;
+  created_by: string;
 }
 
 interface IApplicationTrans {
@@ -115,5 +115,19 @@ interface IApplicationTrans {
   desc: string;
 }
 
+interface IReview {
+  _id?: string;
+  rate: number;
+  title?: string;
+  body: string;
+  response?: string;
+  response_at?: number;
+  app_id?: string;
+  status?: number;
+  created_by?: string;
+  created_by_name?: string;
+  created_at?: number;
+}
+
 export {IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission,
-  IApplicationValidation, IValidation};
+  IApplicationValidation, IValidation, IReview};

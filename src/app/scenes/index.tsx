@@ -72,7 +72,7 @@ class Container extends React.Component<IProps, IState> {
           password: '',
         },
         openSignInModal: false,
-        user: initData.__INITIAL_DATA__.user || {},
+        user: initData.__INITIAL_DATA__.user || null,
         lang: initData.__INITIAL_DATA__.locale || Cookies.get('locale') || 'en', // from browser
       };
       this.props.setLogin(this.state.user);
@@ -97,7 +97,6 @@ class Container extends React.Component<IProps, IState> {
   }
 
   public checkIsAdmin = (path: string) => {
-    console.log(path);
     if (path.indexOf('/admin/') > -1 && !this.state.isAdminPage) {
       this.setState({
         isAdminPage: true,
@@ -110,7 +109,6 @@ class Container extends React.Component<IProps, IState> {
   }
 
   public componentWillReceiveProps(props) {
-    console.log(props.location.pathname);
     this.checkIsAdmin(props.location.pathname);
   }
 
@@ -140,6 +138,10 @@ class Container extends React.Component<IProps, IState> {
               code: response.data.data,
             }).then((userResponse) => {
               this.props.setLogin(userResponse.data.data);
+              this.setState({
+                user: userResponse.data.data,
+                openSignInModal: false,
+              });
             }).catch((err) => {
               message.error(err);
             });
@@ -203,7 +205,10 @@ class Container extends React.Component<IProps, IState> {
               </Link>
               <div className="filler"/>
               <Link to="/apps"><Translate>Browse</Translate></Link>
-              <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>
+              {this.state.user === null &&
+              <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
+              {this.state.user !== null &&
+              <div className="user-avatar"><img src={this.state.user.picture} title={this.state.user.name}/></div>}
             </div>
           </nav>
         )}

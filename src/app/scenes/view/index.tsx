@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {Translate, IcoN, Rating, Tab, RateResult} from 'components';
-import {IApplication} from '../../api/interfaces';
-import Const from '../../api/consts/CServer';
+import {IApplication, IReview} from 'api/interfaces';
+import Const from 'api/consts/CServer';
 import {message} from 'antd';
-import {app as AppFactory} from '../../api';
+import {app as AppFactory, review as ReviewFactory} from 'api';
 
 interface IProps {
   app: string;
@@ -34,11 +34,13 @@ interface IProps {
 interface IState {
   appId: string;
   app: IApplication;
+  reviews: IReview[];
 }
 
 class AppView extends React.Component<IProps, IState> {
   private translator: Translate;
   private appFactory: AppFactory;
+  private reviewFactory: ReviewFactory;
 
   /**
    * @constructor
@@ -77,16 +79,19 @@ class AppView extends React.Component<IProps, IState> {
       this.state = {
         app: initData.__INITIAL_DATA__.app || this.props.model || emptyModel,
         appId: this.props.routeParams ? this.props.routeParams.appid : '',
+        reviews: [],
       };
       initData.__INITIAL_DATA__ = {};
     } else {
       this.state = {
         app: this.props.model || emptyModel,
         appId: this.props.routeParams ? this.props.routeParams.appid : '',
+        reviews: [],
       };
     }
     this.translator = new Translate();
     this.appFactory = new AppFactory();
+    this.reviewFactory = new ReviewFactory();
   }
 
   public componentWillReceiveProps(newProps: IProps) {
@@ -109,7 +114,23 @@ class AppView extends React.Component<IProps, IState> {
       }).catch(() => {
         message.error(this.translator._getText('Can\'t fetch app!'));
       });
+      this.reviewFactory.getAll(this.state.appId).then((data) => {
+        if (data.reviews === null) {
+          return;
+        }
+        this.setState({
+          reviews: data.reviews,
+        });
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t fetch app\'s reviews!'));
+      });
     }
+  }
+
+  private reviewHandler = (review: IReview) => {
+    this.setState({
+      reviews: [review, ...this.state.reviews],
+    });
   }
 
   /**
@@ -153,20 +174,24 @@ class AppView extends React.Component<IProps, IState> {
     if (!this.props.preview) {
       tabs[this.translator._getText('Reviews')] = (
         <div>
-          <Rating appId="aaa"/>
+          <Rating appId={this.state.appId} submitted={this.reviewHandler}/>
           <ul className="reviews">
-            <li>
-              <div className="rev-logo">
-                <img src="" alt=""/>
-              </div>
-              <div className="rev-info">
-                <h4>
-                  Personal Info
-                  <RateResult rate={4.2} silver={true}/>
-                </h4>
-                <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
-              </div>
-            </li>
+            {this.state.reviews.map((review, index) => {
+              return (
+                <li key={'review-' + index}>
+                  <div className="rev-logo">
+                    <img src="" alt=""/>
+                  </div>
+                  <div className="rev-info">
+                    <h4>
+                      {review.created_by_name}
+                      <RateResult rate={review.rate} silver={true}/>
+                    </h4>
+                    <p>{review.body}</p>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       );
