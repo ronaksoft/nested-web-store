@@ -595,11 +595,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
   }
 
   public checkValidation = (model: IApplication) => {
-    const appValidation = _.cloneDeep(this.resetValidation());
-    if (model._id) {
-      console.log(model._id.match(REGEX.URL));
-    }
-
+    const appValidation = this.resetValidation();
     if (!model.website) {
       appValidation.website = {
         isValid: false,
@@ -709,7 +705,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         message: 'required',
       };
     } else if (model.lang.length === 0) {
-      appValidation.summary = {
+      appValidation.lang = {
         isValid: false,
         message: 'you must choose at least a language',
       };
@@ -726,10 +722,47 @@ class AdminAddApp extends React.Component<IProps, IState> {
         message: 'please fill Farsi name of your application',
       };
     }
+
+    if (!model.app_id) {
+      appValidation.app_id = {
+        isValid: false,
+        message: 'please fill app id',
+      };
+    } else if (!model.app_id.match(REGEX.APP_ID)) {
+      appValidation.app_id = {
+        isValid: false,
+        message: 'app id contains disallowed characters',
+      };
+    } else {
+      if (!this.state.appValidation.app_id.isValid &&
+        this.state.appValidation.app_id.message === 'App Id Already taken!') {
+        // 'App Id Already taken!'
+        appValidation.app_id = this.state.appValidation.app_id;
+      }
+    }
     this.setState({appValidation});
     return appValidation;
   }
 
+  private appIdKeyUp = (event) => {
+    this.checkAppIdDebounced(event.target.value);
+  }
+
+  private checkAppId = (id: string) => {
+    return new Promise((resolve, reject) => {
+      this.appFactory.appIdAvailable(id).then((isAvailable) => {
+        const appValidation = this.state.appValidation;
+        appValidation.app_id = {
+          isValid: isAvailable,
+          message: isAvailable ? '' : 'App Id Already taken!',
+        };
+        resolve(isAvailable);
+        this.setState({appValidation});
+      }).catch(reject);
+    });
+  }
+
+  private checkAppIdDebounced = _.debounce(this.checkAppId, 100);
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -792,10 +825,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
           <div className="multi-input-row">
             <input type="text" placeholder={this.translator._getText('App user ID')} value={this.state.app.app_id}
                    onChange={this.bindInputToModel.bind(this, 'app_id')}
-                    className={!appValidation.app_id.isValid ? 'has-error' : ''}/>
+                   onKeyUp={this.appIdKeyUp} pattern={REGEX.APP_ID}
+                   className={!appValidation.app_id.isValid ? 'has-error' : ''}/>
             <input type="url" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
                    onChange={this.bindInputToModel.bind(this, 'website')} autoComplete="website"
-                    className={!appValidation.website.isValid ? 'has-error' : ''}/>
+                    className={!appValidation.website.isValid ? 'has-error' : ''}
+                    pattern={REGEX.URL}/>
           </div>
         </div>
         <input type="text"
