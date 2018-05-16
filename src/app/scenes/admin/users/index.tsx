@@ -278,12 +278,12 @@ class AdminUsers extends React.Component<IProps, IState> {
           <div className="page-buttons">
             <h2><Translate>Users List</Translate></h2>
             <div className="_df">
-              <Popover placement="bottom" trigger="click" content={filterMenu}>
+              <Popover placement="bottom" trigger="click" content={filterMenu} overlayClassName="popover-no-padding">
                 <div className="filter">
                   <IcoN name="filter24" size={24}/>
                 </div>
               </Popover>
-              <Popover placement="bottom" trigger="click" content={sortMenu}>
+              <Popover placement="bottom" trigger="click" content={sortMenu} overlayClassName="popover-no-padding">
                 <div className="sort">
                   <IcoN name="sort24" size={24}/>
                 </div>
