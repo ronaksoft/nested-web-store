@@ -794,6 +794,13 @@ footer {
     }
   }
 }
+ul.errors {
+  list-style: none;
+  li, span {
+    margin: 4px 8px;
+    color: @color-force;
+  }
+}
 // Pages styles
 .add-app {
   padding: 0 16px;
@@ -806,9 +813,17 @@ footer {
       max-width: 100%;
     }
   }
+  .multi-selector__input {
+    input {
+      height: 30px;
+    }
+  }
   input {
     height: 32px;
     font-size: 12px;
+    &.has-error, &:invalid, &:required {
+      border-color: @color-force;
+    }
   }
   ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
     font-size: 12px;

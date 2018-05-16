@@ -18,6 +18,31 @@ interface IApplication {
   created_by_name?: string;
   created_at?: number;
 }
+interface IApplicationValidation {
+  _id: IValidation;
+  app_id: IValidation;
+  name: IValidation;
+  summary: IValidation;
+  logo: IValidation;
+  desc: IValidation;
+  website: IValidation;
+  screenshots: IValidation;
+  translations?: IValidation;
+  permissions: IValidation;
+  categories: IValidation;
+  official: IValidation;
+  stared: IValidation;
+  status: IValidation;
+  lang: IValidation;
+  created_by?: IValidation;
+  created_by_name?: IValidation;
+  created_at?: IValidation;
+}
+
+interface IValidation {
+  isValid: boolean;
+  message?: string;
+}
 
 interface IFile {
   _id: string;
@@ -90,4 +115,5 @@ interface IApplicationTrans {
   desc: string;
 }
 
-export {IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission};
+export {IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission,
+  IApplicationValidation, IValidation};

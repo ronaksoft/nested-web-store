@@ -9,14 +9,14 @@ import {
   category as CategoryFactory,
   permission as PermissionFactory,
 } from 'api';
-import {IApplication, ISelectOption, IFile, ICategory, IPermission} from 'api/interfaces';
+import {IApplication, ISelectOption, IFile, ICategory, IPermission,
+  IApplicationValidation} from 'api/interfaces';
 import Const from 'api/consts/CServer';
+import {REGEX} from 'api/consts/CRegex';
 import * as _ from 'lodash';
 import {AppView} from 'scenes';
 import {stateToHTML} from 'draft-js-export-html';
 import {browserHistory} from 'react-router';
-
-// import {Row, Col, Input, Upload} from 'antd';
 
 interface IProps {
   app: string;
@@ -32,6 +32,7 @@ interface IProps {
 
 interface IState {
   app: IApplication;
+  appValidation: IApplicationValidation;
   loading: boolean;
   cropIndex: number;
   editorStateFa: any;
@@ -121,6 +122,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         },
       ],
       app: _.cloneDeep(this.emptyModel),
+      appValidation: this.resetValidation(),
     };
     this.state = state;
     this.appFactory = new AppFactory();
@@ -132,6 +134,79 @@ class AdminAddApp extends React.Component<IProps, IState> {
     //     convertFromHTML(props.message.body).contentBlocks,
     //     convertFromHTML(props.message.body).entityMap
     // ))
+  }
+
+  private resetValidation = () => {
+    const appV = {};
+    Object.keys(_.cloneDeep(this.emptyModel)).forEach((key) => {
+      appV[key] = {
+        isValid: true,
+        message: '',
+      };
+    });
+    return _.cloneDeep(appV) as IApplicationValidation;
+    // return {
+    //   _id: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   app_id: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   logo: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   name: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   desc: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   summary: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   screenshots: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   website: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   categories: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   translations: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   permissions: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   official: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   stared: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   status: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    //   lang: {
+    //     isValid: true,
+    //     message: '',
+    //   },
+    // };
   }
 
   public componentDidMount() {
@@ -435,6 +510,14 @@ class AdminAddApp extends React.Component<IProps, IState> {
     this.uploadScreenShots().then((files) => {
       return this.getModel(false, files);
     }).then((model) => {
+      const appValidation = this.checkValidation(model);
+      if (
+        Object.keys(appValidation)
+        .map((key) => appValidation[key].isValid)
+        .filter((isValid) => !isValid)
+        .length > 0) {
+          return;
+      }
       if (model._id.length === 24) {
         this.appFactory.edit(model).then(() => {
           message.success(this.translator._getText('Application successfully edited'));
@@ -511,6 +594,142 @@ class AdminAddApp extends React.Component<IProps, IState> {
     return permissions;
   }
 
+  public checkValidation = (model: IApplication) => {
+    const appValidation = _.cloneDeep(this.resetValidation());
+    if (model._id) {
+      console.log(model._id.match(REGEX.URL));
+    }
+
+    if (!model.website) {
+      appValidation.website = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (!model.website.match(REGEX.URL)) {
+      appValidation.website = {
+        isValid: false,
+        message: 'invalid',
+      };
+    }
+
+    if (!model.app_id) {
+      appValidation.app_id = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (!model.app_id.match(REGEX.APP_ID)) {
+      appValidation.app_id = {
+        isValid: false,
+        message: 'invalid',
+      };
+    }
+
+    if (!model.summary) {
+      appValidation.summary = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (model.summary.trim().length < 10) {
+      appValidation.summary = {
+        isValid: false,
+        message: 'App summary is too short !',
+      };
+    }
+
+    if (!model.name) {
+      appValidation.name = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (model.name.length < 3) {
+      appValidation.name = {
+        isValid: false,
+        message: 'you app name is too short',
+      };
+    }
+
+    if (!model.desc) {
+      appValidation.desc = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (model.desc.length < 12) {
+      appValidation.desc = {
+        isValid: false,
+        message: 'you app descriptions is too short',
+      };
+    }
+
+    if (!model.screenshots) {
+      appValidation.screenshots = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (model.screenshots.length === 0) {
+      appValidation.screenshots = {
+        isValid: false,
+        message: 'you must upload at least one screenshot of your app',
+      };
+    }
+
+    if (!model.permissions) {
+      appValidation.permissions = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (model.permissions.length === 0) {
+      appValidation.permissions = {
+        isValid: false,
+        message: 'you must choose at least one permission',
+      };
+    }
+
+    if (!model.logo) {
+      appValidation.logo = {
+        isValid: false,
+        message: 'required',
+      };
+    }
+
+    if (!model.categories) {
+      appValidation.categories = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (model.categories.length === 0) {
+      appValidation.categories = {
+        isValid: false,
+        message: 'you must choose at least a category',
+      };
+    }
+
+    if (!model.lang) {
+      appValidation.lang = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (model.lang.length === 0) {
+      appValidation.summary = {
+        isValid: false,
+        message: 'you must choose at least a language',
+      };
+    }
+
+    if (!model.translations[0]) {
+      appValidation.translations = {
+        isValid: false,
+        message: 'required',
+      };
+    } else if (!model.translations[0].name) {
+      appValidation.translations = {
+        isValid: false,
+        message: 'please fill Farsi name of your application',
+      };
+    }
+    this.setState({appValidation});
+    return appValidation;
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -519,7 +738,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
-    const {imageUrl} = this.state;
+    const {imageUrl, appValidation} = this.state;
+    const errors = Object.keys(appValidation)
+    .map((key) => appValidation[key].message)
+    .filter((message) => message && message !== 'required');
     const permissions = this.getPermissions();
     const uploadButton = (
       <div>
@@ -532,7 +754,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
     informationTabs[this.translator._getText('English')] = (
       <div className="app-translations">
         <input type="text" placeholder={this.translator._getText('App name (eng)')} value={this.state.app.name}
-               onChange={this.bindInputToModel.bind(this, 'name')}/>
+               onChange={this.bindInputToModel.bind(this, 'name')}
+               className={!appValidation.name.isValid ? 'has-error' : ''}/>
         <RichEditor initialState={this.state.editorStateEn} onStateChange={this.onChangeEnglishDesc}
                     placeholder={this.translator._getText('Description (eng)')} textAlignment={'left'}/>
       </div>
@@ -540,7 +763,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
     informationTabs[this.translator._getText('Persian')] = (
       <div className="app-translations">
         <input type="text" dir="rtl" placeholder="نام اپلیکیشن (فارسی)" value={this.state.app.translations[0].name}
-               onChange={this.bindInputToModel.bind(this, {name: 'translations[]name', index: 0})}/>
+               onChange={this.bindInputToModel.bind(this, {name: 'translations[]name', index: 0})}
+               className={!appValidation.translations.isValid ? 'has-error' : ''}/>
         <RichEditor initialState={this.state.editorStateFa} onStateChange={this.onChangeFarsiDesc}
                     placeholder="توضیحات (فارسی)" textAlignment={'right'}/>
       </div>
@@ -567,20 +791,23 @@ class AdminAddApp extends React.Component<IProps, IState> {
           </Upload>
           <div className="multi-input-row">
             <input type="text" placeholder={this.translator._getText('App user ID')} value={this.state.app.app_id}
-                   onChange={this.bindInputToModel.bind(this, 'app_id')}/>
-            <input type="text" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
-                   onChange={this.bindInputToModel.bind(this, 'website')}/>
+                   onChange={this.bindInputToModel.bind(this, 'app_id')}
+                    className={!appValidation.app_id.isValid ? 'has-error' : ''}/>
+            <input type="url" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
+                   onChange={this.bindInputToModel.bind(this, 'website')} autoComplete="website"
+                    className={!appValidation.website.isValid ? 'has-error' : ''}/>
           </div>
         </div>
-        <input className="form-row form-block" type="text"
+        <input type="text"
                placeholder={this.translator._getText('Summery (open graph)')} value={this.state.app.summary}
-               onChange={this.bindInputToModel.bind(this, 'summary')}/>
+               onChange={this.bindInputToModel.bind(this, 'summary')}
+               className={!appValidation.summary.isValid ? 'form-row form-block has-error' : 'form-row form-block'}/>
         <h4><Translate>Information</Translate></h4>
         <div>
           <Tab items={informationTabs}/>
         </div>
         <h4><Translate>Category</Translate></h4>
-        <div className="form-row">
+        <div className={!appValidation.categories.isValid ? 'form-row has-error' : 'form-row'}>
           <Select
             isMulti={true}
             onChange={this.handleSelectChangeCategories}
@@ -594,7 +821,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
           />
         </div>
         <h4><Translate>Languages</Translate></h4>
-        <div className="form-row">
+        <div className={!appValidation.lang.isValid ? 'form-row has-error' : 'form-row'}>
           <Select
             name="language"
             isMulti={true}
@@ -666,7 +893,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <p><Translate>
           Add your developed app by filling these fields and helping users find your app better.
         </Translate></p>
-        <div className="form-row">
+        <div className={!appValidation.lang.isValid ? 'form-row has-error' : 'form-row'}>
           <Select
             name="permission"
             onChange={this.handleSelectChangePermission}
@@ -714,6 +941,9 @@ class AdminAddApp extends React.Component<IProps, IState> {
             </button>
           </div>
         </Affixer>
+        <ul className="errors">
+          {errors.map((err, index) => <li key={index}>{err}</li>)}
+        </ul>
         <Tab items={tabs}/>
         <Modal
           title="test"
