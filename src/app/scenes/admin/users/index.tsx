@@ -6,6 +6,8 @@ import {Link} from 'react-router';
 import * as _ from 'lodash';
 import {user as UserFactory} from '../../../api';
 
+const ReactPaginate = require('react-paginate');
+
 // import {Row, Col, Input, Upload} from 'antd';
 
 interface IProps {
@@ -26,12 +28,14 @@ interface IState {
   untouched: boolean;
   addUserModal: boolean;
   model: IUser;
+  pageCount: number;
 }
 
 class AdminUsers extends React.Component<IProps, IState> {
   private translator: Translate;
   private userFactory: UserFactory;
   private emptyModel: IUser;
+  private pagination: any;
 
   /**
    * @constructor
@@ -58,19 +62,30 @@ class AdminUsers extends React.Component<IProps, IState> {
       addUserModal: false,
       untouched: true,
       users: [],
+      pageCount: 1,
       model: _.cloneDeep(this.emptyModel),
     };
     this.state = state;
     this.userFactory = new UserFactory();
+    this.pagination = {
+      skip: 0,
+      limit: 10,
+    };
   }
 
   public componentDidMount() {
-    this.userFactory.getAll('').then((data) => {
-      if (data === null) {
+    this.loadUsers();
+  }
+
+  private loadUsers() {
+    this.userFactory.getAll('', 0, this.pagination.skip, this.pagination.limit).then((data) => {
+      if (data.users === null) {
+        message.warning(this.translator._getText('Reached the end!'));
         return;
       }
       this.setState({
-        users: data,
+        users: data.users,
+        pageCount: data.count,
       });
     }).catch(() => {
       message.error(this.translator._getText('Can\'t fetch users!'));
@@ -180,9 +195,11 @@ class AdminUsers extends React.Component<IProps, IState> {
     });
   }
 
-  private toggleFeature = (uid) => {
-    console.log(uid);
+  private handlePageClick = (data: any) => {
+    this.pagination.skip = this.pagination.limit * data.selected;
+    this.loadUsers();
   }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -228,29 +245,42 @@ class AdminUsers extends React.Component<IProps, IState> {
           <Translate>Add a user manually</Translate>
         </a>
         <ul className="users-list admin-list">
-          <li>
-            <div className="user-logo">
-              <img src={'/public/assets/icons/absents_place.svg'} alt=""/>
-            </div>
-            <div className="user-info">
-              <b>Ali Mahmoodi</b>
-              <span>@robzizo</span>
-            </div>
-            <div className={true ? 'feature-button active' : 'feature-button'}
-                onClick={this.toggleFeature.bind(this, 'robzizo')}>
-              <IcoN name="star24" size={24}/>
-            </div>
-            <Link className="edit-button" to={'/admin/user/edit/' + 'robzizo'}>
-              <IcoN name="pencil24" size={24}/>
-            </Link>
-            <Popconfirm title={this.translator._getText('Are you sure about removing this user?')}
-                        onConfirm={this.onRemove.bind(this, 'robzizo')}
-                        okText={this.translator._getText('Yes')} cancelText={this.translator._getText('No')}>
-              <div className="remove-button">
-                <IcoN name="negativeXCross24" size={24}/>
-              </div>
-            </Popconfirm>
-          </li>
+          {this.state.users.map((user, index) => {
+            return (
+              <li key={'user-' + index}>
+                <div className="user-logo">
+                  <img src={'/public/assets/icons/absents_place.svg'} alt=""/>
+                </div>
+                <div className="user-info">
+                  <b>{user.name}</b>
+                  <span>{user.nested}</span>
+                </div>
+                <Link className="edit-button" to={'/admin/user/edit/' + 'robzizo'}>
+                  <IcoN name="pencil24" size={24}/>
+                </Link>
+                <Popconfirm title={this.translator._getText('Are you sure about removing this user?')}
+                            onConfirm={this.onRemove.bind(this, 'robzizo')}
+                            okText={this.translator._getText('Yes')} cancelText={this.translator._getText('No')}>
+                  <div className="remove-button">
+                    <IcoN name="negativeXCross24" size={24}/>
+                  </div>
+                </Popconfirm>
+              </li>
+            );
+          })}
+          {this.state.pageCount > 1 &&
+          <ReactPaginate
+            nextLabel={<IcoN name="arrow24" size={24}/>}
+            previousLabel={<IcoN name="arrow24" size={24}/>}
+            breakLabel={<a href="">...</a>}
+            breakClassName="reak-me"
+            pageCount={this.state.pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={this.handlePageClick}
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+            activeClassName="active"/>}
         </ul>
         <Modal
           title="Add a user"
@@ -270,7 +300,7 @@ class AdminUsers extends React.Component<IProps, IState> {
               <Translate>Edit</Translate>}
             </button>,
           ]}
-          >
+        >
           <form className="add-category-modal" onSubmit={this.submitCreateCategoryForm}>
             <input type="text" placeholder={this.translator._getText('Category slug...')}
                    onChange={this.bindInputToModel.bind(this, 'slug')} value={this.state.model.name}/>

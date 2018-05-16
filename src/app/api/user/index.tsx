@@ -1,31 +1,25 @@
-import axios from 'axios';
-import Const from '../consts/CServer';
+import callApi from '../common';
 import {IUser} from 'api/interfaces';
 
 class UserFactory {
-
-  public getAll(type: string): Promise<IUser[]> {
-    return axios.post(Const.SERVER_URL + '/admin/user/' + type, {}).then((response) => {
-      return response.data.data.apps;
-    });
+  public get(id: string): Promise<any> {
+    return callApi('/admin/user/get/' + id, {});
   }
 
   public remove(id: string): Promise<string> {
-    return axios.post(Const.SERVER_URL + '/admin/user/remove', {id}).then((response) => {
-      return response.data.data;
-    });
+    return callApi('/admin/user/remove', {id});
   }
 
   public create(model: IUser): Promise<IUser> {
-    return axios.post(Const.SERVER_URL + '/admin/user/create', model).then((response) => {
-      return response.data.data;
-    });
+    return callApi('/admin/user/create', model);
   }
 
   public edit(model: IUser) {
-    return axios.post(Const.SERVER_URL + '/admin/user/edit', model).then((response) => {
-      return response.data.data;
-    });
+    return callApi('/admin/user/edit', model);
+  }
+
+  public getAll(query: string, status: number = 0, skip: number = 0, limit: number = 20): Promise<any> {
+    return callApi('/admin/user/search', {query, status, skip, limit});
   }
 }
 
