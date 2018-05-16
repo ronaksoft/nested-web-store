@@ -64,6 +64,10 @@ class Container extends React.Component<IProps, IState> {
      * @type {IState}
      */
     if (initData) {
+      let user = initData.__INITIAL_DATA__.user;
+      if (user && user._id.length !== 24) {
+        user = null;
+      }
       this.state = {
         isLogin: false,
         isAdminPage: false,
@@ -72,7 +76,7 @@ class Container extends React.Component<IProps, IState> {
           password: '',
         },
         openSignInModal: false,
-        user: initData.__INITIAL_DATA__.user || null,
+        user: user || null,
         lang: initData.__INITIAL_DATA__.locale || Cookies.get('locale') || 'en', // from browser
       };
       this.props.setLogin(this.state.user);

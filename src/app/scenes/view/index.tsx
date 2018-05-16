@@ -159,15 +159,19 @@ class AppView extends React.Component<IProps, IState> {
     tabs[this.translator._getText('Permissions')] = (
       <div>
         <ul className="permissions-list">
-          <li>
-            <div className="per-icon">
-              <IcoN name="filter16" size={16}/>
-            </div>
-            <div className="per-info">
-              <h4>Personal Info</h4>
-              <p>Reads your personal info such as birthday, email, first name, last name, and so on.</p>
-            </div>
-          </li>
+          {this.state.app.permissions.map((permission, index) => {
+            return (
+              <li key={'permission-' + index}>
+                <div className="per-icon">
+                  <IcoN name="filter16" size={16}/>
+                </div>
+                <div className="per-info">
+                  <h4>{permission.name}</h4>
+                  <p>{permission.desc}</p>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
     );

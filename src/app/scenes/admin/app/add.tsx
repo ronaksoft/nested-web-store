@@ -446,6 +446,11 @@ class AdminAddApp extends React.Component<IProps, IState> {
 
   private onSubmit = () => {
     const appValidation = this.checkValidation();
+    console.log(appValidation);
+    console.log(Object.keys(appValidation)
+      .map((key) => appValidation[key].isValid)
+      .filter((isValid) => !isValid)
+      .length);
     if (
       Object.keys(appValidation)
         .map((key) => appValidation[key].isValid)
@@ -536,6 +541,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
 
   public checkValidation = () => {
     const model = this.state.app;
+    model.desc = stateToHTML(this.state.editorStateEn.getCurrentContent());
+    model.translations[0].desc = stateToHTML(this.state.editorStateFa.getCurrentContent());
     const appValidation = this.resetValidation();
     if (!model.website) {
       appValidation.website = {
