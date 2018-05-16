@@ -324,6 +324,9 @@ class AdminAddApp extends React.Component<IProps, IState> {
       const elem = selector.name.split('[]');
       model[elem[0]][selector.index][elem[1]] = e.target.value;
     } else {
+      if (selector === 'app_id') {
+        model[selector] = model[selector].toLowerCase().split(' ').join('_');
+      }
       model[selector] = e.target.value;
     }
     this.setState({
@@ -442,20 +445,20 @@ class AdminAddApp extends React.Component<IProps, IState> {
   }
 
   private onSubmit = () => {
+    const appValidation = this.checkValidation();
+    if (
+      Object.keys(appValidation)
+        .map((key) => appValidation[key].isValid)
+        .filter((isValid) => !isValid)
+        .length > 0) {
+      return;
+    }
     if (this.state.croppedFiles.length !== 0) {
       message.loading(this.translator._getText('Files are being uploaded...'));
     }
     this.uploadScreenShots().then((files) => {
       return this.getModel(false, files);
     }).then((model) => {
-      const appValidation = this.checkValidation(model);
-      if (
-        Object.keys(appValidation)
-          .map((key) => appValidation[key].isValid)
-          .filter((isValid) => !isValid)
-          .length > 0) {
-        return;
-      }
       if (model._id.length === 24) {
         this.appFactory.edit(model).then(() => {
           message.success(this.translator._getText('Application successfully edited'));
@@ -528,11 +531,11 @@ class AdminAddApp extends React.Component<IProps, IState> {
   }
 
   public getPermissions() {
-    const permissions = _.differenceBy(this.state.permissions, this.state.selectedPermissions, '_id');
-    return permissions;
+    return _.differenceBy(this.state.permissions, this.state.selectedPermissions, '_id');
   }
 
-  public checkValidation = (model: IApplication) => {
+  public checkValidation = () => {
+    const model = this.state.app;
     const appValidation = this.resetValidation();
     if (!model.website) {
       appValidation.website = {
@@ -541,18 +544,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
       };
     } else if (!model.website.match(REGEX.URL)) {
       appValidation.website = {
-        isValid: false,
-        message: 'invalid',
-      };
-    }
-
-    if (!model.app_id) {
-      appValidation.app_id = {
-        isValid: false,
-        message: 'required',
-      };
-    } else if (!model.app_id.match(REGEX.APP_ID)) {
-      appValidation.app_id = {
         isValid: false,
         message: 'invalid',
       };
@@ -594,24 +585,19 @@ class AdminAddApp extends React.Component<IProps, IState> {
       };
     }
 
-    if (!model.screenshots) {
-      appValidation.screenshots = {
-        isValid: false,
-        message: 'required',
-      };
-    } else if (model.screenshots.length === 0) {
-      appValidation.screenshots = {
-        isValid: false,
-        message: 'you must upload at least one screenshot of your app',
-      };
-    }
+    // if (!model.screenshots) {
+    //   appValidation.screenshots = {
+    //     isValid: false,
+    //     message: 'required',
+    //   };
+    // } else if (model.screenshots.length === 0) {
+    //   appValidation.screenshots = {
+    //     isValid: false,
+    //     message: 'you must upload at least one screenshot of your app',
+    //   };
+    // }
 
-    if (!model.permissions) {
-      appValidation.permissions = {
-        isValid: false,
-        message: 'required',
-      };
-    } else if (model.permissions.length === 0) {
+    if (this.state.selectedPermissions.length === 0) {
       appValidation.permissions = {
         isValid: false,
         message: 'you must choose at least one permission',
@@ -625,24 +611,14 @@ class AdminAddApp extends React.Component<IProps, IState> {
       };
     }
 
-    if (!model.categories) {
-      appValidation.categories = {
-        isValid: false,
-        message: 'required',
-      };
-    } else if (model.categories.length === 0) {
+     if (this.state.selectedCategories.length === 0) {
       appValidation.categories = {
         isValid: false,
         message: 'you must choose at least a category',
       };
     }
 
-    if (!model.lang) {
-      appValidation.lang = {
-        isValid: false,
-        message: 'required',
-      };
-    } else if (model.lang.length === 0) {
+    if (this.state.selectedLanguages.length === 0) {
       appValidation.lang = {
         isValid: false,
         message: 'you must choose at least a language',
@@ -673,7 +649,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       };
     } else {
       if (!this.state.appValidation.app_id.isValid &&
-        this.state.appValidation.app_id.message === 'App Id Already taken!') {
+        this.state.appValidation.app_id.message === 'App Id\'s already taken!') {
         // 'App Id Already taken!'
         appValidation.app_id = this.state.appValidation.app_id;
       }

@@ -34,7 +34,7 @@ interface IState {
   isLogin: boolean;
   isAdminPage: boolean;
   openSignInModal: boolean;
-  user: any[];
+  user: any;
   lang: string;
   signin: any;
 }
@@ -72,9 +72,10 @@ class Container extends React.Component<IProps, IState> {
           password: '',
         },
         openSignInModal: false,
-        user: initData.__INITIAL_DATA__.user || [],
+        user: initData.__INITIAL_DATA__.user || {},
         lang: initData.__INITIAL_DATA__.locale || Cookies.get('locale') || 'en', // from browser
       };
+      this.props.setLogin(this.state.user);
     } else {
       this.state = {
         isLogin: false,
@@ -84,7 +85,7 @@ class Container extends React.Component<IProps, IState> {
           password: '',
         },
         openSignInModal: false,
-        user: [],
+        user: {},
         lang: 'en',
       };
     }
@@ -137,8 +138,8 @@ class Container extends React.Component<IProps, IState> {
             clearInterval(interval);
             axios.post(websiteUrl + '/user/oauth/token/login', {
               code: response.data.data,
-            }).then(() => {
-              window.location.reload();
+            }).then((userResponse) => {
+              this.props.setLogin(userResponse.data.data);
             }).catch((err) => {
               message.error(err);
             });
@@ -300,14 +301,14 @@ class Container extends React.Component<IProps, IState> {
               ex ea commodo consequat. suscipit lobortis nisl ut aliquip ex ea commodo consequat.
             </Translate></p>
             <button className="butn butn-primary secondary full-width" type="submit" onClick={this.signInWithNested}>
-            <img src="/public/assets/icons/Nested_Logo.svg" height="24" alt="Nested"/> Sign in with Nested
+              <img src="/public/assets/icons/Nested_Logo.svg" height="24" alt="Nested"/> Sign in with Nested
             </button>
             <div className="seperator"><Translate>Or</Translate></div>
             <form onSubmit={this.submitLoginForm}>
               <input type="text" placeholder={this.translator._getText('Username')}
-                    onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.signin.username}/>
+                     onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.signin.username}/>
               <input type="text" placeholder={this.translator._getText('Password')}
-                    onChange={this.bindInputToModel.bind(this, 'password')} value={this.state.signin.password}/>
+                     onChange={this.bindInputToModel.bind(this, 'password')} value={this.state.signin.password}/>
               <button className="butn butn-store-login full-width" type="submit" disabled={!validateForm}>
                 <Translate>Sign in</Translate>
               </button>
