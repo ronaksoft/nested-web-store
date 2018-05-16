@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {Translate, IcoN, Affixer} from 'components';
-import {Modal, message, Popconfirm, Popover} from 'antd';
+import {Translate, IcoN, Affixer, Loading} from 'components';
+import {Modal, message, Popconfirm, Popover, Upload} from 'antd';
 import {IUser} from 'api/interfaces';
 import {Link} from 'react-router';
 import * as _ from 'lodash';
-import {user as UserFactory} from '../../../api';
+import {
+  user as UserFactory,
+  file as FileFactory} from '../../../api';
 
 const ReactPaginate = require('react-paginate');
 
@@ -28,12 +30,15 @@ interface IState {
   untouched: boolean;
   addUserModal: boolean;
   model: IUser;
+  userLogoUrl: string;
   pageCount: number;
 }
 
 class AdminUsers extends React.Component<IProps, IState> {
   private translator: Translate;
   private userFactory: UserFactory;
+  private fileFactory: FileFactory;
+  private customRequest: any;
   private emptyModel: IUser;
   private pagination: any;
 
@@ -61,6 +66,7 @@ class AdminUsers extends React.Component<IProps, IState> {
       loading: false,
       addUserModal: false,
       untouched: true,
+      userLogoUrl: '',
       users: [],
       pageCount: 1,
       model: _.cloneDeep(this.emptyModel),
@@ -71,6 +77,8 @@ class AdminUsers extends React.Component<IProps, IState> {
       skip: 0,
       limit: 10,
     };
+    this.fileFactory = new FileFactory();
+    this.customRequest = this.fileFactory.customRequest.bind(this);
   }
 
   public componentDidMount() {
@@ -138,7 +146,7 @@ class AdminUsers extends React.Component<IProps, IState> {
     });
   }
 
-  private submitCreateCategoryForm = (e) => {
+  private submitCreateUserFrom = (e) => {
     e.preventDefault();
     e.stopPropagation();
     const users: IUser[] = this.state.users;
@@ -174,6 +182,18 @@ class AdminUsers extends React.Component<IProps, IState> {
     }
   }
 
+  private beforeUploadLogo = (file: any) => {
+    const isSVG = file.type === 'image/svg+xml';
+    if (!isSVG) {
+      message.error('You can only upload SVG file!');
+    }
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('Image must smaller than 1MB!');
+    }
+    return isSVG && isLt1M;
+  }
+
   private validateForm(model: IUser) {
     console.log(model);
     return false;
@@ -200,6 +220,29 @@ class AdminUsers extends React.Component<IProps, IState> {
     this.loadUsers();
   }
 
+  private handleRoleChange = (event) => {
+    console.log(event);
+  }
+
+  private getBase64 = (img: any, callback: any) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+
+  private logoChangeHandler = (info) => {
+    if (info.file.status === 'uploading') {
+      this.setState({loading: true});
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      this.getBase64(info.file.originFileObj, (userLogoUrl) => this.setState({
+        userLogoUrl,
+        loading: false,
+      }));
+    }
+  }
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -208,6 +251,7 @@ class AdminUsers extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
+    const {userLogoUrl} = this.state;
     const validateForm = this.validateForm(this.state.model);
     const sortMenu = (
       <ul className="sort-menu">
@@ -220,6 +264,13 @@ class AdminUsers extends React.Component<IProps, IState> {
         <li>ssss</li>
         <li>11</li>
       </ul>
+    );
+    const uploadButton = (
+      <div>
+        {this.state.loading && <Loading active={true}/>}
+        {!this.state.loading && <IcoN name="cross24" size={24}/>}
+        <div className="ant-upload-text">Upload</div>
+      </div>
     );
     return (
       <div className="admin-wrapper admin-users-list">
@@ -262,7 +313,7 @@ class AdminUsers extends React.Component<IProps, IState> {
                             onConfirm={this.onRemove.bind(this, 'robzizo')}
                             okText={this.translator._getText('Yes')} cancelText={this.translator._getText('No')}>
                   <div className="remove-button">
-                    <IcoN name="negativeXCross24" size={24}/>
+                    <IcoN name="binRed24" size={24}/>
                   </div>
                 </Popconfirm>
               </li>
@@ -283,7 +334,7 @@ class AdminUsers extends React.Component<IProps, IState> {
             activeClassName="active"/>}
         </ul>
         <Modal
-          title="Add a user"
+          title="Add or edit a user manually"
           wrapClassName="vertical-center-modal"
           width="466px"
           visible={this.state.addUserModal}
@@ -292,7 +343,7 @@ class AdminUsers extends React.Component<IProps, IState> {
             <button key="back" className="butn secondary" onClick={this.toggleAddUserModal}>
               <Translate>Cancel</Translate>
             </button>,
-            <button key="submit" className="butn butn-primary" onClick={this.submitCreateCategoryForm}
+            <button key="submit" className="butn butn-primary" onClick={this.submitCreateUserFrom}
                     disabled={!validateForm}>
               {this.state.model._id === '' &&
               <Translate>Add</Translate>}
@@ -301,9 +352,41 @@ class AdminUsers extends React.Component<IProps, IState> {
             </button>,
           ]}
         >
-          <form className="add-category-modal" onSubmit={this.submitCreateCategoryForm}>
-            <input type="text" placeholder={this.translator._getText('Category slug...')}
-                   onChange={this.bindInputToModel.bind(this, 'slug')} value={this.state.model.name}/>
+          <form className="add-user-modal" onSubmit={this.submitCreateUserFrom}>
+            <div className="_df">
+              <div>
+                <legend><Translate>Basic info</Translate></legend>
+                <input type="text" placeholder={this.translator._getText('Name')}
+                      onChange={this.bindInputToModel.bind(this, 'name')} value={this.state.model.name}/>
+                <input type="text" placeholder={this.translator._getText('Username')}
+                      onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.model.username}/>
+              </div>
+              <div className="user-logo">
+                <Upload
+                  name="avatar"
+                  listType="picture-card"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  beforeUpload={this.beforeUploadLogo}
+                  onChange={this.logoChangeHandler}
+                  customRequest={this.customRequest}
+                >
+                  {userLogoUrl ? <img src={userLogoUrl} alt=""/> : uploadButton}
+                </Upload>
+              </div>
+            </div>
+            <input type="text" placeholder={this.translator._getText('Email address')}
+              onChange={this.bindInputToModel.bind(this, 'email')} value={this.state.model.email}/>
+            <select value={'developer'} onChange={this.handleRoleChange}>
+              <option value="normal">noraml</option>
+              <option value="developer">Developer</option>
+              <option value="admin">Admin</option>
+            </select>
+            <legend><Translate>Nested Account Info</Translate></legend>
+            <input type="text" placeholder={this.translator._getText('Nested domain')}
+                   onChange={this.bindInputToModel.bind(this, 'nested')} value={this.state.model.nested}/>
+            <input type="text" placeholder={this.translator._getText('Nested username')}
+                   onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.model.username}/>
             <button className="hidden-submit" type="submit" disabled={!validateForm}/>
           </form>
         </Modal>

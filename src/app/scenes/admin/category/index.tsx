@@ -232,7 +232,7 @@ class AdminCategory extends React.Component<IProps, IState> {
         <Popconfirm title="Are you sure about removing this Category?" onConfirm={onRemove.bind(this, value._id)}
                     okText="Yes" cancelText="No">
           <div className="remove-button">
-            <IcoN name="negativeXCross24" size={24}/>
+            <IcoN name="binRed24" size={24}/>
           </div>
         </Popconfirm>
       </li>

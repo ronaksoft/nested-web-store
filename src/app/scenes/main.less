@@ -189,7 +189,18 @@ textarea::-webkit-input-placeholder{
     display: none;
   }
 }
-
+select {
+  height: 32px;
+  padding: 0 8px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  box-shadow: inset 0px 0px 1px transparent;
+  color: #323D47;
+  border-radius: 4px;
+  font-size: 12px;
+  color: @color-solid;
+  transition: all 0.2s;
+}
 // Components 
 
 .sidebar {
@@ -1226,12 +1237,6 @@ ul.errors {
     width: 100%;
     margin: 0 0 16px;
   }
-  button {
-    opacity: 0;
-    height: 0px;
-    visibility: hidden;
-    width: 0px;
-  }
 }
 
 .admin-list, .category-sort-item {
@@ -1433,7 +1438,41 @@ ul.errors {
     }
   }
 }
+.add-user-modal {
+  legend {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .user-logo {
+    padding: 28px 0 0 24px;
+    .ant-upload {
+      margin: 0;
+      width: 56px;
+      height: 56px;
+    }
+  }
+  input, select {
+    height: 32px;
+    margin-bottom: 8px;
+    width: 100%;
+    font-size: 12px;
+  }
+  select {
+    margin-bottom: 16px;
+  }
+  ::placeholder { 
+    font-size: 12px;
+    opacity: 1;
+  }
 
+  :-ms-input-placeholder {
+    font-size: 12px;
+  }
+
+  ::-ms-input-placeholder {
+    font-size: 12px;
+  }
+}
 // Antd modal
 .ant-modal-content {
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.32);
@@ -1465,6 +1504,10 @@ ul.errors {
 }
 .hidden-submit {
   position: absolute;
+  opacity: 0;
+  height: 0px;
+  visibility: hidden;
+  width: 0px;
 }
 .nst-vertical-logo {
   display: flex;

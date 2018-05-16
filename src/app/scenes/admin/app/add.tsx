@@ -952,7 +952,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
                   <p>{permission.data.desc}</p>
                 </div>
                 <div className="per-remove" onClick={this.removePermission.bind(this, index)}>
-                  <IcoN name="negativeXCross24" size={24}/>
+                  <IcoN name="binRed24" size={24}/>
                 </div>
               </li>
             );
