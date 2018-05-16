@@ -72,104 +72,39 @@ class AdminWrapper extends React.Component<IProps, IState> {
    */
   public render() {
     return (
-        <div>
-          <nav className="navbar-wrapper">
-            <div className="navbar admin">
-              <Link to="/">
-                <img src="/public/assets/icons/Nested_Logo.svg" height={32} alt="Nested" className="logo"/>
-                <img src="/public/assets/icons/Nested_EnglishType.svg" height={32} alt="Nested"
-                  className="logo-type"/>
-                <img src="/public/assets/icons/Nested_PersianType.svg" height={32} alt="Nested"
-                  className="logo-type fa"/>
-              </Link>
-              <div className="devider"/>
-              <Link to="/admin/app/create">
-                <Translate>Add an App</Translate>
-              </Link>
-              <div className="filler"/>
-              <div className="user-wrapper"/>
-            </div>
-          </nav>
-          <div className="main-container">
-            <div className="main-container-inner">
-              <Affixer offsetTop={72} zIndex={4} height={80}>
-                <div className="sidebar">
-                  <h3><Translate>Dashboard</Translate></h3>
-                  <ul>
-                    <li><Link to="/admin/app" activeClassName="active">
-                      <Translate>Applications</Translate>
-                    </Link></li>
-                    <li><Link to="/admin/category" activeClassName="active">
-                      <Translate>Categories</Translate>
-                    </Link></li>
-                    <li><Link to="/admin/permission" activeClassName="active">
-                      <Translate>Permissions</Translate></Link>
-                    </li>
-                {/* <li><Link to="/admin/reviews" activeClassName="active">
-                <Translate>Reviews</Translate></Link>
+      <div className="main-container">
+        <div className="main-container-inner">
+          <Affixer offsetTop={72} zIndex={4} height={80}>
+            <div className="sidebar">
+              <h3><Translate>Dashboard</Translate></h3>
+              <ul>
+                <li><Link to="/admin/app" activeClassName="active">
+                  <Translate>Applications</Translate>
+                </Link></li>
+                <li><Link to="/admin/category" activeClassName="active">
+                  <Translate>Categories</Translate>
+                </Link></li>
+                <li><Link to="/admin/permission" activeClassName="active">
+                  <Translate>Permissions</Translate></Link>
                 </li>
-                <li><Link to="/admin/reports" activeClassName="active">
-                <Translate>Reports</Translate></Link></li> */}
-                    <li>
-                      <Link to="/admin/user" activeClassName="active">
-                        <Translate>Users List</Translate>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </Affixer>
-              <div className="content-wrapper">
-                {this.props.children}
-              </div>
+            {/* <li><Link to="/admin/reviews" activeClassName="active">
+            <Translate>Reviews</Translate></Link>
+            </li>
+            <li><Link to="/admin/reports" activeClassName="active">
+            <Translate>Reports</Translate></Link></li> */}
+                <li>
+                  <Link to="/admin/user" activeClassName="active">
+                    <Translate>Users List</Translate>
+                  </Link>
+                </li>
+              </ul>
             </div>
+          </Affixer>
+          <div className="content-wrapper">
+            {this.props.children}
           </div>
-          <footer>
-            <div className="footer-inner">
-              <div className="_aic">
-                <div className="nested">
-                  <img src="/public/assets/icons/Nested_LogoNegative.svg" alt="Nested" className="logo"/>
-                  <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
-                    className="logo-type"/>
-                  <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" alt="Nested"
-                    className="logo-type fa"/>
-                </div>
-                <Translate>App Store</Translate>
-                <div className="languages">
-                  <img onClick={reactTranslateChangeLanguage.bind(this, 'en')} alt="EN" className="lng-en"
-                    src="/public/assets/images/en-logo.png" srcSet="/public/assets/images/en-logo@2x.png"/>
-                  <div className="devider"/>
-                  <img src="/public/assets/images/fa-logo.png" srcSet="/public/assets/images/fa-logo@2x.png"
-                    onClick={reactTranslateChangeLanguage.bind(this, 'fa')} alt="FA" className="lng-fa"/>
-                </div>
-              </div>
-              <div>
-                <h6><Translate>NESTED</Translate></h6>
-                <a href=""><Translate>Features</Translate></a>
-                <a href=""><Translate>Get Nested app</Translate></a>
-              </div>
-              <div>
-                <h6><Translate>COMPANY</Translate></h6>
-                <a href=""><Translate>About us</Translate></a>
-                <a href=""><Translate>Press</Translate></a>
-                <a href=""><Translate>Work with us</Translate></a>
-              </div>
-              <div>
-                <h6><Translate>SUPPORT</Translate></h6>
-                <a href=""><Translate>Help center</Translate></a>
-                <a href=""><Translate>Contact us</Translate></a>
-                <a href=""><Translate>Terms &amp; Conditions</Translate></a>
-              </div>
-              <div>
-                {/* <h6><Translate>SOCIAL NETWORKS</Translate></h6> */}
-                <a href=""><Translate>Blog</Translate></a>
-                <a href=""><Translate>Twitter</Translate></a>
-                <a href=""><Translate>Facebook</Translate></a>
-                <a href=""><Translate>Instagram</Translate></a>
-                <a href=""><Translate>LinkedIn</Translate> </a>
-              </div>
-            </div>
-          </footer>
         </div>
+      </div>
     );
   }
 }

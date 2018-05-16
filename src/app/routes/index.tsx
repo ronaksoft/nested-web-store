@@ -19,14 +19,14 @@ export default (
         <Route path="/app/:appid" component={AppView}/>
         <Route path="/apps" component={Browse}/>
         <Route path="/apps/:cat" component={Browse}/>
-      </Route>
-      <Route component={AdminWrapper}>
-        <Route path="/admin/app" component={AdminApp}/>
-        <Route path="/admin/app/create" component={AdminAddApp}/>
-        <Route path="/admin/app/edit/:id" component={AdminAddApp}/>
-        <Route path="/admin/category" component={AdminAddCategory}/>
-        <Route path="/admin/permission" component={AdminPermission}/>
-        <Route path="/admin/user" component={AdminUsers}/>
+        <Route component={AdminWrapper}>
+          <Route path="/admin/app" component={AdminApp}/>
+          <Route path="/admin/app/create" component={AdminAddApp}/>
+          <Route path="/admin/app/edit/:id" component={AdminAddApp}/>
+          <Route path="/admin/category" component={AdminAddCategory}/>
+          <Route path="/admin/permission" component={AdminPermission}/>
+          <Route path="/admin/user" component={AdminUsers}/>
+        </Route>
       </Route>
       <Route path="/404" component={NotFound}/>
       <Route path="*" component={NotFound}/>
