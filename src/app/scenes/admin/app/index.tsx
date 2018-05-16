@@ -154,7 +154,7 @@ class AdminApp extends React.Component<IProps, IState> {
                   {app.status === Status.UNPUBLISHED &&
                   <span className="app-badge unpublished"><Translate>UNPUBLISHED</Translate></span>}
                 </h4>
-                <p>{app.categories && app.categories.length > 0 ? app.categories[0].name : ''}</p>
+                <p>{app.app_id}</p>
               </div>
               <div className={app.stared ? 'feature-button active' : 'feature-button'}
                    onClick={this.makeFeature.bind(this, app._id)}>
