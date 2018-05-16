@@ -27,6 +27,13 @@ class AppFactory {
     });
   }
 
+  public appIdAvailable(appId: string): Promise<boolean> {
+    return axios.post(Const.SERVER_URL + '/admin/app/available',
+      {query: appId}).then((response) => {
+      return response.data.data;
+    });
+  }
+
   public getAll(type: string): Promise<IApplication[]> {
     return axios.post(Const.SERVER_URL + '/app/' + type, {}).then((response) => {
       return response.data.data.apps;
