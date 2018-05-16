@@ -1087,8 +1087,27 @@ ul.errors {
 }
 
 .signin-modal {
-  .nst-vertical-logo {
-    margin-bottom: 36px;
+  .app-store-logo {
+    height: 195px;
+    background: linear-gradient(217.57deg, #228BA3 5.54%, #774FCD 99.14%);
+    border-radius: 6px 6px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .store-logo {
+      height: 92px;
+      margin-right: 16px;
+    }
+    .nested-logo-name {
+      display: flex;
+      flex-direction: column;
+      span {
+        color: @color-white;
+        font-size: 30px;
+        line-height: 20px;
+        margin-bottom: 16px;
+      }
+    }
   }
   .login-des {
     padding: 16px;
@@ -1154,7 +1173,7 @@ ul.errors {
     }
   }
   .ant-modal-body {
-    padding: 36px 0 0;
+    padding: 0;
   }
   .ant-modal-footer {
     display: none;
