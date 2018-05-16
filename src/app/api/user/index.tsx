@@ -21,6 +21,10 @@ class UserFactory {
   public getAll(query: string, status: number = 0, skip: number = 0, limit: number = 20): Promise<any> {
     return callApi('/admin/user/search', {query, status, skip, limit});
   }
+
+  public getCurrent(): Promise<any> {
+    return callApi('/user/current', {});
+  }
 }
 
 export default UserFactory;

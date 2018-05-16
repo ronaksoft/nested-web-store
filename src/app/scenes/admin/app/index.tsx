@@ -6,6 +6,7 @@ import {IApplication} from 'api/interfaces';
 import * as _ from 'lodash';
 import {app as AppFactory} from '../../../api';
 import Const from 'api/consts/CServer';
+import Status from 'api/consts/CAppStatus';
 
 const ReactPaginate = require('react-paginate');
 
@@ -142,7 +143,16 @@ class AdminApp extends React.Component<IProps, IState> {
               <div className="app-info">
                 <h4>
                   {app.name}
-                  <span className="app-badge published"><Translate>PUBLISHED</Translate></span>
+                  {app.status === Status.PUBLISHED &&
+                  <span className="app-badge published"><Translate>PUBLISHED</Translate></span>}
+                  {app.status === Status.DECLINED &&
+                  <span className="app-badge declined"><Translate>DECLINED</Translate></span>}
+                  {app.status === Status.PENDING &&
+                  <span className="app-badge pending"><Translate>PENDING</Translate></span>}
+                  {app.status === Status.SUSPENDED &&
+                  <span className="app-badge susoended"><Translate>SUSPENDED</Translate></span>}
+                  {app.status === Status.UNPUBLISHED &&
+                  <span className="app-badge unpublished"><Translate>UNPUBLISHED</Translate></span>}
                 </h4>
                 <p>{app.categories && app.categories.length > 0 ? app.categories[0].name : ''}</p>
               </div>

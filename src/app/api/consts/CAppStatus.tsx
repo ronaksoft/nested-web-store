@@ -1,0 +1,7 @@
+export default {
+  PUBLISHED: 0x01,
+  PENDING: 0x02,
+  SUSPENDED: 0x03,
+  DECLINED: 0x04,
+  UNPUBLISHED: 0x05,
+};
