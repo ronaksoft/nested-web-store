@@ -189,11 +189,13 @@ class Container extends React.Component<IProps, IState> {
         {!isAdminPage && (
           <nav className="navbar-wrapper">
             <div className="navbar">
-              <img src="/public/assets/icons/Nested_LogoNegative.svg" height="32" alt="Nested" className="logo"/>
-              <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" height="32" alt="Nested"
-                  className="logo-type"/>
-              <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
-                  className="logo-type fa"/>
+              <Link to="/">
+                <img src="/public/assets/icons/Nested_LogoNegative.svg" height="32" alt="Nested" className="logo"/>
+                <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" height="32" alt="Nested"
+                    className="logo-type"/>
+                <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
+                    className="logo-type fa"/>
+              </Link>
               <div className="devider"/>
               <Link to="/admin/app">
                 <Translate>App Store</Translate>
