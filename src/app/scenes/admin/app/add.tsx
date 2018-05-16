@@ -9,8 +9,10 @@ import {
   category as CategoryFactory,
   permission as PermissionFactory,
 } from 'api';
-import {IApplication, ISelectOption, IFile, ICategory, IPermission,
-  IApplicationValidation} from 'api/interfaces';
+import {
+  IApplication, ISelectOption, IFile, ICategory, IPermission,
+  IApplicationValidation,
+} from 'api/interfaces';
 import Const from 'api/consts/CServer';
 import {REGEX} from 'api/consts/CRegex';
 import * as _ from 'lodash';
@@ -145,116 +147,52 @@ class AdminAddApp extends React.Component<IProps, IState> {
       };
     });
     return _.cloneDeep(appV) as IApplicationValidation;
-    // return {
-    //   _id: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   app_id: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   logo: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   name: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   desc: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   summary: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   screenshots: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   website: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   categories: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   translations: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   permissions: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   official: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   stared: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   status: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    //   lang: {
-    //     isValid: true,
-    //     message: '',
-    //   },
-    // };
   }
 
   public componentDidMount() {
-    this.categoryFactory.getAll().then((data) => {
-      if (data == null) {
-        return;
+    const promises = [];
+    promises.push(this.categoryFactory.getAll());
+    promises.push(this.permissionFactory.getAll());
+    Promise.all(promises).then((data) => {
+      if (data[0] !== null) {
+        this.categories = data[0];
+        const categories: ISelectOption[] = data[0].map((category) => {
+          return {
+            value: category._id,
+            label: category.name,
+          };
+        });
+        this.setState({
+          categories,
+        });
       }
-      this.categories = data;
-      const categories: ISelectOption[] = data.map((category) => {
-        return {
-          value: category._id,
-          label: category.name,
-        };
-      });
-      this.setState({
-        categories,
-      });
-    }).catch(() => {
-      message.error(this.translator._getText('Can\'t fetch categories!'));
-    });
-    this.permissionFactory.getAll().then((data) => {
-      if (data == null) {
-        return;
+      if (data[1] !== null) {
+        this.permissions = data[1];
+        const permissions: ISelectOption[] = data[1].map((permission) => {
+          return {
+            value: permission._id,
+            label: permission.name,
+          };
+        });
+        this.setState({
+          permissions,
+        });
       }
-      this.permissions = data;
-      const permissions: ISelectOption[] = data.map((permission) => {
-        return {
-          value: permission._id,
-          label: permission.name,
-        };
-      });
-      this.setState({
-        permissions,
-      });
     }).catch(() => {
-      message.error(this.translator._getText('Can\'t fetch permissions!'));
+      message.error(this.translator._getText('Can\'t init data!'));
+    }).then(() => {
+      if (this.props.location.pathname.indexOf('/admin/app/edit/') > -1 && this.props.routeParams.id) {
+        this.appFactory.getById(this.props.routeParams.id).then((data) => {
+          this.fillModel(data);
+        }).catch(() => {
+          message.error(this.translator._getText('Can\'t fetch application!'));
+        });
+      }
     });
-    if (this.props.location.pathname.indexOf('/admin/app/edit/') > -1 && this.props.routeParams.id) {
-      this.appFactory.getById(this.props.routeParams.id).then((data) => {
-        this.fillModel(data);
-      }).catch(() => {
-        message.error(this.translator._getText('Can\'t fetch application!'));
-      });
-    }
   }
 
   private fillModel(data: IApplication) {
-    data = _.merge(this.emptyModel, data);
+    data = _.merge(this.emptyModel, _.omitBy(data, _.isNull));
     let selectedCategories: ISelectOption[] = [];
     if (data.categories) {
       selectedCategories = data.categories.map((item): ISelectOption => {
@@ -513,10 +451,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
       const appValidation = this.checkValidation(model);
       if (
         Object.keys(appValidation)
-        .map((key) => appValidation[key].isValid)
-        .filter((isValid) => !isValid)
-        .length > 0) {
-          return;
+          .map((key) => appValidation[key].isValid)
+          .filter((isValid) => !isValid)
+          .length > 0) {
+        return;
       }
       if (model._id.length === 24) {
         this.appFactory.edit(model).then(() => {
@@ -762,7 +700,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
   }
 
-  private checkAppIdDebounced = _.debounce(this.checkAppId, 100);
+  private checkAppIdDebounced = _.debounce(this.checkAppId, 512);
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -773,8 +712,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
   public render() {
     const {imageUrl, appValidation} = this.state;
     const errors = Object.keys(appValidation)
-    .map((key) => appValidation[key].message)
-    .filter((message) => message && message !== 'required');
+      .map((key) => appValidation[key].message)
+      .filter((message) => message && message !== 'required');
     const permissions = this.getPermissions();
     const uploadButton = (
       <div>
@@ -829,8 +768,8 @@ class AdminAddApp extends React.Component<IProps, IState> {
                    className={!appValidation.app_id.isValid ? 'has-error' : ''}/>
             <input type="url" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
                    onChange={this.bindInputToModel.bind(this, 'website')} autoComplete="website"
-                    className={!appValidation.website.isValid ? 'has-error' : ''}
-                    pattern={REGEX.URL}/>
+                   className={!appValidation.website.isValid ? 'has-error' : ''}
+                   pattern={REGEX.URL}/>
           </div>
         </div>
         <input type="text"
