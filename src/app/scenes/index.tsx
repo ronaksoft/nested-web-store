@@ -235,12 +235,15 @@ class Container extends React.Component<IProps, IState> {
           onCancel={this.toggleSignInModal}
           maskClosable={true}
         >
-          <div className="nst-vertical-logo">
-            <img src="/public/assets/icons/Nested_Logo.svg" height="32" alt="Nested" className="logo"/>
-            <img src="/public/assets/icons/Nested_EnglishType.svg" height="32" alt="Nested"
-                 className="logo-type"/>
-            <img src="/public/assets/icons/Nested_PersianType.svg" height="32" alt="Nested"
-                 className="logo-type fa"/>
+          <div className="app-store-logo">
+            <img src="/public/assets/icons/App_StoreNegative.svg" height="92" alt="Nested" className="store-logo"/>
+            <div className="nested-logo-name">
+              <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" width="136" alt="Nested"
+                  className="logo-type"/>
+              <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" width="136" alt="Nested"
+                  className="logo-type fa"/>
+              <Translate>App Store</Translate>
+            </div>
           </div>
           <div className="login-des">
             <h2><Translate>Sign in to Nested App Store</Translate></h2>
