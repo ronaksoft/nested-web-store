@@ -247,6 +247,17 @@ select {
     top: 0;
     bottom: 0;
     width: 429px;
+    img {
+      &:first-child {
+        opacity: 0;
+        animation: bottomLeft .5s ease alternate forwards;
+        animation-delay: 0.1s;
+      }
+      &:last-child {
+        opacity: 0;
+        animation: topLeft .5s ease alternate forwards;
+      }
+    }
   }
   .bg-right {
     position: absolute;
@@ -254,8 +265,17 @@ select {
     top: 0;
     bottom: 0;
     width: 429px;
-    img:first-child {
-      left: -89px;
+    img {
+      &:first-child {
+        left: -89px;
+        opacity: 0;
+        animation: topRight .5s ease alternate forwards;
+        animation-delay: 0.1s;
+      }
+      &:last-child {
+        opacity: 0;
+        animation: bottomRight .5s ease alternate forwards;
+      }
     }
   }
   .bg-right img,
