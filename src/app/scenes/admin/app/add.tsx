@@ -189,6 +189,18 @@ class AdminAddApp extends React.Component<IProps, IState> {
         });
       }
     });
+    window.addEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
+  private updateLang = () => {
+    setTimeout(() => {
+      this.translator = new Translate();
+      this.forceUpdate();
+    }, 100);
   }
 
   private fillModel(data: IApplication) {
@@ -850,7 +862,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <p><Translate>
           Add your developed app by filling these fields and helping users find your app better.
         </Translate></p>
-        <div className={!appValidation.lang.isValid ? 'form-row has-error' : 'form-row'}>
+        <div className={!appValidation.permissions.isValid ? 'form-row has-error' : 'form-row'}>
           <Select
             name="permission"
             onChange={this.handleSelectChangePermission}

@@ -98,6 +98,18 @@ class Container extends React.Component<IProps, IState> {
   public componentDidMount() {
     reactTranslateChangeLanguage(this.state.lang);
     this.checkIsAdmin(this.props.location.pathname);
+    window.addEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
+  private updateLang = () => {
+    setTimeout(() => {
+      this.translator = new Translate();
+      this.forceUpdate();
+    }, 100);
   }
 
   public checkIsAdmin = (path: string) => {
@@ -141,11 +153,13 @@ class Container extends React.Component<IProps, IState> {
             axios.post(websiteUrl + '/user/oauth/token/login', {
               code: response.data.data,
             }).then((userResponse) => {
-              this.props.setLogin(userResponse.data.data);
-              this.setState({
-                user: userResponse.data.data,
-                openSignInModal: false,
-              });
+              if (userResponse.data.status !== 'nok') {
+                this.props.setLogin(userResponse.data.data);
+                this.setState({
+                  user: userResponse.data.data,
+                  openSignInModal: false,
+                });
+              }
             }).catch((err) => {
               message.error(err);
             });
@@ -310,9 +324,10 @@ class Container extends React.Component<IProps, IState> {
               ex ea commodo consequat. suscipit lobortis nisl ut aliquip ex ea commodo consequat.
             </Translate></p>
             <button className="butn butn-primary secondary full-width" type="submit" onClick={this.signInWithNested}>
-              <img src="/public/assets/icons/Nested_Logo.svg" height="24" alt="Nested"/> Sign in with Nested
+              <img src="/public/assets/icons/Nested_Logo.svg" height="24" alt="Nested"/>
+              <Translate>Sign in with Nested</Translate>
             </button>
-            <div className="seperator"><Translate>Or</Translate></div>
+            <div className="seperator"><a><Translate>Or</Translate></a></div>
             <form onSubmit={this.submitLoginForm}>
               <input type="text" placeholder={this.translator._getText('Username')}
                      onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.signin.username}/>

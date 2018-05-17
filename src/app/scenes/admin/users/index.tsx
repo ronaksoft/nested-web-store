@@ -319,20 +319,20 @@ class AdminUsers extends React.Component<IProps, IState> {
               </li>
             );
           })}
-          {this.state.pageCount > 1 &&
-          <ReactPaginate
-            nextLabel={<IcoN name="arrow24" size={24}/>}
-            previousLabel={<IcoN name="arrow24" size={24}/>}
-            breakLabel={<a href="">...</a>}
-            breakClassName="reak-me"
-            pageCount={this.state.pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={this.handlePageClick}
-            containerClassName="pagination"
-            subContainerClassName="pages pagination"
-            activeClassName="active"/>}
-        </ul>
+          </ul>
+        {this.state.pageCount > 1 &&
+        <ReactPaginate
+          nextLabel={<IcoN name="arrow24" size={24}/>}
+          previousLabel={<IcoN name="arrow24" size={24}/>}
+          breakLabel={<a href="">...</a>}
+          breakClassName="reak-me"
+          pageCount={this.state.pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.handlePageClick}
+          containerClassName="pagination"
+          subContainerClassName="pages pagination"
+          activeClassName="active"/>}
         <Modal
           title="Add or edit a user manually"
           wrapClassName="vertical-center-modal"

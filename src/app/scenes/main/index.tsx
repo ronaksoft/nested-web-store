@@ -86,6 +86,18 @@ class Main extends React.Component<any, IState> {
         message.error(this.translator._getText('Can\'t fetch recent apps!'));
       });
     }
+    window.addEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
+  private updateLang = () => {
+    setTimeout(() => {
+      this.translator = new Translate();
+      this.forceUpdate();
+    }, 100);
   }
 
   /**

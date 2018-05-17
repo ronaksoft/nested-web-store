@@ -1140,7 +1140,7 @@ ul.errors {
     display: flex;
     justify-content: center;
     margin-bottom: 24px;
-    span {
+    a {
       display: inline-flex;
       width: 36px;
       flex: 1;
@@ -1157,6 +1157,10 @@ ul.errors {
       }
       &:after {
         margin-left: 8px;
+      }
+      span {
+        width: 36px;
+        text-align: center;
       }
     }
   }
@@ -1228,6 +1232,10 @@ ul.errors {
       }
       .per-icon {
         padding: 0 8px;
+        img {
+          max-width: 16px;
+          max-height: 16px;
+        }
       }
     }
   }

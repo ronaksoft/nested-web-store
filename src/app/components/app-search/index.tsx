@@ -72,18 +72,15 @@ export default class AppSearch extends React.Component<any, IState> {
     window.addEventListener('reactTranslateChangeLanguage', this.updateLang);
   }
 
+  public componentWillUnmount() {
+    window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
   private updateLang = () => {
     setTimeout(() => {
       this.translator = new Translate();
       this.forceUpdate();
     }, 100);
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
-  }
-  private onOpen() {
-    console.log('onOpen');
   }
 
   /**
@@ -103,7 +100,6 @@ export default class AppSearch extends React.Component<any, IState> {
                 value={value}
                 onChange={this.onChange}
                 onInputChange={this.onInputChange}
-                menuContainerStyle={this.onOpen}
                 className={this.state.suggestions.length === 0 && !this.state.inputValue
                   ? 'no-option suggester'
                   : 'suggester'}

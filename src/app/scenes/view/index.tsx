@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, IcoN, Rating, Tab, RateResult} from 'components';
+import {Translate, Rating, Tab, RateResult} from 'components';
 import {IApplication, IReview} from 'api/interfaces';
 import Const from 'api/consts/CServer';
 import {message} from 'antd';
@@ -125,6 +125,17 @@ class AppView extends React.Component<IProps, IState> {
         message.error(this.translator._getText('Can\'t fetch app\'s reviews!'));
       });
     }
+    window.addEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+  public componentWillUnmount() {
+    window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
+  }
+
+  private updateLang = () => {
+    setTimeout(() => {
+      this.translator = new Translate();
+      this.forceUpdate();
+    }, 100);
   }
 
   private reviewHandler = (review: IReview) => {
@@ -159,19 +170,17 @@ class AppView extends React.Component<IProps, IState> {
     tabs[this.translator._getText('Permissions')] = (
       <div>
         <ul className="permissions-list">
-          {this.state.app.permissions.map((permission, index) => {
-            return (
-              <li key={'permission-' + index}>
-                <div className="per-icon">
-                  <IcoN name="filter16" size={16}/>
-                </div>
-                <div className="per-info">
-                  <h4>{permission.name}</h4>
-                  <p>{permission.desc}</p>
-                </div>
-              </li>
-            );
-          })}
+          {this.state.app.permissions.map((permission, index) => (
+            <li key={'permission-' + index}>
+              <div className="per-icon">
+                <img src={Const.SERVER_URL + permission.icon} alt={permission.name}/>
+              </div>
+              <div className="per-info">
+                <h4>{permission.name}</h4>
+                <p>{permission.desc}</p>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     );

@@ -1,120 +1,177 @@
-
 html[dir="rtl"] {
-    .navbar a:last-of-type {
-        margin-right: 5px;
-        margin-left: 20px;
+  .navbar a:last-of-type {
+    margin-right: 5px;
+    margin-left: 20px;
+  }
+  .app-content {
+    .product-hero {
+      margin-right: 0;
+      margin-left: 24px;
+      .categories a {
+        margin: 0 0 6px 6px;
+      }
     }
-    .app-content {
-        .product-hero {
+  }
+  .jumbotron {
+    .content {
+      .featureds {
+        >a {
+          &:first-child {
             margin-right: 0;
-            margin-left: 24px;
-            .categories a {
-                margin: 0 0 6px 6px;
-            }
+            margin-left: 16px;
+          }
+          &:last-child {
+            margin-left: 0;
+            margin-right: 16px;
+          }
         }
-    }
-    .jumbotron {
-        .content {
-            .featureds {
-                > a {
-                    &:first-child {
-                    margin-right: 0;
-                    margin-left: 16px;
-                    }
-                    &:last-child {
-                    margin-left: 0;
-                    margin-right: 16px;
-                    }
-                }
-            }
-        }
-    }
-    .sidebar {
-        margin-right: 0;
-        margin-left: 32px;
-    }
-    .search-box {
-      > i {
-        left: auto;
-        right: 4px;
       }
     }
-    .suggester {
-        .suggester__indicators {
-            right: auto;
-            left: 0;
-        }
+  }
+  .sidebar {
+    margin-right: 0;
+    margin-left: 32px;
+  }
+  .search-box {
+    >i {
+      left: auto;
+      right: 4px;
     }
-    .lng-en {
-        opacity: .64;
+  }
+  .suggester {
+    .suggester__indicators {
+      right: auto;
+      left: 0;
     }
-    .lng-fa {
-        opacity: 1;
+  }
+  .lng-en {
+    opacity: .64;
+  }
+  .lng-fa {
+    opacity: 1;
+  }
+  .tabs-content {
+    .reviews li {
+      .rev-logo {
+        padding-right: 0;
+        padding-left: 16px;
+      }
+      .rev-info .rating {
+        margin: 0 8px 0 0;
+      }
     }
-    .tabs-content {
-        .reviews li {
-            .rev-logo {
-                padding-right: 0;
-                padding-left: 16px;
-            }
-            .rev-info .rating {
-                margin: 0 8px 0 0;
-            }
-        }
-        .permissions li {
-            .per-icon {
-                padding: 3px 0 0 16px;
-            }
-            .per-info {
-                border-left: none;
-                padding-left: 0;
-                padding-right: 6px;
-                border-right: 1px solid rgba(50, 61, 71, 0.32);
-            }
-        }
+    .permissions-list li {
+      .per-icon {
+        padding: 3px 0 0 16px;
+      }
+      .per-info {
+        border-left: none;
+        padding-left: 0;
+        padding-right: 6px;
+        border-right: 1px solid rgba(50, 61, 71, 0.32);
+      }
     }
-    .logo-type {
-      display: none;
+  }
+  .logo-type {
+    display: none;
+  }
+  .logo-type.fa {
+    display: unset;
+  }
+  .app-content .product-hero .languages a {
+    background-position: right center;
+    padding: 5px 30px 5px 6px;
+  }
+  .add-app .images-container {
+    padding-right: 0;
+    padding-left: 8px;
+    .upload-box {
+      margin-left: 20px;
+      margin-right: 0;
     }
-    .logo-type.fa {
-      display: unset;
-    }
-    .app-content .product-hero .languages a {
-        background-position: right center;
-        padding: 5px 30px 5px 6px;
-    }
-    .add-app .images-container {
     .image-handler {
-        img {
-          border-radius: 4px 4px 4px 0px;
-        }
-        .image-buttons {
-          left: 0;
-          right: auto;
-          border-radius:  4px 0px 0px 4px;
-        }
-        &:nth-child(odd) {
-          margin-right: 0;
-          margin-left: 20px;
-        }
-        &:nth-child(even) {
-          margin-right: 20px;
-          margin-left: 0;
-        }
+      img {
+        border-radius: 4px 4px 4px 0px;
       }
-    }
-    .add-app .images-container .upload-box {
+      .image-buttons {
+        left: 0;
+        right: auto;
+        border-radius: 4px 0px 0px 4px;
+      }
+      &:nth-child(odd) {
+        margin-right: 0;
+        margin-left: 20px;
+      }
+      &:nth-child(even) {
         margin-right: 20px;
         margin-left: 0;
+      }
     }
-    .page-buttons .page-buttons-inner button {
-        margin: 0 16px 0 0;
+  }
+  .page-buttons .page-buttons-inner button {
+    margin: 0 16px 0 0;
+  }
+  .ant-modal-close {
+    right: auto;
+    left: 0;
+  }
+  .ant-modal-footer {
+    button + button {
+        margin-left: 0;
+        margin-right: 8px;
     }
-    .ant-modal-close {
-        right: auto;
-        left: 0;
+    justify-content: flex-end;
+  }
+  .rating-form {
+    .comment-box {
+      .user-logo {
+        padding-right: 0;
+        padding-left: 8px;
+      }
     }
-    .ant-modal-footer {
-        justify-content: flex-end;
+  }
+  .signin-modal {
+    .app-store-logo .store-logo {
+      margin-right: 0;
+      margin-left: 16px;
     }
+  }
+  .pagination {
+    .previous i {
+      transform: rotateZ(-90deg);
+    }
+    .next i {
+      transform: rotateZ(90deg);
+    }
+  }
+  .ant-message .anticon {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+  .admin-list,
+  .category-sort-item {
+    .remove-button {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+  }
+  .app-vertical-list {
+    .remove-button {
+      margin-left: 12px;
+      margin-right: 0;
+    }
+  }
+  .add-app .ant-upload {
+    margin-right: 0;
+    margin-left: 16px;
+  }
+  .multi-selector {
+    .multi-selector__multi-value__label {
+      padding: 5px 5px 5px 0;
+    }
+    .multi-selector__indicators {
+      right: auto;
+      left: 0;
+    }
+  }
 }

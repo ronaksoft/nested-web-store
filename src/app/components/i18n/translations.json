@@ -177,19 +177,19 @@
   },
   "App user ID &amp; Logo": {
     "en": "",
-    "fa": ""
+    "fa": "مشخصه ‌App و لوگو"
   },
   "Information": {
     "en": "",
-    "fa": ""
+    "fa": "اطلاعات"
   },
   "Category": {
     "en": "",
-    "fa": ""
+    "fa": " موضوع"
   },
   "Languages": {
     "en": "",
-    "fa": ""
+    "fa": "زبان ها"
   },
   "Screenshots &amp; Pictures": {
     "en": "",
@@ -205,7 +205,7 @@
   },
   "Owner URL": {
     "en": "",
-    "fa": ""
+    "fa": "آدرس وبسایت"
   },
   "App name (eng)": {
     "en": "",
@@ -233,7 +233,7 @@
   },
   "Add an App": {
     "en": "",
-    "fa": ""
+    "fa": "افزودن App"
   },
   "Preview": {
     "en": "",
@@ -244,6 +244,294 @@
     "fa": ""
   },
   "Languages Support": {
+    "en": "",
+    "fa": ""
+  },
+  "Your comment successfully added": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t comment!": {
+    "en": "",
+    "fa": ""
+  },
+  "Apply": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t init data!": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch application!": {
+    "en": "",
+    "fa": ""
+  },
+  "Files are being uploaded...": {
+    "en": "",
+    "fa": ""
+  },
+  "Application successfully edited": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t edit the Application!": {
+    "en": "",
+    "fa": ""
+  },
+  "Application successfully created": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t create the Application!": {
+    "en": "",
+    "fa": ""
+  },
+  "English": {
+    "en": "",
+    "fa": ""
+  },
+  "Persian": {
+    "en": "",
+    "fa": ""
+  },
+  "Applications": {
+    "en": "",
+    "fa": ""
+  },
+  "PUBLISHED": {
+    "en": "",
+    "fa": "منتشر"
+  },
+  "DECLINED": {
+    "en": "",
+    "fa": "لغو"
+  },
+  "PENDING": {
+    "en": "",
+    "fa": "منتظر"
+  },
+  "SUSPENDED": {
+    "en": "",
+    "fa": "مسدود"
+  },
+  "UNPUBLISHED": {
+    "en": "",
+    "fa": "منتشر نشده"
+  },
+  "Reached the end!": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch apps!": {
+    "en": "",
+    "fa": ""
+  },
+  "Application successfully removed": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t remove application!": {
+    "en": "",
+    "fa": ""
+  },
+  "Category Management": {
+    "en": "",
+    "fa": ""
+  },
+  "Save": {
+    "en": "",
+    "fa": ""
+  },
+  "Cancel": {
+    "en": "",
+    "fa": ""
+  },
+  "Add": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch categories!": {
+    "en": "",
+    "fa": ""
+  },
+  "Categories order successfully updated": {
+    "en": "",
+    "fa": ""
+  },
+  "Category successfully removed": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t remove category!": {
+    "en": "",
+    "fa": ""
+  },
+  "Category successfully created": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t create category!": {
+    "en": "",
+    "fa": ""
+  },
+  "Category successfully edited": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t edit category!": {
+    "en": "",
+    "fa": ""
+  },
+  "Category slug...": {
+    "en": "",
+    "fa": ""
+  },
+  "Category name in English...": {
+    "en": "",
+    "fa": ""
+  },
+  "Category name in Persian...": {
+    "en": "",
+    "fa": ""
+  },
+  "Dashboard": {
+    "en": "",
+    "fa": "داشبورد"
+  },
+  "Reports": {
+    "en": "",
+    "fa": "گزارشات"
+  },
+  "Users List": {
+    "en": "",
+    "fa": "لیست کاربران"
+  },
+  "Permission Management": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch permissions!": {
+    "en": "",
+    "fa": ""
+  },
+  "Permission successfully removed": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t remove permission!": {
+    "en": "",
+    "fa": ""
+  },
+  "Permission successfully created": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t create permission!": {
+    "en": "",
+    "fa": ""
+  },
+  "Permission successfully edited": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t edit permission!": {
+    "en": "",
+    "fa": ""
+  },
+  "Permission name...": {
+    "en": "",
+    "fa": ""
+  },
+  "Permission description...": {
+    "en": "",
+    "fa": ""
+  },
+  "نام دسترسی...": {
+    "en": "Permission name in farsi",
+    "fa": ""
+  },
+  "توضیح دسترسی...": {
+    "en": "Permission description in farsi",
+    "fa": ""
+  },
+  "Permission Value": {
+    "en": "",
+    "fa": ""
+  },
+  "Add a user manually": {
+    "en": "",
+    "fa": ""
+  },
+  "Edit": {
+    "en": "",
+    "fa": "ویرایش"
+  },
+  "Basic info": {
+    "en": "",
+    "fa": "اطلاعات اساسی"
+  },
+  "Nested Account Info": {
+    "en": "",
+    "fa": "اطلاعات حساب نستد"
+  },
+  "Can\\'t fetch users!": {
+    "en": "",
+    "fa": "خطا در دریافت کاربران"
+  },
+  "Are you sure about removing this user?": {
+    "en": "",
+    "fa": ""
+  },
+  "Yes": {
+    "en": "",
+    "fa": "بلی"
+  },
+  "Name": {
+    "en": "",
+    "fa": "نام"
+  },
+  "Username": {
+    "en": "",
+    "fa": "نام کاربری"
+  },
+  "Email address": {
+    "en": "",
+    "fa": "آدرس ایمیل"
+  },
+  "Nested domain": {
+    "en": "",
+    "fa": "دامین نستد"
+  },
+  "Nested username": {
+    "en": "",
+    "fa": "نام کاربری در نستد"
+  },
+  "Most Recent Apps": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch recent apps!": {
+    "en": "",
+    "fa": ""
+  },
+  "Sign in to Nested App Store": {
+    "en": "",
+    "fa": "ورود به حساب کاربری فروشگاه App نستد"
+  },
+  "Or": {
+    "en": "",
+    "fa": ""
+  },
+  "Password": {
+    "en": "",
+    "fa": "کلمه عبور"
+  },
+  "Can\\'t fetch app!": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch app\\'s reviews!": {
     "en": "",
     "fa": ""
   }
