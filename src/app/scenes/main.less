@@ -1103,12 +1103,14 @@ ul.errors {
     display: flex;
     justify-content: center;
     align-items: center;
-    .store-logo {
-      height: 92px;
+    svg {
       margin-right: 16px;
     }
     .nested-logo-name {
       display: flex;
+      opacity: 0;
+      animation: showUp .746s ease alternate forwards;
+      animation-delay: .512s;
       flex-direction: column;
       span {
         color: @color-white;
@@ -1116,6 +1118,9 @@ ul.errors {
         line-height: 20px;
         margin-bottom: 16px;
       }
+    }
+    svg {
+      overflow: visible;
     }
   }
   .login-des {

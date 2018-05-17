@@ -24,8 +24,7 @@ import AdminPermission from './admin/permission';
 import AdminWrapper from './admin/';
 import {IUser} from 'api/interfaces';
 import * as Cookies from 'cookies-js';
-import {Translate} from 'components';
-import {reactTranslateChangeLanguage} from 'components/';
+import {Translate, IcoN, reactTranslateChangeLanguage} from 'components';
 import Const from './../api/consts/CServer';
 import axios from 'axios';
 import {message, Modal} from 'antd';
@@ -300,7 +299,7 @@ class Container extends React.Component<IProps, IState> {
               <a target="_blank" href="http://twitter.com/nestedme"><Translate>Twitter</Translate></a>
               <a target="_blank" href="http://facebook.com/nestedme"><Translate>Facebook</Translate></a>
               <a target="_blank" href="https://www.instagram.com/nestedmail/"><Translate>Instagram</Translate></a>
-              <a target="_blank" href="https://www.linkedin.com/company/nested.me"><Translate>LinkedIn</Translate> </a>
+              <a target="_blank" href="https://www.linkedin.com/company/nested.me"><Translate>LinkedIn</Translate></a>
             </div>
           </div>
         </footer>
@@ -313,7 +312,7 @@ class Container extends React.Component<IProps, IState> {
           maskClosable={true}
         >
           <div className="app-store-logo">
-            <img src="/public/assets/icons/App_StoreNegative.svg" height="92" alt="Nested" className="store-logo"/>
+            <IcoN name="appStoreLogo7792" size={7792}/>
             <div className="nested-logo-name">
               <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" width="136" alt="Nested"
                   className="logo-type"/>
