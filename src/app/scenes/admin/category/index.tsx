@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, IcoN, Affixer} from 'components';
+import {Translate, IcoN, Affixer, ProperLanguage} from 'components';
 import {Modal, message, Popconfirm} from 'antd';
 import {SortableContainer, SortableElement, arrayMove, SortableHandle} from 'react-sortable-hoc';
 import {ICategory} from 'api/interfaces';
@@ -223,7 +223,7 @@ class AdminCategory extends React.Component<IProps, IState> {
         <div className="dragger">
           <DragHandle/>
         </div>
-        <span>{value.name}</span>
+        <ProperLanguage model={value} property="name"/>
         <a className="edit-button" onClick={() => {
           onEdit(value._id);
         }}>
@@ -259,7 +259,7 @@ class AdminCategory extends React.Component<IProps, IState> {
         </Affixer>
         <a className="add" onClick={this.toggleAddCategoryModal}>
           <IcoN name="cross24" size={24}/>
-          <span>Add a category</span>
+          <Translate>Add a category</Translate>
         </a>
         <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} distance={2} lockAxis="Y"/>
         <Modal

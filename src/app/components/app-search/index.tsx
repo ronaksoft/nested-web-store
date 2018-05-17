@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Select from 'react-select';
 import {ISelectOption} from 'api/interfaces';
-import {IcoN, Translate} from 'components';
+import {IcoN, Translate, ProperLanguage} from 'components';
 import Highlighter from 'react-highlight-words';
 import {app as AppFactory} from 'api';
 
@@ -44,7 +44,7 @@ export default class AppSearch extends React.Component<any, IState> {
           suggestions: data.apps.map((app) => {
             return {
               value: app._id,
-              label: app.name,
+              label: <ProperLanguage model={app} property="name"/>,
             };
           }),
         });

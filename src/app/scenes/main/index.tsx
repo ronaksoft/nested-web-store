@@ -8,7 +8,7 @@ interface IState {
 }
 import {Link} from 'react-router';
 
-import {Translate, AppList} from 'components';
+import {Translate, AppList, ProperLanguage} from 'components';
 import {category as CategoryFactory, app as AppFactory} from '../../api';
 import {message} from 'antd';
 import {IApplication, ICategory} from '../../api/interfaces';
@@ -150,7 +150,9 @@ class Main extends React.Component<any, IState> {
                   this.state.categories.map((category, index) => {
                     return (
                       <li key={'category-' + index}>
-                        <Link to={'/apps/' + category.slug}>{category.name}</Link>
+                        <Link to={'/apps/' + category.slug}>
+                          <ProperLanguage model={category} property="name"/>
+                        </Link>
                       </li>
                     );
                   })

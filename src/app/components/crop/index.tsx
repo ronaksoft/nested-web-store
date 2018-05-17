@@ -30,6 +30,7 @@ export default class NstCrop extends React.Component<IProps, IStates > {
         y: 20,
         minWidth: 300,
         minHeight : 100,
+        aspect: 16 / 9,
         keepSelection: true,
       },
       visible: false,
@@ -81,6 +82,7 @@ export default class NstCrop extends React.Component<IProps, IStates > {
       crop: ReactCrop.makeAspectCrop({
         x: 0,
         y: 0,
+        aspect: 16 / 9,
       }, image.naturalWidth / image.naturalHeight),
     });
   }

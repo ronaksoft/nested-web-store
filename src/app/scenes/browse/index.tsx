@@ -9,7 +9,7 @@ interface IState {
 import {message} from 'antd';
 import {category as CategoryFactory, app as AppFactory} from '../../api';
 import {Link} from 'react-router';
-import {Translate, AppList} from 'components';
+import {Translate, AppList, ProperLanguage} from 'components';
 import {IApplication, ICategory} from '../../api/interfaces';
 class Browse extends React.Component<any, IState> {
   private translator: Translate;
@@ -92,7 +92,7 @@ class Browse extends React.Component<any, IState> {
               this.state.categories.map((category, index) => {
                 return (
                   <li key={'category-' + index}>
-                    <Link to={'/apps/' + category.slug}>{category.name}</Link>
+                    <Link to={'/apps/' + category.slug}><ProperLanguage model={category} property="name"/></Link>
                   </li>
                 );
               })

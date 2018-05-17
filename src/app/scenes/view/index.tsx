@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, Rating, Tab, RateResult} from 'components';
+import {Translate, Rating, Tab, RateResult, ProperLanguage} from 'components';
 import {IApplication, IReview} from 'api/interfaces';
 import Const from 'api/consts/CServer';
 import {message} from 'antd';
@@ -153,9 +153,7 @@ class AppView extends React.Component<IProps, IState> {
    */
   public render() {
     const tabs = {};
-    tabs[this.translator._getText('App info')] = (
-      <div dangerouslySetInnerHTML={{__html: this.state.app.desc}}/>
-    );
+    tabs[this.translator._getText('App info')] = <ProperLanguage model={this.state.app} property="desc" html={true}/>;
     tabs[this.translator._getText('Pictures')] = (
       <div className="pictures">
         {
@@ -176,8 +174,8 @@ class AppView extends React.Component<IProps, IState> {
                 <img src={Const.SERVER_URL + permission.icon} alt={permission.name}/>
               </div>
               <div className="per-info">
-                <h4>{permission.name}</h4>
-                <p>{permission.desc}</p>
+                <h4><ProperLanguage model={permission} property="name"/></h4>
+                <p><ProperLanguage model={permission} property="desc"/></p>
               </div>
             </li>
           ))}
@@ -226,7 +224,9 @@ class AppView extends React.Component<IProps, IState> {
                 <h4><Translate>Categories</Translate>:</h4>
                 {this.state.app.categories.map((category, index) => {
                   return (
-                    <a key={'category-' + index} href={category.slug}>{category.name}</a>
+                    <a key={'category-' + index} href={category.slug}>
+                      <ProperLanguage model={category} property="name"/>
+                    </a>
                   );
                 })}
               </div>
@@ -239,7 +239,7 @@ class AppView extends React.Component<IProps, IState> {
               </div>
             </div>
             <div className="product-info">
-              <h1>{this.state.app.name}</h1>
+              <h1><ProperLanguage model={this.state.app} property="name"/></h1>
               <RateResult rate={4.2}/>
               <Tab items={tabs}/>
             </div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, IcoN, Affixer} from 'components';
+import {Translate, IcoN, Affixer, ProperLanguage} from 'components';
 import {Link} from 'react-router';
 import {message, Popconfirm} from 'antd';
 import {IApplication} from 'api/interfaces';
@@ -142,7 +142,7 @@ class AdminApp extends React.Component<IProps, IState> {
               </div>
               <div className="app-info">
                 <h4>
-                  {app.name}
+                  <ProperLanguage model={app} property="name" />
                   {app.status === Status.PUBLISHED &&
                   <span className="app-badge published"><Translate>PUBLISHED</Translate></span>}
                   {app.status === Status.DECLINED &&

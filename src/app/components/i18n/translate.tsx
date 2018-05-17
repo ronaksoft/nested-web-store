@@ -9,6 +9,7 @@ export default class Translate extends React.Component <any, IState> {
   private translations: any;
   private defaultLanguage: string;
   private debugMode: boolean;
+  private mounted: boolean = false;
 
   public constructor(props = {}) {
     super(props);
@@ -32,6 +33,11 @@ export default class Translate extends React.Component <any, IState> {
 
   public componentDidMount() {
     window.addEventListener('reactTranslateChangeLanguage', this._changeLanguage.bind(this));
+    this.mounted = true;
+  }
+
+  public componentWillUnmount() {
+    this.mounted = false;
   }
 
   public render() {
@@ -50,8 +56,12 @@ export default class Translate extends React.Component <any, IState> {
     return text;
   }
 
+  public getCurrentLang = (): string => this.state.language;
+
   public _changeLanguage(event) {
-    this.setState({language: event.detail});
+    if (this.mounted) {
+      this.setState({language: event.detail});
+    }
   }
 
   public _getDebugModeStyles(text) {

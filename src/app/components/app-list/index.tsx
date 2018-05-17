@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate} from 'components';
+import {Translate, ProperLanguage} from 'components';
 import {Link} from 'react-router';
 import {IApplication, ICategory} from '../../api/interfaces';
 import Const from '../../api/consts/CServer';
@@ -37,9 +37,9 @@ export default class AppList extends React.Component<IProps, IState> {
     const isMini = this.props.mode === 'mini';
     const enable = this.state.items.length > 0;
     const getCategoriesName = (categories: ICategory[]) => {
-      return categories.slice(0, 2).map((item) => {
-        return item.name;
-      }).join(', ');
+      return categories.slice(0, 2).map((item, index) => {
+        return <ProperLanguage key={index} model={item} property="name"/>;
+      });
     };
     // Finally, render it!
     return (
@@ -63,8 +63,8 @@ export default class AppList extends React.Component<IProps, IState> {
                     )}
                   </div>
                   <div className="app-data">
-                    <h4>{item.name}</h4>
-                    <aside>{getCategoriesName(item.categories)}</aside>
+                    <h4><ProperLanguage model={item} property="name"/></h4>
+                    <aside>{getCategoriesName(item.categories).map((el) => el)}</aside>
                   </div>
                 </Link>
               ))}

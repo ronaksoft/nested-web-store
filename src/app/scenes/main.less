@@ -370,7 +370,7 @@ select {
     padding: 16px;
     flex-direction: column;
     h4 {
-      line-height: 22px;
+      line-height: 21px;
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 4px;
@@ -382,6 +382,15 @@ select {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      span {
+        &:after {
+          content: ', ';
+          display: inline;
+        }
+        &:last-of-type:after {
+          display: none;
+        }
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, IcoN, Tab, Affixer, Loading} from 'components';
+import {Translate, IcoN, Tab, Affixer, Loading, ProperLanguage} from 'components';
 import {message, Modal, Popconfirm, Upload} from 'antd';
 import {IPermission} from 'api/interfaces';
 import * as _ from 'lodash';
@@ -272,7 +272,7 @@ class AdminPermission extends React.Component<IProps, IState> {
           </Affixer>
           <a className="add" onClick={this.toggleAddModal}>
             <IcoN name="cross24" size={24}/>
-            <span>Add a permission control</span>
+            <Translate>Add a permission control</Translate>
           </a>
           <ul className="permissions-list admin-list">
             {this.state.permissions.map((permission) => (
@@ -281,13 +281,13 @@ class AdminPermission extends React.Component<IProps, IState> {
                   <IcoN name="filter16" size={16}/>
                 </div>
                 <div className="per-info">
-                  <h4>{permission.name}</h4>
-                  <p>{permission.desc}</p>
+                  <h4><ProperLanguage model={permission} property="name"/></h4>
+                  <p><ProperLanguage model={permission} property="desc"/></p>
                 </div>
                 <div className="edit-button" onClick={this.onEdit.bind(this, permission._id)}>
                   <IcoN name="pencil24" size={24}/>
                 </div>
-                <Popconfirm title="Are you sure about removing this Permission?"
+                <Popconfirm title={this.translator._getText('Are you sure about removing this Permission?')}
                             onConfirm={this.onRemove.bind(this, permission._id)}
                             okText="Yes" cancelText="No">
                   <div className="remove-button">
