@@ -274,29 +274,33 @@ class Container extends React.Component<IProps, IState> {
             </div>
             <div>
               <h6><Translate>NESTED</Translate></h6>
-              <a href=""><Translate>Features</Translate></a>
-              <a href=""><Translate>Get Nested app</Translate></a>
+              <a target="_blank" href="https://nested.me/features/"><Translate>Features</Translate></a>
+              <a target="_blank" href="https://play.google.com/store/apps/details?id=me.nested.android.mail">
+                <Translate>Get Nested app</Translate>
+              </a>
             </div>
             <div>
               <h6><Translate>COMPANY</Translate></h6>
-              <a href=""><Translate>About us</Translate></a>
-              <a href=""><Translate>Press</Translate></a>
-              <a href=""><Translate>Work with us</Translate></a>
+              <a target="_blank" href="https://nested.me/about-us/"><Translate>About us</Translate></a>
+              <a target="_blank" href="https://nested.me/press/"><Translate>Press</Translate></a>
+              <a target="_blank" href="https://nested.me/jobs/"><Translate>Work with us</Translate></a>
             </div>
             <div>
               <h6><Translate>SUPPORT</Translate></h6>
-              <a href=""><Translate>Help center</Translate></a>
-              <a href=""><Translate>Contact us</Translate></a>
-              <a href=""><Translate>Terms &amp; Conditions</Translate></a>
-              <Link to={'/admin/app/create'}>admin</Link>
+              <a target="_blank" href="http://help.nested.me/"><Translate>Help center</Translate></a>
+              <a target="_blank" href="https://nested.me/feedback/"><Translate>Contact us</Translate></a>
+              <a target="_blank" href="https://help.nested.me/terms/index.html">
+                <Translate>Terms &amp; Conditions</Translate>
+              </a>
+              {/* <Link to={'/admin/app/create'}>admin</Link> */}
             </div>
             <div>
               {/* <h6><Translate>SOCIAL NETWORKS</Translate></h6> */}
-              <a href=""><Translate>Blog</Translate></a>
-              <a href=""><Translate>Twitter</Translate></a>
-              <a href=""><Translate>Facebook</Translate></a>
-              <a href=""><Translate>Instagram</Translate></a>
-              <a href=""><Translate>LinkedIn</Translate> </a>
+              <a target="_blank" href="https://nested.me/blog/"><Translate>Blog</Translate></a>
+              <a target="_blank" href="http://twitter.com/nestedme"><Translate>Twitter</Translate></a>
+              <a target="_blank" href="http://facebook.com/nestedme"><Translate>Facebook</Translate></a>
+              <a target="_blank" href="https://www.instagram.com/nestedmail/"><Translate>Instagram</Translate></a>
+              <a target="_blank" href="https://www.linkedin.com/company/nested.me"><Translate>LinkedIn</Translate> </a>
             </div>
           </div>
         </footer>
