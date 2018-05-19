@@ -27,7 +27,7 @@ import * as Cookies from 'cookies-js';
 import {Translate, IcoN, reactTranslateChangeLanguage} from 'components';
 import Const from './../api/consts/CServer';
 import axios from 'axios';
-import {message, Modal} from 'antd';
+import {message, Modal, Popover} from 'antd';
 
 interface IState {
   isLogin: boolean;
@@ -194,6 +194,13 @@ class Container extends React.Component<IProps, IState> {
     });
   }
 
+  private signOut = () => {
+    this.props.setLogout();
+    this.setState({
+      user: null,
+    });
+  }
+
   /**
    * renders the component if the credentials are valid
    * @returns {ReactElement} markup
@@ -226,7 +233,18 @@ class Container extends React.Component<IProps, IState> {
                   {this.state.user === null &&
                   <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
                   {this.state.user !== null &&
-                  <div className="user-avatar"><img src={this.state.user.picture} title={this.state.user.name}/></div>}
+                  <div className="user-avatar">
+                    <Popover placement="bottom" trigger="click" content={(
+                      <div className="profile-popover">
+                        <div style={{display: 'inline-flex'}}><b>{this.state.user.name}</b></div>
+                        <button className="butn butn-red" onClick={this.signOut}>
+                          <Translate>Sign out</Translate>
+                        </button>
+                      </div>
+                    )} overlayClassName="popover-no-padding">
+                      <img src={this.state.user.picture} title={this.state.user.name}/>
+                    </Popover>
+                  </div>}
                 </div>
             )}
             {isAdminPage && (
