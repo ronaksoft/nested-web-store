@@ -1,20 +1,27 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {Translate, IcoN} from 'components';
 import {message, Tooltip} from 'antd';
 import {review as ReviewFactory} from '../../api';
-import {IReview} from '../../api/interfaces';
+import {IReview, IUser} from '../../api/interfaces';
 
+interface IOwnProps {
+  appId: string;
+  submitted: (IReview) => void;
+}
 interface IProps {
   appId: string;
-  submitted?: (IReview) => void;
+  submitted: (IReview) => void;
+  user: IUser;
 }
 
 interface IState {
   rate: number;
+  user: IUser;
   comment: string;
 }
 
-export default class Rating extends React.Component<IProps, IState> {
+class Rating extends React.Component<IProps, IState> {
   private translator: Translate;
   private reviewFactory: ReviewFactory;
 
@@ -22,6 +29,7 @@ export default class Rating extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       rate: 0,
+      user: this.props.user,
       comment: '',
     };
     this.translator = new Translate();
@@ -32,6 +40,13 @@ export default class Rating extends React.Component<IProps, IState> {
   private handleOptionChange = (rate: number) => {
     this.setState({
       rate,
+    });
+  }
+
+  public componentWillReceiveProps(props) {
+    console.log(props.user);
+    this.setState({
+      user: props.user,
     });
   }
 
@@ -131,3 +146,16 @@ export default class Rating extends React.Component<IProps, IState> {
     );
   }
 }
+
+/**
+ * redux store mapper
+ * @param {any} redux store
+ * @returns store item object
+ */
+const mapStateToProps = (store, IOwnProps: IOwnProps) => ({
+  user: store.app.user,
+  appId: IOwnProps.appId,
+  submitted: IOwnProps.submitted,
+});
+
+export default connect(mapStateToProps, {})(Rating);
