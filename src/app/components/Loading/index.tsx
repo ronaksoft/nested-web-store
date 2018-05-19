@@ -9,7 +9,7 @@
  */
 import * as React from 'react';
 
-// const style = require('./loading.css');
+import './loading.css';
 
 interface IProps {
   active: boolean;

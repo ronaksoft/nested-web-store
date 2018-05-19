@@ -3,7 +3,7 @@ import AppSearch from 'components/app-search';
 import {message} from 'antd';
 import {category as CategoryFactory, app as AppFactory} from '../../api';
 import {Link} from 'react-router';
-import {Translate, AppList, ProperLanguage, IcoN} from 'components';
+import {Translate, AppList, ProperLanguage, IcoN, Loading} from 'components';
 import {IApplication, ICategory} from '../../api/interfaces';
 
 const ReactPaginate = require('react-paginate');
@@ -13,6 +13,7 @@ interface IState {
   categories: ICategory[];
   category: ICategory;
   pageCount: number;
+  loading: boolean;
 }
 interface IProps {
   location: any;
@@ -41,6 +42,7 @@ class Browse extends React.Component<IProps, IState> {
         categories: initData.__INITIAL_DATA__.categories || [],
         category: null,
         pageCount: 1,
+        loading: true,
       };
       initData.__INITIAL_DATA__ = {};
     } else {
@@ -49,6 +51,7 @@ class Browse extends React.Component<IProps, IState> {
         categories: [],
         category: null,
         pageCount: 1,
+        loading: true,
       };
     }
     this.translator = new Translate();
@@ -94,6 +97,7 @@ class Browse extends React.Component<IProps, IState> {
       if (category) {
         this.setState({
           category,
+          loading: true,
         }, () => { this.getApps(); }); // to avoid bad paramater
       }
     }
@@ -102,15 +106,18 @@ class Browse extends React.Component<IProps, IState> {
   private getApps = (categorySlug?: string) => {
     const category = categorySlug || (this.state.category && this.state.category.slug);
     if (category) {
-      this.appFactory.getByCategory(category).then((data) => {
+      this.appFactory.getByCategory(category, this.pagination.skip, this.pagination.limit).then(
+        (data) => {
         if (data === null) {
           this.setState({
             apps: [],
+            loading: false,
           });
           return;
         }
         this.setState({
           apps: data,
+          loading: false,
         });
       }).catch(() => {
         message.error(this.translator._getText('Can\'t fetch this category apps!'));
@@ -168,6 +175,12 @@ class Browse extends React.Component<IProps, IState> {
                     subContainerClassName="pages pagination"
                     activeClassName="active"/>}
               </div>
+            )}
+            {this.state.apps.length === 0 && (
+              <h4>
+                {!this.state.loading && <Translate>No Apps found</Translate>}
+                {this.state.loading && <Loading position="absolute" active={true}/>}
+              </h4>
             )}
           </div>
         </div>
