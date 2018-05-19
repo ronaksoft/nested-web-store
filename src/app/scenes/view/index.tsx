@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Translate, Rating, Tab, RateResult, ProperLanguage} from 'components';
 import {IApplication, IReview} from 'api/interfaces';
+import {Link} from 'react-router';
 import Const from 'api/consts/CServer';
 import {message} from 'antd';
 import {app as AppFactory, review as ReviewFactory} from 'api';
@@ -224,9 +225,9 @@ class AppView extends React.Component<IProps, IState> {
                 <h4><Translate>Categories</Translate>:</h4>
                 {this.state.app.categories.map((category, index) => {
                   return (
-                    <a key={'category-' + index} href={category.slug}>
+                    <Link key={'category-' + index} to={'/apps/' + category.slug}>
                       <ProperLanguage model={category} property="name"/>
-                    </a>
+                    </Link>
                   );
                 })}
               </div>
