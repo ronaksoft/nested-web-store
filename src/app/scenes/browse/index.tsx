@@ -9,10 +9,7 @@ import {IApplication, ICategory} from '../../api/interfaces';
 const ReactPaginate = require('react-paginate');
 
 interface IState {
-  slides: IApplication[];
   apps: IApplication[];
-  recentApps: IApplication[];
-  featuredApps: IApplication[];
   categories: ICategory[];
   category: ICategory;
   pageCount: number;
@@ -40,10 +37,7 @@ class Browse extends React.Component<IProps, IState> {
     }
     if (initData) {
       this.state = {
-        slides: initData.__INITIAL_DATA__.slides || [],
         apps: initData.__INITIAL_DATA__.recent_apps || [],
-        recentApps: initData.__INITIAL_DATA__.recent_apps || [],
-        featuredApps: initData.__INITIAL_DATA__.featured_apps || [],
         categories: initData.__INITIAL_DATA__.categories || [],
         category: null,
         pageCount: 1,
@@ -51,10 +45,7 @@ class Browse extends React.Component<IProps, IState> {
       initData.__INITIAL_DATA__ = {};
     } else {
       this.state = {
-        slides: [],
         apps: [],
-        recentApps: [],
-        featuredApps: [],
         categories: [],
         category: null,
         pageCount: 1,
@@ -86,18 +77,6 @@ class Browse extends React.Component<IProps, IState> {
         this.getApps(initCat);
       }
     }
-    if (this.state.recentApps.length === 0) {
-      this.appFactory.getAll('recent').then((data) => {
-        if (data === null) {
-          return;
-        }
-        this.setState({
-          recentApps: data,
-        });
-      }).catch(() => {
-        message.error(this.translator._getText('Can\'t fetch recent apps!'));
-      });
-    }
   }
 
   private getCatFromPath(path): string {
@@ -125,6 +104,9 @@ class Browse extends React.Component<IProps, IState> {
     if (category) {
       this.appFactory.getByCategory(category).then((data) => {
         if (data === null) {
+          this.setState({
+            apps: [],
+          });
           return;
         }
         this.setState({
@@ -187,8 +169,6 @@ class Browse extends React.Component<IProps, IState> {
                     activeClassName="active"/>}
               </div>
             )}
-            <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={this.state.featuredApps}/>
-            <AppList title={<Translate>Most Recent Apps</Translate>} haveMore={true} items={this.state.recentApps}/>
           </div>
         </div>
       </div>
