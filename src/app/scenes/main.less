@@ -137,7 +137,7 @@ textarea {
   border: none;
   outline: none;
   padding: 4px 8px;
-  font-family: 'OpenSans';
+  font-family: 'YekanBakh', 'OpenSans';
   color: #323D47;
   &:focus {
     box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.25);
@@ -206,7 +206,7 @@ textarea::-webkit-input-placeholder {
   max-width: 1440px;
   align-items: center;
   padding: 0 32px;
-  font-family: 'openSans';openSans
+  font-family: 'YekanBakh', 'OpenSans';
   img {
     height: 32px;
   }
@@ -788,13 +788,13 @@ footer {
     color: @color-white;
   }
   .logo {
-    height: 32px;
+    height: 48px;
   }
   .logo-type {
-    height: 32px;
+    width: 100%;
   }
   .languages {
-    margin-top: 16px;
+    margin-top: 24px;
     display: flex;
     img {
       width: 24px;
@@ -807,6 +807,21 @@ footer {
       width: 1px;
       height: 24px;
       background-color: white;
+    }
+  }
+  .nested {
+    width: 110px;
+    height: 48px;
+    display: flex;
+    .app-info-logo {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    span {
+      text-align: center;
+      font-size: 15px;
+      transform: translateY(-4px);
     }
   }
 }
@@ -921,7 +936,7 @@ footer {
         }
         p {
           line-height: 21px;
-          font-family: 'openSans';
+          font-family: 'YekanBakh', 'OpenSans';
           font-size: 12px;
         }
         .rate-result {
@@ -1394,7 +1409,7 @@ ul.errors {
       padding-top: 16px;
       border-bottom: none;
       border-top: 1px solid rgba(50, 61, 71, 0.06);
-      font-family: 'openSans';
+      font-family: 'YekanBakh', 'OpenSans';
       &:first-of-type {
         margin: 0;
       }
@@ -1771,7 +1786,7 @@ ul.errors {
   }
 }
 .openSans {
-  font-family: 'OpenSans';
+  font-family: 'YekanBakh', 'OpenSans';
 }
 @import "../containers/404/style";
 @import "../styles/antd.min.css";

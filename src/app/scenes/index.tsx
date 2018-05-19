@@ -218,7 +218,7 @@ class Container extends React.Component<IProps, IState> {
             {!isAdminPage && (
                 <div className="navbar">
                   <Link to="/">
-                    <img src="/public/assets/icons/Nested_LogoNegative.svg" height="32" alt="Nested" className="logo"/>
+                    <img src="/public/assets/icons/App_StoreNegative_32.svg" height="32" alt="Nested" className="logo"/>
                     <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" height="32" alt="Nested"
                         className="logo-type"/>
                     <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
@@ -250,10 +250,10 @@ class Container extends React.Component<IProps, IState> {
             {isAdminPage && (
               <div className="navbar">
                 <Link to="/">
-                  <img src="/public/assets/icons/Nested_Logo.svg" height={32} alt="Nested" className="logo"/>
-                  <img src="/public/assets/icons/Nested_EnglishType.svg" height={32} alt="Nested"
+                  <img src="/public/assets/icons/App_Store_32.svg" height={32} alt="Nested" className="logo"/>
+                  <img src="/public/assets/icons/Nested_EnglishTypeSolidAppStore.svg" height={32} alt="Nested"
                     className="logo-type"/>
-                  <img src="/public/assets/icons/Nested_PersianType.svg" height={32} alt="Nested"
+                  <img src="/public/assets/icons/Nested_PersianTypeSolidAppStore.svg" height={32} alt="Nested"
                     className="logo-type fa"/>
                 </Link>
                 <div className="devider"/>
@@ -276,13 +276,15 @@ class Container extends React.Component<IProps, IState> {
           <div className="footer-inner">
             <div className="_aic">
               <div className="nested">
-                <img src="/public/assets/icons/Nested_LogoNegative.svg" alt="Nested" className="logo"/>
-                <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
-                     className="logo-type"/>
-                <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" alt="Nested"
-                     className="logo-type fa"/>
+                <img src="/public/assets/icons/App_StoreNegative.svg" alt="Nested" className="logo"/>
+                <div className="app-info-logo">
+                  <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
+                      className="logo-type"/>
+                  <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" alt="Nested"
+                      className="logo-type fa"/>
+                  <Translate>App Store</Translate>
+                </div>
               </div>
-              <Translate>App Store</Translate>
               <div className="languages">
                 <img onClick={reactTranslateChangeLanguage.bind(this, 'en')} alt="EN" className="lng-en"
                      src="/public/assets/images/en-logo.png" srcSet="/public/assets/images/en-logo@2x.png"/>
