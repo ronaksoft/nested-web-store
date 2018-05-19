@@ -214,7 +214,7 @@ class Container extends React.Component<IProps, IState> {
     return (
       <div>
         <div className="navbar-wrapper">
-          <div className="navbar-container">
+          <div className={isAdminPage ? 'navbar-container admin' : 'navbar-container'}>
             {!isAdminPage && (
                 <div className="navbar">
                   <Link to="/">
@@ -248,7 +248,7 @@ class Container extends React.Component<IProps, IState> {
                 </div>
             )}
             {isAdminPage && (
-              <div className="navbar admin">
+              <div className="navbar">
                 <Link to="/">
                   <img src="/public/assets/icons/Nested_Logo.svg" height={32} alt="Nested" className="logo"/>
                   <img src="/public/assets/icons/Nested_EnglishType.svg" height={32} alt="Nested"

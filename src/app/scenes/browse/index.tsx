@@ -3,8 +3,10 @@ import AppSearch from 'components/app-search';
 import {message} from 'antd';
 import {category as CategoryFactory, app as AppFactory} from '../../api';
 import {Link} from 'react-router';
-import {Translate, AppList, ProperLanguage} from 'components';
+import {Translate, AppList, ProperLanguage, IcoN} from 'components';
 import {IApplication, ICategory} from '../../api/interfaces';
+
+const ReactPaginate = require('react-paginate');
 
 interface IState {
   slides: IApplication[];
@@ -13,6 +15,7 @@ interface IState {
   featuredApps: IApplication[];
   categories: ICategory[];
   category: ICategory;
+  pageCount: number;
 }
 interface IProps {
   location: any;
@@ -22,6 +25,7 @@ class Browse extends React.Component<IProps, IState> {
   private translator: Translate;
   private categoryFactory: CategoryFactory;
   private appFactory: AppFactory;
+  private pagination: any;
   /**
    * @constructor
    * Creates an instance of Sidebar.
@@ -42,6 +46,7 @@ class Browse extends React.Component<IProps, IState> {
         featuredApps: initData.__INITIAL_DATA__.featured_apps || [],
         categories: initData.__INITIAL_DATA__.categories || [],
         category: null,
+        pageCount: 1,
       };
       initData.__INITIAL_DATA__ = {};
     } else {
@@ -52,11 +57,16 @@ class Browse extends React.Component<IProps, IState> {
         featuredApps: [],
         categories: [],
         category: null,
+        pageCount: 1,
       };
     }
     this.translator = new Translate();
     this.categoryFactory = new CategoryFactory();
     this.appFactory = new AppFactory();
+    this.pagination = {
+      skip: 0,
+      limit: 10,
+    };
   }
 
   public componentDidMount() {
@@ -126,6 +136,11 @@ class Browse extends React.Component<IProps, IState> {
     }
   }
 
+  private handlePageClick = (data: any) => {
+    this.pagination.skip = this.pagination.limit * data.selected;
+    this.getApps();
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -153,9 +168,24 @@ class Browse extends React.Component<IProps, IState> {
           </div>
           <div className="content-wrapper">
             <AppSearch/>
-            {this.state.category && (
-              <AppList title={<ProperLanguage model={this.state.category} property="name"/>}
-                haveMore={false} items={this.state.apps}/>
+            {this.state.category && this.state.apps.length > 0 && (
+              <div>
+                <AppList title={<ProperLanguage model={this.state.category} property="name"/>}
+                  haveMore={false} items={this.state.apps} noScrollbar={true}/>
+                {this.state.pageCount > 1 &&
+                  <ReactPaginate
+                    nextLabel={<IcoN name="arrow24" size={24}/>}
+                    previousLabel={<IcoN name="arrow24" size={24}/>}
+                    breakLabel={<a href="">...</a>}
+                    breakClassName="reak-me"
+                    pageCount={this.state.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                    activeClassName="active"/>}
+              </div>
             )}
             <AppList title={<Translate>Featured Apps</Translate>} haveMore={true} items={this.state.featuredApps}/>
             <AppList title={<Translate>Most Recent Apps</Translate>} haveMore={true} items={this.state.recentApps}/>

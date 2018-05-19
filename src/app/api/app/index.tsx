@@ -22,8 +22,8 @@ class AppFactory {
     return callApi('/admin/app/available', {query: appId});
   }
 
-  public getByCategory(category: string): Promise<IApplication[]> {
-    return callApi('/app/category/' + category, {}).then((response) => {
+  public getByCategory(category: string, skip = 0, limit = 20): Promise<IApplication[]> {
+    return callApi('/app/category/' + category, {skip, limit}).then((response) => {
       return response.apps;
     });
   }

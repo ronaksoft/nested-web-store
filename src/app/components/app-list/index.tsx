@@ -9,6 +9,7 @@ interface IProps {
   mode?: string;
   title: any;
   haveMore: boolean;
+  noScrollbar?: boolean;
 }
 
 interface IState {
@@ -51,7 +52,7 @@ export default class AppList extends React.Component<IProps, IState> {
               <div className="filler"/>
               {this.props.haveMore && <a href=""><Translate>See more</Translate></a>}
             </div>
-            <div className="list-body">
+            <div className={(this.props.noScrollbar ? 'no-scrollbar ' : '') + 'list-body'}>
               {this.state.items.map((item, index) => (
                 <Link to={'/app/' + item.app_id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
                   <div className="app-image">

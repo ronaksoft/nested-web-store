@@ -182,6 +182,20 @@ textarea::-webkit-input-placeholder {
   display: flex;
   width: 100%;
   justify-content: center;
+  &.admin {
+    background: @color-white;
+    .navbar {
+      a {
+        color: #508EE6;
+      }
+      button {
+        margin: 0 8px;
+      }
+      .devider {
+        background-color: rgba(50, 61, 71, 0.16);
+      }
+    }
+  }
 }
 
 .navbar {
@@ -221,18 +235,6 @@ textarea::-webkit-input-placeholder {
     border-radius: 16px;
     width: 32px;
     height: 32px;
-  }
-  &.admin {
-    background: @color-white;
-    a {
-      color: #508EE6;
-    }
-    button {
-      margin: 0 8px;
-    }
-    .devider {
-      background-color: rgba(50, 61, 71, 0.16);
-    }
   }
 }
 
@@ -1148,6 +1150,9 @@ ul.errors {
   }
   .list-body {
     display: flex;
+    &.no-scrollbar {
+      flex-wrap: wrap;
+    }
   }
 }
 
