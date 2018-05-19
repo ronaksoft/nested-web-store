@@ -94,6 +94,7 @@ interface IUser {
   name: string;
   email: string;
   nested: string;
+  avatar?: IFile;
   apps: IApp[];
   admin: boolean;
   developer: boolean;

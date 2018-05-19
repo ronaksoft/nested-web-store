@@ -4,6 +4,7 @@ import {Translate, IcoN} from 'components';
 import {message, Tooltip} from 'antd';
 import {review as ReviewFactory} from '../../api';
 import {IReview, IUser} from '../../api/interfaces';
+import Const from 'api/consts/CServer';
 
 interface IOwnProps {
   appId: string;
@@ -44,7 +45,6 @@ class Rating extends React.Component<IProps, IState> {
   }
 
   public componentWillReceiveProps(props) {
-    console.log(props.user);
     this.setState({
       user: props.user,
     });
@@ -80,20 +80,20 @@ class Rating extends React.Component<IProps, IState> {
                  onChange={this.handleOptionChange.bind(this, 5)}/>
           <label htmlFor="rating-5" data-value="5">
             <Tooltip title={this.translator._getText('Loved it')} placement="bottom">
-                        <span className="rating-star">
-                            <IcoN name="starWire32" size={32}/>
-                            <IcoN name="star32" size={32}/>
-                        </span>
+              <span className="rating-star">
+                <IcoN name="starWire32" size={32}/>
+                <IcoN name="star32" size={32}/>
+              </span>
             </Tooltip>
           </label>
           <input id="rating-4" name="rating" type="radio" value="4"
                  onChange={this.handleOptionChange.bind(this, 4)}/>
           <label htmlFor="rating-4" data-value="4">
             <Tooltip title={this.translator._getText('Awesome')} placement="bottom">
-                        <span className="rating-star">
-                            <IcoN name="starWire32" size={32}/>
-                            <IcoN name="star32" size={32}/>
-                        </span>
+              <span className="rating-star">
+                  <IcoN name="starWire32" size={32}/>
+                  <IcoN name="star32" size={32}/>
+              </span>
             </Tooltip>
           </label>
           <input id="rating-3" name="rating" type="radio" value="3"
@@ -127,10 +127,12 @@ class Rating extends React.Component<IProps, IState> {
             </Tooltip>
           </label>
         </div>
-        {this.state.rate > 0 && (
+        {this.state.rate > 0 && this.state.user && (
           <div className="comment-box">
             <div className="user-logo">
               <img src="/public/assets/icons/absents_place.svg" width={32} height={32} alt=""/>
+              <img src={Const.SERVER_URL + this.state.user.avatar.path}
+                alt={this.state.user._id}/>
             </div>
             <div className="text-box">
                         <textarea placeholder={this.translator._getText('Write as') + ' ' + 'Ali M' + '...'}
@@ -140,6 +142,13 @@ class Rating extends React.Component<IProps, IState> {
                 <Translate>Submit</Translate>
               </button>
             </div>
+          </div>
+        )}
+        {this.state.rate > 0 && !this.state.user && (
+          <div className="comment-box">
+            <h4 className="login-error">
+              <Translate>Please login to continue submitting your comment</Translate>
+            </h4>
           </div>
         )}
       </div>
