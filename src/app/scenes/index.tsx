@@ -206,51 +206,53 @@ class Container extends React.Component<IProps, IState> {
     const {isAdminPage} = this.state;
     return (
       <div>
-        <nav className="navbar-wrapper">
-          {!isAdminPage && (
-              <div className="navbar">
+        <div className="navbar-wrapper">
+          <div className="navbar-container">
+            {!isAdminPage && (
+                <div className="navbar">
+                  <Link to="/">
+                    <img src="/public/assets/icons/Nested_LogoNegative.svg" height="32" alt="Nested" className="logo"/>
+                    <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" height="32" alt="Nested"
+                        className="logo-type"/>
+                    <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
+                        className="logo-type fa"/>
+                  </Link>
+                  <div className="devider"/>
+                  <Link to="/admin/app">
+                    <Translate>App Store</Translate>
+                  </Link>
+                  <div className="filler"/>
+                  <Link to="/apps"><Translate>Browse</Translate></Link>
+                  {this.state.user === null &&
+                  <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
+                  {this.state.user !== null &&
+                  <div className="user-avatar"><img src={this.state.user.picture} title={this.state.user.name}/></div>}
+                </div>
+            )}
+            {isAdminPage && (
+              <div className="navbar admin">
                 <Link to="/">
-                  <img src="/public/assets/icons/Nested_LogoNegative.svg" height="32" alt="Nested" className="logo"/>
-                  <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" height="32" alt="Nested"
-                      className="logo-type"/>
-                  <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
-                      className="logo-type fa"/>
+                  <img src="/public/assets/icons/Nested_Logo.svg" height={32} alt="Nested" className="logo"/>
+                  <img src="/public/assets/icons/Nested_EnglishType.svg" height={32} alt="Nested"
+                    className="logo-type"/>
+                  <img src="/public/assets/icons/Nested_PersianType.svg" height={32} alt="Nested"
+                    className="logo-type fa"/>
                 </Link>
                 <div className="devider"/>
-                <Link to="/admin/app">
-                  <Translate>App Store</Translate>
+                <Link to="/admin/app/create">
+                  <Translate>Add an App</Translate>
                 </Link>
                 <div className="filler"/>
-                <Link to="/apps"><Translate>Browse</Translate></Link>
                 {this.state.user === null &&
-                <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
+                  <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>
+                }
                 {this.state.user !== null &&
-                <div className="user-avatar"><img src={this.state.user.picture} title={this.state.user.name}/></div>}
+                  <div className="user-avatar"><img src={this.state.user.picture} title={this.state.user.name}/></div>
+                }
               </div>
-          )}
-          {isAdminPage && (
-            <div className="navbar admin">
-              <Link to="/">
-                <img src="/public/assets/icons/Nested_Logo.svg" height={32} alt="Nested" className="logo"/>
-                <img src="/public/assets/icons/Nested_EnglishType.svg" height={32} alt="Nested"
-                  className="logo-type"/>
-                <img src="/public/assets/icons/Nested_PersianType.svg" height={32} alt="Nested"
-                  className="logo-type fa"/>
-              </Link>
-              <div className="devider"/>
-              <Link to="/admin/app/create">
-                <Translate>Add an App</Translate>
-              </Link>
-              <div className="filler"/>
-              {this.state.user === null &&
-                <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>
-              }
-              {this.state.user !== null &&
-                <div className="user-avatar"><img src={this.state.user.picture} title={this.state.user.name}/></div>
-              }
-            </div>
-          )}
-        </nav>
+            )}
+          </div>
+        </div>
         {this.props.children}
         <footer>
           <div className="footer-inner">
