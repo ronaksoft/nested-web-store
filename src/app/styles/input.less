@@ -19,8 +19,8 @@
     margin: 0;
     width: 100%;
   }
-
 }
+
 input[type="text"],
 input[type="url"],
 input[type="number"],
@@ -55,7 +55,7 @@ input[type="password"] {
       border: 1px solid @color-solid;
       box-shadow: inset 0px 0px 1px @color-solid;
     }
-    & + p {
+    &+p {
       color: @color-solid;
       background-color: fade(@color-solid, 10%);
     }
@@ -73,25 +73,29 @@ input[type="password"] {
       border: 1px solid @color-solid;
       box-shadow: inset 0px 0px 1px @color-solid;
     }
-    & + p {
+    &+p {
       color: @color-solid;
       background-color: fade(@color-solid, 10%);
     }
   }
 }
-input, select {
+
+input,
+select {
   outline: none;
 }
 
 input::-webkit-input-placeholder {
-    color: @color-gale-new;
-    font-size: 16px;
+  color: @color-gale-new;
+  font-size: 16px;
 }
+
 input:-moz-placeholder {
-    color: @color-gale-new;
-    font-size: 16px;
+  color: @color-gale-new;
+  font-size: 16px;
 }
+
 input::-moz-placeholder {
-    color: @color-gale-new;
-    font-size: 16px;
+  color: @color-gale-new;
+  font-size: 16px;
 }

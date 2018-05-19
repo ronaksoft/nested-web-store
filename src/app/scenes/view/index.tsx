@@ -3,7 +3,7 @@ import {Translate, Rating, Tab, RateResult, ProperLanguage} from 'components';
 import {IApplication, IReview} from 'api/interfaces';
 import {Link} from 'react-router';
 import Const from 'api/consts/CServer';
-import {message} from 'antd';
+import {message, Modal} from 'antd';
 import {app as AppFactory, review as ReviewFactory} from 'api';
 
 interface IProps {
@@ -34,6 +34,7 @@ interface IProps {
 
 interface IState {
   appId: string;
+  authorizeModal: boolean;
   app: IApplication;
   reviews: IReview[];
 }
@@ -81,6 +82,7 @@ class AppView extends React.Component<IProps, IState> {
         app: initData.__INITIAL_DATA__.app || this.props.model || emptyModel,
         appId: this.props.routeParams ? this.props.routeParams.appid : '',
         reviews: [],
+        authorizeModal: false,
       };
       initData.__INITIAL_DATA__ = {};
     } else {
@@ -88,6 +90,7 @@ class AppView extends React.Component<IProps, IState> {
         app: this.props.model || emptyModel,
         appId: this.props.routeParams ? this.props.routeParams.appid : '',
         reviews: [],
+        authorizeModal: false,
       };
     }
     this.translator = new Translate();
@@ -144,6 +147,12 @@ class AppView extends React.Component<IProps, IState> {
   private reviewHandler = (review: IReview) => {
     this.setState({
       reviews: [review, ...this.state.reviews],
+    });
+  }
+
+  private toggleAuthorizeModal = () => {
+    this.setState({
+      authorizeModal: !this.state.authorizeModal,
     });
   }
 
@@ -223,7 +232,9 @@ class AppView extends React.Component<IProps, IState> {
               {!this.state.app.logo && (
                 <img src="/public/assets/icons/Nested_Logo.svg" alt={this.state.app.app_id}/>
               )}
-              <button className="butn butn-primary full-width"><Translate>Install App</Translate></button>
+              <button className="butn butn-primary full-width" onClick={this.toggleAuthorizeModal}>
+                <Translate>Install App</Translate>
+              </button>
               <a href="" className="report-butn"><Translate>Report this app</Translate></a>
               <div className="product-her-block categories">
                 <h4><Translate>Categories</Translate>:</h4>
@@ -256,6 +267,46 @@ class AppView extends React.Component<IProps, IState> {
             }]} mode="mini"/>
           )}*/}
         </div>
+        <Modal
+          wrapClassName="vertical-center-modal"
+          className="authorize-modal"
+          width="360px"
+          visible={this.state.authorizeModal}
+          onCancel={this.toggleAuthorizeModal}
+          maskClosable={true}
+        >
+          {this.state.app.logo && (
+            <div className="app-snippet">
+              <img src={Const.SERVER_URL + this.state.app.logo.path} alt={this.state.app.app_id}/>
+              <div className="_df _fw">
+                <b><ProperLanguage model={this.state.app} property="name"/></b>
+                <span>{this.state.app.app_id}</span>
+              </div>
+            </div>
+          )}
+          <h3><Translate>Wants to access:</Translate></h3>
+          <ul className="permissions-list">
+            {this.state.app.permissions.map((permission) => (
+              <li key={permission._id}>
+                <div className="per-info">
+                  <div className="_df">
+                    <img src={Const.SERVER_URL + permission.icon} alt={permission.name}/>
+                    <h4><ProperLanguage model={permission} property="name"/></h4>
+                  </div>
+                  <p><ProperLanguage model={permission} property="desc"/></p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="modal-buttons">
+            <button className="butn butn-primary full-width">
+              <Translate>Authorise</Translate>
+            </button>
+            <button className="butn full-width" onClick={this.toggleAuthorizeModal}>
+              <Translate>Cancel</Translate>
+            </button>
+          </div>
+        </Modal>
       </div>
     );
   }

@@ -1346,6 +1346,10 @@ ul.errors {
       width: 100%;
       background: @color-white;
       border-radius: 4px;
+      border: none;
+      &:hover, &:focus {
+        border: none;
+      }
     }
     button {
       margin: 8px 0 0;
@@ -1361,6 +1365,47 @@ ul.errors {
   }
   .ant-modal-content {
     background: #F7F7F7;
+  }
+}
+
+.authorize-modal {
+  h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .permissions-list {
+    margin-bottom: 32px;
+    li {
+      padding: 0;
+      border-left: 1px solid @color-wind-new;
+      border-bottom: none;
+      .per-info {
+        border: none;
+      }
+    }
+  }
+  .modal-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .butn-primary {
+    margin-bottom: 16px;
+  }
+  button {
+    margin: 0;
+  }
+  .ant-modal-body {
+    padding: 40px 16px 16px;
+  }
+  .ant-modal-footer {
+    display: none;
+  }
+  .ant-modal-content {
+    background: #F7F7F7;
+  }
+  .ant-modal-close-x {
+    transform: translateY(-10px);
   }
 }
 
@@ -1787,6 +1832,32 @@ ul.errors {
 }
 .openSans {
   font-family: 'YekanBakh', 'OpenSans';
+}
+.app-snippet {
+  border: 1px solid rgba(50, 61, 71, 0.32);
+  border-radius: 8px;
+  display: flex;
+  background: @color-white;
+  overflow: hidden; 
+  height: 64px;
+  margin-bottom: 16px;
+  img {
+    width: 48px;
+    height: 48px;
+    margin: 8px;
+  }
+  div {
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 8px;
+    > span {
+      font-size: 14px;
+      color: @color-solid-64;
+    }
+  }
+  b {
+    font-size: 16px;
+  }
 }
 @import "../containers/404/style";
 @import "../styles/antd.min.css";
