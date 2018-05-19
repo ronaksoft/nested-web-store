@@ -122,6 +122,10 @@ class Browse extends React.Component<IProps, IState> {
           loading: false,
         });
       }).catch(() => {
+        this.setState({
+          apps: [],
+          loading: false,
+        });
         message.error(this.translator._getText('Can\'t fetch this category apps!'));
       });
     }

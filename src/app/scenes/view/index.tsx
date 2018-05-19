@@ -156,7 +156,9 @@ class AppView extends React.Component<IProps, IState> {
    */
   public render() {
     const tabs = {};
-    tabs[this.translator._getText('App info')] = <ProperLanguage model={this.state.app} property="desc" html={true}/>;
+    tabs[this.translator._getText('App info')] = (
+      <div className="openSans"><ProperLanguage model={this.state.app} property="desc" html={true}/></div>
+    );
     tabs[this.translator._getText('Pictures')] = (
       <div className="pictures">
         {
@@ -178,7 +180,7 @@ class AppView extends React.Component<IProps, IState> {
               </div>
               <div className="per-info">
                 <h4><ProperLanguage model={permission} property="name"/></h4>
-                <p><ProperLanguage model={permission} property="desc"/></p>
+                <p className="openSans"><ProperLanguage model={permission} property="desc"/></p>
               </div>
             </li>
           ))}

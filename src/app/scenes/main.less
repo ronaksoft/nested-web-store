@@ -137,6 +137,7 @@ textarea {
   border: none;
   outline: none;
   padding: 4px 8px;
+  font-family: 'OpenSans';
   color: #323D47;
   &:focus {
     box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.25);
@@ -205,6 +206,7 @@ textarea::-webkit-input-placeholder {
   max-width: 1440px;
   align-items: center;
   padding: 0 32px;
+  font-family: 'openSans';openSans
   img {
     height: 32px;
   }
@@ -393,11 +395,13 @@ select {
       color: #508EE6;
       text-align: center;
       margin-top: 65px;
+      font-weight: 900;
     }
     p {
       margin-top: 12px;
       font-size: 24px;
       color: @color-solid;
+      font-weight: 300;
       text-align: center;
     }
     .featureds {
@@ -917,6 +921,7 @@ footer {
         }
         p {
           line-height: 21px;
+          font-family: 'openSans';
           font-size: 12px;
         }
         .rate-result {
@@ -1312,15 +1317,12 @@ ul.errors {
         height: 1px;
         background: rgba(50, 61, 71, 0.32);
       }
-      &:before {
-        margin-right: 8px;
-      }
-      &:after {
-        margin-left: 8px;
-      }
       span {
         width: 36px;
+        font-size: 14px;
+        font-style: italic;
         text-align: center;
+        color: @color-solid;
       }
     }
   }
@@ -1392,6 +1394,7 @@ ul.errors {
       padding-top: 16px;
       border-bottom: none;
       border-top: 1px solid rgba(50, 61, 71, 0.06);
+      font-family: 'openSans';
       &:first-of-type {
         margin: 0;
       }
@@ -1766,6 +1769,9 @@ ul.errors {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+.openSans {
+  font-family: 'OpenSans';
 }
 @import "../containers/404/style";
 @import "../styles/antd.min.css";

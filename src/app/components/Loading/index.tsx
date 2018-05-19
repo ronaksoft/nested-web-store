@@ -9,8 +9,6 @@
  */
 import * as React from 'react';
 
-import './loading.css';
-
 interface IProps {
   active: boolean;
   size?: string;
