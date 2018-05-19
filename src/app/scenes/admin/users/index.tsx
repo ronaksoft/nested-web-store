@@ -93,7 +93,7 @@ class AdminUsers extends React.Component<IProps, IState> {
       }
       this.setState({
         users: data.users,
-        pageCount: data.count,
+        pageCount: Math.floor(data.count / this.pagination.limit) + 1,
       });
     }).catch(() => {
       message.error(this.translator._getText('Can\'t fetch users!'));

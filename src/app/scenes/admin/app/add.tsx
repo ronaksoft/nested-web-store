@@ -408,7 +408,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
           model.screenshots = defFiles;
         }
         model.categories = this.state.selectedCategories.map((category) => {
-          return {_id: category.value};
+          return {
+            _id: category.value,
+            slug: _.find(this.categories, {_id: category.value}).slug,
+          };
         });
         model.permissions = this.state.selectedPermissions.map((permission) => {
           return {_id: permission.value};

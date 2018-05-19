@@ -105,16 +105,18 @@ class AppView extends React.Component<IProps, IState> {
 
   public componentDidMount() {
     if (!this.props.preview) {
-      this.appFactory.get(this.state.appId).then((data) => {
-        if (data === null) {
-          return;
-        }
-        this.setState({
-          app: data,
+      if (this.state.app._id.length !== 24) {
+        this.appFactory.get(this.state.appId).then((data) => {
+          if (data === null) {
+            return;
+          }
+          this.setState({
+            app: data,
+          });
+        }).catch(() => {
+          message.error(this.translator._getText('Can\'t fetch app!'));
         });
-      }).catch(() => {
-        message.error(this.translator._getText('Can\'t fetch app!'));
-      });
+      }
       this.reviewFactory.getAll(this.state.appId).then((data) => {
         if (data.reviews === null) {
           return;
