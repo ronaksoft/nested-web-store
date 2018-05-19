@@ -110,20 +110,20 @@ class Rating extends React.Component<IProps, IState> {
                  onChange={this.handleOptionChange.bind(this, 2)}/>
           <label htmlFor="rating-2" data-value="2">
             <Tooltip title={this.translator._getText('Disliked it')} placement="bottom">
-                        <span className="rating-star">
-                            <IcoN name="starWire32" size={32}/>
-                            <IcoN name="star32" size={32}/>
-                        </span>
+              <span className="rating-star">
+                  <IcoN name="starWire32" size={32}/>
+                  <IcoN name="star32" size={32}/>
+              </span>
             </Tooltip>
           </label>
           <input id="rating-1" name="rating" type="radio" value="1"
                  onChange={this.handleOptionChange.bind(this, 1)}/>
           <label htmlFor="rating-1" data-value="1">
             <Tooltip title={this.translator._getText('Hated it')} placement="bottom">
-                        <span className="rating-star">
-                            <IcoN name="starWire32" size={32}/>
-                            <IcoN name="star32" size={32}/>
-                        </span>
+              <span className="rating-star">
+                  <IcoN name="starWire32" size={32}/>
+                  <IcoN name="star32" size={32}/>
+              </span>
             </Tooltip>
           </label>
         </div>

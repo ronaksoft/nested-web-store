@@ -350,6 +350,7 @@ select {
       }
       &:last-child {
         opacity: 0;
+        transform-origin: top right;
         animation: topLeft .5s ease alternate forwards;
       }
     }
@@ -364,8 +365,10 @@ select {
       &:first-child {
         left: -89px;
         opacity: 0;
+        transform-origin: top left;
         animation: topRight .5s ease alternate forwards;
         animation-delay: 0.1s;
+        animation-timing-function: bounce;
       }
       &:last-child {
         opacity: 0;
