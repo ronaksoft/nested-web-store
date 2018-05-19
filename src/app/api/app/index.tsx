@@ -23,7 +23,7 @@ class AppFactory {
   }
 
   public getByCategory(category: string): Promise<IApplication[]> {
-    return callApi('/app/' + category, {}).then((response) => {
+    return callApi('/app/category/' + category, {}).then((response) => {
       return response.apps;
     });
   }
