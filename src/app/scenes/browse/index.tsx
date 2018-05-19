@@ -69,16 +69,18 @@ class Browse extends React.Component<IProps, IState> {
         if (data === null) {
           return;
         }
+        const initCat = this.getCatFromPath(this.props.location.pathname);
+        if (initCat) {
+          this.getApps(initCat);
+        }
+        const category = data.find((cat) => cat.slug === initCat);
         this.setState({
           categories: data,
+          category,
         });
       }).catch(() => {
         message.error(this.translator._getText('Can\'t fetch categories!'));
       });
-      const initCat = this.getCatFromPath(this.props.location.pathname);
-      if (initCat) {
-        this.getApps(initCat);
-      }
     }
   }
 
