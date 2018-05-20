@@ -7,6 +7,8 @@ import {
   file as FileFactory,
   permission as PermissionFactory,
 } from 'api';
+import Const from '../../../api/consts/CServer';
+
 // import {Row, Col, Input, Upload} from 'antd';
 
 interface IProps {
@@ -48,6 +50,8 @@ class AdminPermission extends React.Component<IProps, IState> {
     this.emptyModel = {
       _id: '',
       code: null,
+      icon: '',
+      file_id: '',
       name: '',
       desc: '',
       translations: [{
@@ -75,6 +79,7 @@ class AdminPermission extends React.Component<IProps, IState> {
       if (data === null) {
         return;
       }
+      console.log(data);
       this.setState({
         permissions: data,
       });
@@ -218,7 +223,8 @@ class AdminPermission extends React.Component<IProps, IState> {
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       const permission = this.state.model;
-      permission.icon = info.file.response.data.files[0];
+      permission.icon = info.file.response.data.files[0].path;
+      permission.file_id = info.file.response.data.files[0]._id;
       this.getBase64(info.file.originFileObj, (imageUrl) => this.setState({
         imageUrl,
         loading: false,
@@ -226,6 +232,7 @@ class AdminPermission extends React.Component<IProps, IState> {
       }));
     }
   }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -278,7 +285,10 @@ class AdminPermission extends React.Component<IProps, IState> {
             {this.state.permissions.map((permission) => (
               <li key={permission._id}>
                 <div className="per-icon">
-                  <IcoN name="filter16" size={16}/>
+                  {!permission.icon &&
+                  <IcoN name="filter16" size={16}/>}
+                  {permission.icon && permission.icon.length !== 0 &&
+                  <img src={Const.SERVER_URL + permission.icon} alt={permission.name}/>}
                 </div>
                 <div className="per-info">
                   <h4><ProperLanguage model={permission} property="name"/></h4>
@@ -330,7 +340,8 @@ class AdminPermission extends React.Component<IProps, IState> {
                 onChange={this.logoChangeHandler}
                 customRequest={this.customRequest}
               >
-                {imageUrl ? <img src={imageUrl} alt=""/> : uploadButton}
+                {imageUrl ? <img src={imageUrl} alt=""/> : this.state.model.icon ?
+                  <img src={Const.SERVER_URL + this.state.model.icon} alt=""/> : uploadButton}
               </Upload>
               <form onSubmit={this.submitCreatePermissionForm}>
                 <Tab items={tabs}/>

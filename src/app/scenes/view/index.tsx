@@ -134,6 +134,7 @@ class AppView extends React.Component<IProps, IState> {
     }
     window.addEventListener('reactTranslateChangeLanguage', this.updateLang);
   }
+
   public componentWillUnmount() {
     window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
   }
@@ -206,7 +207,13 @@ class AppView extends React.Component<IProps, IState> {
               return (
                 <li key={'review-' + index}>
                   <div className="rev-logo">
-                    <img src="" alt=""/>
+                    {!review.user.picture &&
+                    <img src={'/public/assets/icons/absents_place.svg'} alt=""/>}
+                    {review.user.picture &&
+                    <img
+                      src={review.user.picture.indexOf('http') > -1 ? review.user.picture :
+                        Const.SERVER_URL + review.user.picture}
+                      alt=""/>}
                   </div>
                   <div className="rev-info">
                     <div className="_df">

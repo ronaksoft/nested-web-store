@@ -72,7 +72,8 @@ interface IPermission {
   code?: number;
   name?: string;
   desc?: string;
-  icon?: IFile;
+  file_id?: string;
+  icon?: string;
   translations?: IPermissionTrans[];
 }
 
@@ -94,6 +95,8 @@ interface IUser {
   name: string;
   email: string;
   nested: string;
+  nested_domain?: string;
+  nested_username?: string;
   avatar?: IFile;
   apps: IApp[];
   admin: boolean;
@@ -126,6 +129,7 @@ interface IReview {
   response_at?: number;
   app_id?: string;
   status?: number;
+  user?: IUser;
   created_by?: string;
   created_by_name?: string;
   created_at?: number;

@@ -2,11 +2,12 @@ import * as React from 'react';
 import {Translate, IcoN, Affixer, Loading} from 'components';
 import {Modal, message, Popconfirm, Popover, Upload} from 'antd';
 import {IUser} from 'api/interfaces';
-import {Link} from 'react-router';
 import * as _ from 'lodash';
 import {
   user as UserFactory,
-  file as FileFactory} from '../../../api';
+  file as FileFactory,
+} from 'api';
+import Const from 'api/consts/CServer';
 
 const ReactPaginate = require('react-paginate');
 
@@ -32,6 +33,7 @@ interface IState {
   model: IUser;
   userLogoUrl: string;
   pageCount: number;
+  userRole: string;
 }
 
 class AdminUsers extends React.Component<IProps, IState> {
@@ -57,6 +59,8 @@ class AdminUsers extends React.Component<IProps, IState> {
       name: '',
       email: '',
       nested: '',
+      nested_domain: '',
+      nested_username: '',
       apps: [],
       admin: false,
       developer: true,
@@ -70,6 +74,7 @@ class AdminUsers extends React.Component<IProps, IState> {
       users: [],
       pageCount: 1,
       model: _.cloneDeep(this.emptyModel),
+      userRole: 'normal',
     };
     this.state = state;
     this.userFactory = new UserFactory();
@@ -150,8 +155,15 @@ class AdminUsers extends React.Component<IProps, IState> {
     e.preventDefault();
     e.stopPropagation();
     const users: IUser[] = this.state.users;
+    const model = this.state.model;
+    if (this.state.userRole === 'admin') {
+      model.admin = true;
+    } else if (this.state.userRole === 'developer') {
+      model.developer = true;
+    }
+    model.nested = model.nested_username + '@' + model.nested_domain;
     if (this.state.model._id === '') {
-      this.userFactory.create(this.state.model).then((data) => {
+      this.userFactory.create(model).then((data) => {
         users.push(data);
         this.setState({
           users,
@@ -163,7 +175,7 @@ class AdminUsers extends React.Component<IProps, IState> {
         message.error(this.translator._getText('Can\'t create category!'));
       });
     } else {
-      this.userFactory.edit(this.state.model).then((data) => {
+      this.userFactory.edit(model).then((data) => {
         const index = _.findIndex(users, {
           _id: data._id,
         });
@@ -183,20 +195,51 @@ class AdminUsers extends React.Component<IProps, IState> {
   }
 
   private beforeUploadLogo = (file: any) => {
-    const isSVG = file.type === 'image/svg+xml';
-    if (!isSVG) {
-      message.error('You can only upload SVG file!');
-    }
     const isLt1M = file.size / 1024 / 1024 < 1;
     if (!isLt1M) {
       message.error('Image must smaller than 1MB!');
     }
-    return isSVG && isLt1M;
+    return isLt1M;
+  }
+
+  private onEdit = (id) => {
+    const index = _.findIndex(this.state.users, {
+      _id: id,
+    });
+    if (index === -1) {
+      return;
+    }
+    const model = this.state.users[index];
+    const nested = model.nested.split('@');
+    model.nested_domain = nested[1];
+    model.nested_username = nested[0];
+    let userRole = 'normal';
+    if (model.admin) {
+      userRole = 'admin';
+    } else if (model.developer) {
+      userRole = 'developer';
+    }
+    this.setState({
+      model,
+      userRole,
+      addUserModal: true,
+    });
   }
 
   private validateForm(model: IUser) {
-    console.log(model);
-    return false;
+    if (model.name.length === 0) {
+      return false;
+    }
+    if (model.nested_domain.length === 0) {
+      return false;
+    }
+    if (model.nested_username.length === 0) {
+      return false;
+    }
+    if (model.username.length === 0) {
+      return false;
+    }
+    return true;
   }
 
   private bindInputToModel(selector: any, e: any) {
@@ -220,8 +263,10 @@ class AdminUsers extends React.Component<IProps, IState> {
     this.loadUsers();
   }
 
-  private handleRoleChange = (event) => {
-    console.log(event);
+  private handleRoleChange = (e) => {
+    this.setState({
+      userRole: e.target.value,
+    });
   }
 
   private getBase64 = (img: any, callback: any) => {
@@ -237,12 +282,16 @@ class AdminUsers extends React.Component<IProps, IState> {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
+      const model = this.state.model;
+      model.picture = info.file.response.data.files[0].path;
       this.getBase64(info.file.originFileObj, (userLogoUrl) => this.setState({
         userLogoUrl,
         loading: false,
+        model,
       }));
     }
   }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -300,15 +349,19 @@ class AdminUsers extends React.Component<IProps, IState> {
             return (
               <li key={'user-' + index}>
                 <div className="user-logo">
-                  <img src={'/public/assets/icons/absents_place.svg'} alt=""/>
+                  {!user.picture &&
+                  <img src={'/public/assets/icons/absents_place.svg'} alt=""/>}
+                  {user.picture &&
+                  <img src={user.picture.indexOf('http') > -1 ? user.picture : Const.SERVER_URL + user.picture}
+                       alt=""/>}
                 </div>
                 <div className="user-info">
                   <b>{user.name}</b>
                   <span>{user.nested}</span>
                 </div>
-                <Link className="edit-button" to={'/admin/user/edit/' + 'robzizo'}>
+                <div className="edit-button" onClick={this.onEdit.bind(this, user._id)}>
                   <IcoN name="pencil24" size={24}/>
-                </Link>
+                </div>
                 <Popconfirm title={this.translator._getText('Are you sure about removing this user?')}
                             onConfirm={this.onRemove.bind(this, 'robzizo')}
                             okText={this.translator._getText('Yes')} cancelText={this.translator._getText('No')}>
@@ -319,7 +372,7 @@ class AdminUsers extends React.Component<IProps, IState> {
               </li>
             );
           })}
-          </ul>
+        </ul>
         {this.state.pageCount > 1 &&
         <ReactPaginate
           nextLabel={<IcoN name="arrow24" size={24}/>}
@@ -348,7 +401,7 @@ class AdminUsers extends React.Component<IProps, IState> {
               {this.state.model._id === '' &&
               <Translate>Add</Translate>}
               {this.state.model._id !== '' &&
-              <Translate>Edit</Translate>}
+              <Translate>Apply</Translate>}
             </button>,
           ]}
         >
@@ -357,9 +410,9 @@ class AdminUsers extends React.Component<IProps, IState> {
               <div>
                 <legend><Translate>Basic info</Translate></legend>
                 <input type="text" placeholder={this.translator._getText('Name')}
-                      onChange={this.bindInputToModel.bind(this, 'name')} value={this.state.model.name}/>
+                       onChange={this.bindInputToModel.bind(this, 'name')} value={this.state.model.name}/>
                 <input type="text" placeholder={this.translator._getText('Username')}
-                      onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.model.username}/>
+                       onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.model.username}/>
               </div>
               <div className="user-logo">
                 <Upload
@@ -376,17 +429,19 @@ class AdminUsers extends React.Component<IProps, IState> {
               </div>
             </div>
             <input type="text" placeholder={this.translator._getText('Email address')}
-              onChange={this.bindInputToModel.bind(this, 'email')} value={this.state.model.email}/>
-            <select value={'developer'} onChange={this.handleRoleChange}>
-              <option value="normal">noraml</option>
+                   onChange={this.bindInputToModel.bind(this, 'email')} value={this.state.model.email}/>
+            <select value={this.state.userRole} onChange={this.handleRoleChange}>
+              <option value="normal">Normal</option>
               <option value="developer">Developer</option>
               <option value="admin">Admin</option>
             </select>
             <legend><Translate>Nested Account Info</Translate></legend>
             <input type="text" placeholder={this.translator._getText('Nested domain')}
-                   onChange={this.bindInputToModel.bind(this, 'nested')} value={this.state.model.nested}/>
+                   onChange={this.bindInputToModel.bind(this, 'nested_domain')}
+                   value={this.state.model.nested_domain}/>
             <input type="text" placeholder={this.translator._getText('Nested username')}
-                   onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.model.username}/>
+                   onChange={this.bindInputToModel.bind(this, 'nested_username')}
+                   value={this.state.model.nested_username}/>
             <button className="hidden-submit" type="submit" disabled={!validateForm}/>
           </form>
         </Modal>
