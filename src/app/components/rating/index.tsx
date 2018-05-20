@@ -130,9 +130,11 @@ class Rating extends React.Component<IProps, IState> {
         {this.state.rate > 0 && this.state.user && (
           <div className="comment-box">
             <div className="user-logo">
-              <img src="/public/assets/icons/absents_place.svg" width={32} height={32} alt=""/>
-              <img src={Const.SERVER_URL + this.state.user.avatar.path}
-                alt={this.state.user._id}/>
+              {!this.state.user.picture &&
+                <img src="/public/assets/icons/absents_place.svg" width={32} height={32} alt=""/>
+              }
+              {this.state.user && <img src={this.state.user.picture}
+                alt={this.state.user._id}/>}
             </div>
             <div className="text-box">
                         <textarea placeholder={this.translator._getText('Write as') + ' ' + 'Ali M' + '...'}

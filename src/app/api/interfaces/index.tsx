@@ -99,6 +99,7 @@ interface IUser {
   admin: boolean;
   developer: boolean;
   created_at: number;
+  picture?: string;
 }
 
 interface IApp {
