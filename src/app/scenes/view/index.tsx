@@ -300,7 +300,7 @@ class AppView extends React.Component<IProps, IState> {
           </ul>
           <div className="modal-buttons">
             <button className="butn butn-primary full-width">
-              <Translate>Authorise</Translate>
+              <Translate>Authorize</Translate>
             </button>
             <button className="butn full-width" onClick={this.toggleAuthorizeModal}>
               <Translate>Cancel</Translate>
