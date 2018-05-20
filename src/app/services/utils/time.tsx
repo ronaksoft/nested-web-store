@@ -71,12 +71,9 @@ class TimeUntiles {
    * @memberof TimeUntiles
    */
   public dynamicTask(timestamp: number, haveTime: boolean) {
-    let date;
-    if (!haveTime) {
-      date = moment(timestamp).startOf('day').add(23, 'hours').add(59, 'minutes');
-    } else {
-      date = moment(timestamp);
-    }
+    const date = haveTime
+      ? moment(timestamp)
+      : moment(timestamp).startOf('day').add(23, 'hours').add(59, 'minutes');
     const current = Date.now();
     let diffDate = date.diff(moment(current));
     let str = ' left';

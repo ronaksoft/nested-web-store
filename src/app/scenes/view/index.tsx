@@ -4,6 +4,7 @@ import {IApplication, IReview} from 'api/interfaces';
 import {Link} from 'react-router';
 import Const from 'api/consts/CServer';
 import {message, Modal} from 'antd';
+import TimeUntiles from 'services/utils/time';
 import {app as AppFactory, review as ReviewFactory} from 'api';
 
 interface IProps {
@@ -208,10 +209,13 @@ class AppView extends React.Component<IProps, IState> {
                     <img src="" alt=""/>
                   </div>
                   <div className="rev-info">
-                    <h4>
-                      {review.created_by_name}
-                      <RateResult rate={review.rate} silver={true}/>
-                    </h4>
+                    <div className="_df">
+                      <h4>
+                        {review.created_by_name}
+                        <RateResult rate={review.rate} silver={true}/>
+                      </h4>
+                      <time className="openSans">{TimeUntiles.dynamic(review.created_at)}</time>
+                    </div>
                     <p>{review.body}</p>
                   </div>
                 </li>

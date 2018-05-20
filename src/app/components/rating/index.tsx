@@ -4,7 +4,7 @@ import {Translate, IcoN} from 'components';
 import {message, Tooltip} from 'antd';
 import {review as ReviewFactory} from '../../api';
 import {IReview, IUser} from '../../api/interfaces';
-import Const from 'api/consts/CServer';
+// import Const from 'api/consts/CServer';
 
 interface IOwnProps {
   appId: string;
