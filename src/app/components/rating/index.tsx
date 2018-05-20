@@ -100,10 +100,10 @@ class Rating extends React.Component<IProps, IState> {
                  onChange={this.handleOptionChange.bind(this, 3)}/>
           <label htmlFor="rating-3" data-value="3">
             <Tooltip title={this.translator._getText('Liked it')} placement="bottom">
-                        <span className="rating-star">
-                            <IcoN name="starWire32" size={32}/>
-                            <IcoN name="star32" size={32}/>
-                        </span>
+              <span className="rating-star">
+                  <IcoN name="starWire32" size={32}/>
+                  <IcoN name="star32" size={32}/>
+              </span>
             </Tooltip>
           </label>
           <input id="rating-2" name="rating" type="radio" value="2"
@@ -111,8 +111,8 @@ class Rating extends React.Component<IProps, IState> {
           <label htmlFor="rating-2" data-value="2">
             <Tooltip title={this.translator._getText('Disliked it')} placement="bottom">
               <span className="rating-star">
-                  <IcoN name="starWire32" size={32}/>
-                  <IcoN name="star32" size={32}/>
+                <IcoN name="starWire32" size={32}/>
+                <IcoN name="star32" size={32}/>
               </span>
             </Tooltip>
           </label>
@@ -121,8 +121,8 @@ class Rating extends React.Component<IProps, IState> {
           <label htmlFor="rating-1" data-value="1">
             <Tooltip title={this.translator._getText('Hated it')} placement="bottom">
               <span className="rating-star">
-                  <IcoN name="starWire32" size={32}/>
-                  <IcoN name="star32" size={32}/>
+                <IcoN name="starWire32" size={32}/>
+                <IcoN name="star32" size={32}/>
               </span>
             </Tooltip>
           </label>
@@ -137,8 +137,8 @@ class Rating extends React.Component<IProps, IState> {
                 alt={this.state.user._id}/>}
             </div>
             <div className="text-box">
-                        <textarea placeholder={this.translator._getText('Write as') + ' ' + 'Ali M' + '...'}
-                                  value={this.state.comment} onChange={this.handleChange}/>
+              <textarea placeholder={this.translator._getText('Write as') + ' ' + this.state.user.name + '...'}
+                        value={this.state.comment} onChange={this.handleChange}/>
               <button className="butn butn-primary" onClick={this.submit}
                       disabled={this.state.comment.length === 0}>
                 <Translate>Submit</Translate>
