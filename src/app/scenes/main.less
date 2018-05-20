@@ -319,7 +319,7 @@ select {
         width: 100%;
         flex: 1;
         display: flex;
-        transition: all @animation-dur;
+        transition: all .2s;
         cursor: pointer;
         &:hover,
         &.active {
@@ -1337,6 +1337,7 @@ ul.errors {
         font-size: 14px;
         font-style: italic;
         text-align: center;
+        letter-spacing: -0.03em;
         color: @color-solid;
       }
     }
@@ -1347,8 +1348,14 @@ ul.errors {
       background: @color-white;
       border-radius: 4px;
       border: none;
-      &:hover, &:focus {
+      transition: all .2s;
+      &:hover {
         border: none;
+        box-shadow: 0px 0px 4px @color-breeze;
+      }
+      &:focus {
+        border: none;
+        box-shadow: 0px 0px 4px @color-wind;
       }
     }
     button {

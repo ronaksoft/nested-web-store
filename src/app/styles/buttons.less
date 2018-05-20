@@ -4,7 +4,7 @@
   border-width: 1px;
   border-style: solid;
   font-size: 14px;
-  color: rgba(50,61,71, .8);
+  color: rgba(50, 61, 71, .8);
   white-space: nowrap;
   font-weight: bold;
   height: 32px;
@@ -18,30 +18,30 @@
   min-width: 80px;
   padding: 0 16px;
   outline: none;
-  margin:0 4px 8px;
+  margin: 0 4px 8px;
   background-color: #fff;
   border-color: transparent;
   &.full-width {
-      min-width: 100%;
+    min-width: 100%;
   }
   &:hover {
-      color: rgba(50,61,71, 1);
-      box-shadow: 0px 4px 8px rgba(35, 38, 41, 0.16);
+    color: rgba(50, 61, 71, 1);
+    box-shadow: 0px 4px 8px rgba(35, 38, 41, 0.16);
   }
-  &:focus{
-      color: rgba(50,61,71, 1);
-      box-shadow: 0px 1px 2px rgba(35, 38, 41, 0.16);
+  &:focus {
+    color: rgba(50, 61, 71, 1);
+    box-shadow: 0px 1px 2px rgba(35, 38, 41, 0.16);
   }
   &:hover:disabled,
   &:focus:disabled,
   &:disabled {
-      cursor: not-allowed;
-      border-color: #DDDFE0;
-      text-decoration: none;
-      box-shadow: none;
-      background-color: #DDDFE0;
-      background: #DDDFE0;
-      color: #ACB0B4;
+    cursor: not-allowed;
+    border-color: #DDDFE0;
+    text-decoration: none;
+    box-shadow: none;
+    background-color: #DDDFE0;
+    background: #DDDFE0;
+    color: #ACB0B4;
   }
 }
 
@@ -50,7 +50,7 @@
   line-height: 38px;
 }
 
-.butn-primary{
+.butn-primary {
   background-color: #14D769;
   border-color: #00B45A;
   color: #fff;
@@ -68,12 +68,12 @@
     box-shadow: 0px 1px 2px rgba(0, 180, 90, 0.32);
   }
   &.secondary {
-    background-color: #fff!important;
+    background-color: #fff !important;
     color: #00B45A;
   }
 }
 
-.butn-blue{
+.butn-blue {
   background-color: #0079F2;
   border-color: #004DA6;
   color: #fff;
@@ -84,13 +84,13 @@
     color: #fff;
   }
   &:focus {
-      box-shadow: 0px 1px 2px rgba(0, 77, 166, 0.32);
+    box-shadow: 0px 1px 2px rgba(0, 77, 166, 0.32);
     background-color: #004DA6;
     border-color: #004DA6;
     color: #fff;
   }
   &.secondary {
-    background-color: #fff!important;
+    background-color: #fff !important;
     color: #004DA6;
     box-shadow: 0px 2px 4px rgba(0, 121, 242, 0.08);
     &:hover {
@@ -102,7 +102,7 @@
   }
 }
 
-.butn-red{
+.butn-red {
   background-color: #FF3344;
   border-color: #E60026;
   box-shadow: 0px 2px 4px rgba(230, 0, 38, 0.32);
@@ -112,14 +112,14 @@
     border-color: #FF3344;
     color: #fff;
   }
-  &:focus{
+  &:focus {
     color: #fff;
     box-shadow: 0px 1px 2px rgba(230, 0, 38, 0.32);
     background-color: #E60026;
     border-color: #E60026;
   }
   &.secondary {
-    background-color: #fff!important;
+    background-color: #fff !important;
     color: #E60026;
     box-shadow: 0px 2px 4px rgba(255, 51, 68, 0.08);
     &:hover {
@@ -131,7 +131,7 @@
   }
 }
 
-.butn-solid{
+.butn-solid {
   background-color: #323D47;
   border-color: #232629;
   box-shadow: 0px 2px 4px rgba(35, 38, 41, 0.32);
@@ -141,14 +141,14 @@
     border-color: #323D47;
     color: #fff;
   }
-  &:focus{
+  &:focus {
     color: #fff;
     box-shadow: 0px 1px 2px rgba(35, 38, 41, 0.32);
     background-color: #232629;
     border-color: #232629;
   }
   &.secondary {
-    background-color: #fff!important;
+    background-color: #fff !important;
     color: #323D47;
     box-shadow: 0px 2px 4px rgba(35, 38, 41, 0.08);
     &:hover {
@@ -160,7 +160,7 @@
   }
 }
 
-.butn-shine{
+.butn-shine {
   background-color: #FFCC33;
   border-color: #E6AC00;
   box-shadow: 0px 2px 4px rgba(230, 172, 0, 0.32);
@@ -170,14 +170,14 @@
     border-color: #FFCC33;
     color: #fff;
   }
-  &:focus{
+  &:focus {
     color: #fff;
     box-shadow: 0px 1px 2px rgba(230, 172, 0, 0.32);
     background-color: #E6AC00;
     border-color: #E6AC00;
   }
   &.secondary {
-    background-color: #fff!important;
+    background-color: #fff !important;
     color: #E6AC00;
     box-shadow: 0px 2px 4px rgba(255, 204, 51, 0.08);
     &:hover {
@@ -189,14 +189,23 @@
   }
 }
 
-.butn-store-login{
+.butn-store-login {
   background: linear-gradient(256.29deg, #228BA3 17.98%, #774FCD 121.55%);
   border-color: transparent;
   box-shadow: none;
+  font-size: 16px;
   color: #fff;
-  &:hover, &:focus {
+  font-family: 'Corporative';
+  &:hover,
+  &:focus {
     box-shadow: transparent;
     border-color: transparent;
     color: #fff;
+    box-shadow: 0px 0px 6px @color-wind;
+  }
+  &:disabled,
+  &:hover:disabled {
+    background: #DDDFE0;
+    color: #FFFFFF;
   }
 }

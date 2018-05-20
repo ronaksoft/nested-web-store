@@ -355,13 +355,13 @@ class Container extends React.Component<IProps, IState> {
               <img src="/public/assets/icons/Nested_Logo.svg" height="24" alt="Nested"/>
               <Translate>Sign in with Nested</Translate>
             </button>
-            <div className="seperator"><a><Translate>Or</Translate></a></div>
+            <div className="seperator"><a><Translate>or</Translate></a></div>
             <form onSubmit={this.submitLoginForm}>
               <input type="text" placeholder={this.translator._getText('Username')}
                      onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.signin.username}/>
               <input type="text" placeholder={this.translator._getText('Password')}
                      onChange={this.bindInputToModel.bind(this, 'password')} value={this.state.signin.password}/>
-              <button className="butn butn-store-login full-width" type="submit" disabled={!validateForm}>
+              <button className="butn butn-store-login full-width" type="submit" disabled={validateForm}>
                 <Translate>Sign in</Translate>
               </button>
             </form>
