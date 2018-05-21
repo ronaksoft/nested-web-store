@@ -236,10 +236,20 @@ class Container extends React.Component<IProps, IState> {
                   <div className="user-avatar">
                     <Popover placement="bottom" trigger="click" content={(
                       <div className="profile-popover">
-                        <div style={{display: 'inline-flex'}}><b>{this.state.user.name}</b></div>
-                        <button className="butn butn-red" onClick={this.signOut}>
+                        <div className="_df">
+                          <div className="user-avatar">
+                            <img src={this.state.user.picture} title={this.state.user.name}/>
+                          </div>
+                          <div>
+                            <b>{this.state.user.name}</b>
+                            <span>{this.state.user.username}</span>
+                          </div>
+                        </div>
+                        <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>
+                        <a className="signout" onClick={this.signOut}>
+                          <IcoN name="exit16" size={16}/>
                           <Translate>Sign out</Translate>
-                        </button>
+                        </a>
                       </div>
                     )} overlayClassName="popover-no-padding">
                       <img src={this.state.user.picture} title={this.state.user.name}/>
