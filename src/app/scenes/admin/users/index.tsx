@@ -33,6 +33,7 @@ interface IState {
   model: IUser;
   userLogoUrl: string;
   pageCount: number;
+  keyword: string;
   userRole: string;
 }
 
@@ -71,6 +72,7 @@ class AdminUsers extends React.Component<IProps, IState> {
       addUserModal: false,
       untouched: true,
       userLogoUrl: '',
+      keyword: '',
       users: [],
       pageCount: 1,
       model: _.cloneDeep(this.emptyModel),
@@ -91,9 +93,17 @@ class AdminUsers extends React.Component<IProps, IState> {
   }
 
   private loadUsers() {
-    this.userFactory.getAll('', 0, this.pagination.skip, this.pagination.limit).then((data) => {
+    this.userFactory.getAll(this.state.keyword, 0, this.pagination.skip, this.pagination.limit).then((data) => {
       if (data.users === null) {
-        message.warning(this.translator._getText('Reached the end!'));
+        this.setState({
+          users: [],
+          pageCount: 1,
+        });
+        if (this.pagination.skip > 0) {
+          message.warning(this.translator._getText('Reached the end!'));
+        } else {
+          message.warning(this.translator._getText('No results'));
+        }
         return;
       }
       this.setState({
@@ -104,6 +114,8 @@ class AdminUsers extends React.Component<IProps, IState> {
       message.error(this.translator._getText('Can\'t fetch users!'));
     });
   }
+
+  private loadUsersDebounced = _.debounce(this.loadUsers, 512);
 
   private toggleAddUserModal = () => {
     if (!this.state.addUserModal) {
@@ -292,6 +304,14 @@ class AdminUsers extends React.Component<IProps, IState> {
     }
   }
 
+  private changeSearch = (event) => {
+    this.setState({keyword: event.target.value});
+    this.pagination = {
+      skip: 0,
+      limit: 10,
+    };
+    this.loadUsersDebounced();
+  }
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -343,10 +363,13 @@ class AdminUsers extends React.Component<IProps, IState> {
             </div>
           </div>
         </Affixer>
-        <a className="add" onClick={this.toggleAddUserModal}>
-          <IcoN name="cross24" size={24}/>
-          <Translate>Add a user manually</Translate>
-        </a>
+        <Affixer offsetTop={136} zIndex={4} height={48}>
+          <div className="search-list">
+            <IcoN name="search24" size={24}/>
+            <input type="text" onChange={this.changeSearch}
+              placeholder={this.translator._getText('Search in apps...')}/>
+          </div>
+        </Affixer>
         <ul className="users-list admin-list">
           {this.state.users.map((user, index) => {
             return (
