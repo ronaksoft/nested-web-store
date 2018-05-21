@@ -234,7 +234,7 @@ class Container extends React.Component<IProps, IState> {
                   <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
                   {this.state.user !== null &&
                   <div className="user-avatar">
-                    <Popover placement="bottom" trigger="click" content={(
+                    <Popover placement="bottomRight" trigger="click" content={(
                       <div className="profile-popover">
                         <div className="_df">
                           <div className="user-avatar">
@@ -272,11 +272,30 @@ class Container extends React.Component<IProps, IState> {
                 </Link>
                 <div className="filler"/>
                 {this.state.user === null &&
-                  <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>
-                }
+                  <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
                 {this.state.user !== null &&
-                  <div className="user-avatar"><img src={this.state.user.picture} title={this.state.user.name}/></div>
-                }
+                <div className="user-avatar">
+                  <Popover placement="bottomRight" trigger="click" content={(
+                    <div className="profile-popover">
+                      <div className="_df">
+                        <div className="user-avatar">
+                          <img src={this.state.user.picture} title={this.state.user.name}/>
+                        </div>
+                        <div>
+                          <b>{this.state.user.name}</b>
+                          <span>{this.state.user.username}</span>
+                        </div>
+                      </div>
+                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>
+                      <a className="signout" onClick={this.signOut}>
+                        <IcoN name="exit16" size={16}/>
+                        <Translate>Sign out</Translate>
+                      </a>
+                    </div>
+                  )} overlayClassName="popover-no-padding">
+                    <img src={this.state.user.picture} title={this.state.user.name}/>
+                  </Popover>
+                </div>}
               </div>
             )}
           </div>
