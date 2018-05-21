@@ -326,6 +326,9 @@ class AdminUsers extends React.Component<IProps, IState> {
         <Affixer offsetTop={72} zIndex={4} height={80}>
           <div className="page-buttons">
             <h2><Translate>Users List</Translate></h2>
+            <button className="butn butn-blue" onClick={this.toggleAddUserModal}>
+              <Translate>Add User</Translate>
+            </button>
             <div className="_df">
               <Popover placement="bottom" trigger="click" content={filterMenu} overlayClassName="popover-no-padding">
                 <div className="filter">

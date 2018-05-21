@@ -252,15 +252,14 @@ class AdminCategory extends React.Component<IProps, IState> {
         <Affixer offsetTop={72} zIndex={4} height={80}>
           <div className="page-buttons">
             <h2><Translate>Category Management</Translate></h2>
+            <button className="butn butn-blue" onClick={this.toggleAddCategoryModal}>
+              <Translate>Add Category</Translate>
+            </button>
             <button className="butn butn-primary" onClick={this.onSave} disabled={this.state.untouched}>
               <Translate>Save</Translate>
             </button>
           </div>
         </Affixer>
-        <a className="add" onClick={this.toggleAddCategoryModal}>
-          <IcoN name="cross24" size={24}/>
-          <Translate>Add a category</Translate>
-        </a>
         <SortableList items={this.state.categories} onSortEnd={this.onSortEnd} distance={2} lockAxis="Y"/>
         <Modal
           title="Add or edit a category"

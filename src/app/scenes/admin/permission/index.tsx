@@ -275,12 +275,11 @@ class AdminPermission extends React.Component<IProps, IState> {
           <Affixer offsetTop={72} zIndex={4} height={80}>
             <div className="page-buttons">
               <h2><Translate>Permission Management</Translate></h2>
+              <button className="butn butn-blue" onClick={this.toggleAddModal}>
+                <Translate>Add Permission</Translate>
+              </button>
             </div>
           </Affixer>
-          <a className="add" onClick={this.toggleAddModal}>
-            <IcoN name="cross24" size={24}/>
-            <Translate>Add a permission control</Translate>
-          </a>
           <ul className="permissions-list admin-list">
             {this.state.permissions.map((permission) => (
               <li key={permission._id}>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Translate, IcoN, Affixer, ProperLanguage} from 'components';
 import {Link} from 'react-router';
-import {message, Popconfirm} from 'antd';
+import {message, Popconfirm, Popover} from 'antd';
 import {IApplication} from 'api/interfaces';
 import * as _ from 'lodash';
 import {app as AppFactory} from '../../../api';
@@ -28,12 +28,14 @@ interface IState {
   loading: boolean;
   apps: IApplication[];
   pageCount: number;
+  keyword: string;
 }
 
 class AdminApp extends React.Component<IProps, IState> {
   private translator: Translate;
   private appFactory: AppFactory;
   private pagination: any;
+  private filterbar: any;
 
   /**
    * @constructor
@@ -47,6 +49,7 @@ class AdminApp extends React.Component<IProps, IState> {
     const state: IState = {
       loading: false,
       apps: [],
+      keyword: '',
       pageCount: 1,
     };
     this.state = state;
@@ -63,10 +66,18 @@ class AdminApp extends React.Component<IProps, IState> {
 
   private loadApps() {
     this.appFactory
-      .searchAll('', 0, this.pagination.skip, this.pagination.limit)
+      .searchAll(this.state.keyword, 0, this.pagination.skip, this.pagination.limit)
       .then((data) => {
         if (data.apps === null) {
-          message.warning(this.translator._getText('Reached the end!'));
+          this.setState({
+            apps: [],
+            pageCount: 1,
+          });
+          if (this.pagination.skip > 0) {
+            message.warning(this.translator._getText('Reached the end!'));
+          } else {
+            message.warning(this.translator._getText('No results'));
+          }
           return;
         }
         this.setState({
@@ -77,6 +88,8 @@ class AdminApp extends React.Component<IProps, IState> {
       message.error(this.translator._getText('Can\'t fetch apps!'));
     });
   }
+
+  private loadAppsDebounced = _.debounce(this.loadApps, 512);
 
   private makeFeature = (id) => {
     this.appFactory.star(id).then((data) => {
@@ -114,6 +127,21 @@ class AdminApp extends React.Component<IProps, IState> {
     this.loadApps();
   }
 
+  private refHandler = (element) => {
+    this.filterbar = element;
+  }
+
+  private getPopupContainer = () => this.filterbar;
+
+  private changeSearch = (event) => {
+    this.setState({keyword: event.target.value});
+    this.pagination = {
+      skip: 0,
+      limit: 10,
+    };
+    this.loadAppsDebounced();
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -122,17 +150,88 @@ class AdminApp extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
+    const sortMenu = (
+      <ul className="sort-menu">
+        <li className="container-icon">
+          <Translate>Sort</Translate>
+        </li>
+        <li className="active"><Translate>Date added</Translate></li>
+        <li><Translate>Starred</Translate></li>
+      </ul>
+    );
+    const filterMenu = (
+      <ul className="filter-menu">
+      <li className="container-icon">
+        <Translate>Filter</Translate>
+      </li>
+        <li>
+          <label htmlFor="checkbox-published" className="app-badge published">
+            <Translate>PUBLISHED</Translate>
+          </label>
+          <div className="filler"/>
+          <input id="checkbox-published" type="checkbox" defaultChecked={true}/>
+        </li>
+        <li>
+          <label htmlFor="checkbox-pending" className="app-badge pending">
+            <Translate>PENDING</Translate>
+          </label>
+          <div className="filler"/>
+          <input id="checkbox-pending" type="checkbox" defaultChecked={true}/>
+        </li>
+        <li>
+          <label htmlFor="checkbox-suspended" className="app-badge suspended">
+            <Translate>SUSPENDED</Translate>
+          </label>
+          <div className="filler"/>
+          <input id="checkbox-suspended" type="checkbox" defaultChecked={true}/>
+        </li>
+        <li>
+          <label htmlFor="checkbox-declined" className="app-badge declined">
+            <Translate>DECLINED</Translate>
+          </label>
+          <div className="filler"/>
+          <input id="checkbox-declined" type="checkbox" defaultChecked={true}/>
+        </li>
+        <li>
+          <label htmlFor="checkbox-badge" className="app-badge unpublished">
+            <Translate>DECLINED</Translate>
+          </label>
+          <div className="filler"/>
+          <input id="checkbox-badge" type="checkbox" defaultChecked={true}/>
+        </li>
+      </ul>
+    );
     return (
       <div className="admin-wrapper admin-app-list-scene">
         <Affixer offsetTop={72} zIndex={4} height={80}>
           <div className="page-buttons">
             <h2><Translate>Applications</Translate></h2>
+            <Link className="butn butn-blue" to="/admin/app/create">
+              <Translate>Start Building</Translate>
+            </Link>
+            <div className="_df" ref={this.refHandler}>
+              <Popover placement="bottomRight" trigger="click" content={filterMenu}
+                overlayClassName="popover-no-padding" getPopupContainer={this.getPopupContainer}>
+                <div className="filter">
+                  <IcoN name="filter24" size={24}/>
+                </div>
+              </Popover>
+              <Popover placement="bottomRight" trigger="click" content={sortMenu} overlayClassName="popover-no-padding"
+                getPopupContainer={this.getPopupContainer}>
+                <div className="sort">
+                  <IcoN name="sort24" size={24}/>
+                </div>
+              </Popover>
+            </div>
           </div>
         </Affixer>
-        <Link className="add" to="/admin/app/create">
-          <IcoN name="cross24" size={24}/>
-          <span>Build an application</span>
-        </Link>
+        <Affixer offsetTop={136} zIndex={4} height={48}>
+          <div className="search-list">
+            <IcoN name="search24" size={24}/>
+            <input type="text" onChange={this.changeSearch}
+              placeholder={this.translator._getText('Search in apps...')}/>
+          </div>
+        </Affixer>
 
         <ul className="app-vertical-list admin-list">
           {this.state.apps.map((app) => (

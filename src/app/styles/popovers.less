@@ -1,21 +1,42 @@
 .popover-no-padding .ant-popover-inner-content {
-    padding: 0;
+  padding: 0;
+}
+.popover-no-padding {
+  top: 8px!important;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+  padding: 0;
+  border-radius: 6px;
+  .ant-popover-arrow {
+    display: none;
+  }
 }
 
-.sort-menu ,
+.sort-menu,
 .filter-menu {
-    width: 174px;
-    list-style: none;
-    padding: 4px 0;
-    li {
-        height: 32px;
-        padding: 0 8px;
-        display: flex;
-        align-items: center;
-        margin: 4px 0;
-        background-color: @color-calm;
-        &:hover {
-            background-color:@color-breeze;
-        }
+  width: 228px;
+  list-style: none;
+  position: relative;
+  padding: 0;
+  li:not(.container-icon) {
+    height: 48px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid @color-breeze;
+    &:hover, &.active {
+      background-color: @color-breeze-50;
     }
+  }
+  .container-icon {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    span {
+      display: flex;
+      font-size: 12px;
+      width: 100%;
+      padding: 0 8px;
+    }
+  }
 }
