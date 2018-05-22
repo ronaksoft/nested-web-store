@@ -287,7 +287,7 @@ class AdminPermission extends React.Component<IProps, IState> {
                   {!permission.icon &&
                   <IcoN name="filter16" size={16}/>}
                   {permission.icon && permission.icon.length !== 0 &&
-                  <img src={Const.SERVER_URL + permission.icon} alt={permission.name}/>}
+                  <img src={Const.SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>}
                 </div>
                 <div className="per-info">
                   <h4><ProperLanguage model={permission} property="name"/></h4>

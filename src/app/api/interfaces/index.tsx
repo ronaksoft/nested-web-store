@@ -135,5 +135,11 @@ interface IReview {
   created_at?: number;
 }
 
+interface IPurchase {
+  _id?: string;
+  app_id?: string;
+  status?: number;
+}
+
 export {IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission,
-  IApplicationValidation, IValidation, IReview};
+  IApplicationValidation, IValidation, IReview, IPurchase};

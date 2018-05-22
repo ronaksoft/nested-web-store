@@ -1403,6 +1403,15 @@ ul.errors {
 }
 
 .authorize-modal {
+  .ant-modal-close {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    color: #fff;
+    .ant-modal-close-x {
+      font-size: 20px;
+    }
+  }
   h3 {
     font-size: 18px;
     margin-bottom: 16px;
@@ -1430,7 +1439,7 @@ ul.errors {
     margin: 0;
   }
   .ant-modal-body {
-    padding: 40px 16px 16px;
+    padding: 16px 16px 16px;
   }
   .ant-modal-footer {
     display: none;
@@ -1628,6 +1637,7 @@ ul.errors {
         font-weight: bold;
         font-size: 16px;
         margin-bottom: 4px;
+        padding: 0 4px;
       }
       p {
         font-size: 12px;
@@ -1760,7 +1770,7 @@ ul.errors {
 }
 
 .ant-modal-mask {
-  background: rgba(50, 61, 71, 0.8);
+  background: rgba(50, 61, 71, 0.95);
 }
 
 .ant-modal-header,
@@ -1858,7 +1868,7 @@ ul.errors {
   > div:first-child {
     padding: 12px 12px 0;}
   b {
-    font-size: 14px;    
+    font-size: 14px;
     display: block;
     line-height: 20px;
     white-space: nowrap;
@@ -1923,7 +1933,7 @@ ul.errors {
   border-radius: 8px;
   display: flex;
   background: @color-white;
-  overflow: hidden; 
+  overflow: hidden;
   height: 64px;
   margin-bottom: 16px;
   img {

@@ -6,6 +6,7 @@ import Const from 'api/consts/CServer';
 import {message, Modal} from 'antd';
 import TimeUntiles from 'services/utils/time';
 import {app as AppFactory, review as ReviewFactory} from 'api';
+import CPurchaseStatus from 'api/consts/CPurchaseStatus';
 
 interface IProps {
   app: string;
@@ -38,6 +39,7 @@ interface IState {
   authorizeModal: boolean;
   app: IApplication;
   reviews: IReview[];
+  installed: boolean;
 }
 
 class AppView extends React.Component<IProps, IState> {
@@ -84,6 +86,7 @@ class AppView extends React.Component<IProps, IState> {
         appId: this.props.routeParams ? this.props.routeParams.appid : '',
         reviews: [],
         authorizeModal: false,
+        installed: false,
       };
       initData.__INITIAL_DATA__ = {};
     } else {
@@ -92,6 +95,7 @@ class AppView extends React.Component<IProps, IState> {
         appId: this.props.routeParams ? this.props.routeParams.appid : '',
         reviews: [],
         authorizeModal: false,
+        installed: false,
       };
     }
     this.translator = new Translate();
@@ -121,6 +125,13 @@ class AppView extends React.Component<IProps, IState> {
           message.error(this.translator._getText('Can\'t fetch app!'));
         });
       }
+      this.appFactory.getAppStatus(this.state.appId).then((data) => {
+        if (data === CPurchaseStatus.INSTALL) {
+          this.setState({
+            installed: true,
+          });
+        }
+      });
       this.reviewFactory.getAll(this.state.appId).then((data) => {
         if (data.reviews === null) {
           return;
@@ -158,6 +169,38 @@ class AppView extends React.Component<IProps, IState> {
     });
   }
 
+  private onAppInstall = () => {
+    this.appFactory.installApp(this.state.appId).then((data) => {
+      if (data.status === CPurchaseStatus.INSTALL) {
+        this.setState({
+          installed: true,
+        });
+      }
+    }).catch((err) => {
+      if (err.code === Const.PERMISSION_DENIED) {
+        message.error(this.translator._getText('You don\'t have permission to install the app'));
+      } else {
+        message.error(this.translator._getText('Can\'t install the app!'));
+      }
+    });
+  }
+
+  private onAppUninstall = () => {
+    this.appFactory.uninstallApp(this.state.appId).then((data) => {
+      if (data.status === CPurchaseStatus.UNINSTALL) {
+        this.setState({
+          installed: false,
+        });
+      }
+    }).catch((err) => {
+      if (err.code === Const.PERMISSION_DENIED) {
+        message.error(this.translator._getText('You don\'t have permission to uninstall the app'));
+      } else {
+        message.error(this.translator._getText('Can\'t uninstall the app!'));
+      }
+    });
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -187,7 +230,7 @@ class AppView extends React.Component<IProps, IState> {
           {this.state.app.permissions.map((permission, index) => (
             <li key={'permission-' + index}>
               <div className="per-icon">
-                <img src={Const.SERVER_URL + permission.icon} alt={permission.name}/>
+                <img src={Const.SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>
               </div>
               <div className="per-info">
                 <h4><ProperLanguage model={permission} property="name"/></h4>
@@ -244,7 +287,10 @@ class AppView extends React.Component<IProps, IState> {
                 <img src="/public/assets/icons/Nested_Logo.svg" alt={this.state.app.app_id}/>
               )}
               <button className="butn butn-primary full-width" onClick={this.toggleAuthorizeModal}>
-                <Translate>Install App</Translate>
+                {!this.state.installed &&
+                <Translate>Install App</Translate>}
+                {this.state.installed &&
+                <Translate>Uninstall App</Translate>}
               </button>
               <a href="" className="report-butn"><Translate>Report this app</Translate></a>
               <div className="product-her-block categories">
@@ -301,7 +347,7 @@ class AppView extends React.Component<IProps, IState> {
               <li key={permission._id}>
                 <div className="per-info">
                   <div className="_df">
-                    <img src={Const.SERVER_URL + permission.icon} alt={permission.name}/>
+                    <img src={Const.SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>
                     <h4><ProperLanguage model={permission} property="name"/></h4>
                   </div>
                   <p><ProperLanguage model={permission} property="desc"/></p>
@@ -310,9 +356,14 @@ class AppView extends React.Component<IProps, IState> {
             ))}
           </ul>
           <div className="modal-buttons">
-            <button className="butn butn-primary full-width">
+            {!this.state.installed &&
+            <button className="butn butn-primary full-width" onClick={this.onAppInstall}>
               <Translate>Authorize</Translate>
-            </button>
+            </button>}
+            {this.state.installed &&
+            <button className="butn butn-primary full-width" onClick={this.onAppUninstall}>
+              <Translate>Uninstall</Translate>
+            </button>}
             <button className="butn full-width" onClick={this.toggleAuthorizeModal}>
               <Translate>Cancel</Translate>
             </button>

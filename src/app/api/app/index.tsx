@@ -1,5 +1,5 @@
 import callApi from '../common';
-import {IApplication} from '../interfaces';
+import {IApplication, IPurchase} from '../interfaces';
 
 class AppFactory {
   public create(app: IApplication) {
@@ -48,6 +48,18 @@ class AppFactory {
 
   public searchAll(query: string, status: number = 0, skip: number = 0, limit: number = 20): Promise<any> {
     return callApi('/admin/app/search', {query, status, skip, limit});
+  }
+
+  public installApp(appId: string): Promise<IPurchase> {
+    return callApi('/purchase/add', {app_id: appId});
+  }
+
+  public uninstallApp(appId: string): Promise<IPurchase> {
+    return callApi('/purchase/remove', {app_id: appId});
+  }
+
+  public getAppStatus(appId: string): Promise<any> {
+    return callApi('/purchase/status/' + appId, {});
   }
 }
 
