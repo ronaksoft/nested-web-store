@@ -287,7 +287,10 @@ class AppView extends React.Component<IProps, IState> {
                 <img src="/public/assets/icons/Nested_Logo.svg" alt={this.state.app.app_id}/>
               )}
               <button className="butn butn-primary full-width" onClick={this.toggleAuthorizeModal}>
-                <Translate>Install App</Translate>
+                {!this.state.installed &&
+                <Translate>Install App</Translate>}
+                {this.state.installed &&
+                <Translate>Uninstall App</Translate>}
               </button>
               <a href="" className="report-butn"><Translate>Report this app</Translate></a>
               <div className="product-her-block categories">
