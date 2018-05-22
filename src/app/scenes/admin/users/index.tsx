@@ -44,6 +44,7 @@ class AdminUsers extends React.Component<IProps, IState> {
   private customRequest: any;
   private emptyModel: IUser;
   private pagination: any;
+  private filterbar: any;
 
   /**
    * @constructor
@@ -127,6 +128,10 @@ class AdminUsers extends React.Component<IProps, IState> {
         addUserModal: false,
       });
     }
+  }
+
+  private refHandler = (element) => {
+    this.filterbar = element;
   }
 
   // private onEdit = (id) => {
@@ -312,6 +317,9 @@ class AdminUsers extends React.Component<IProps, IState> {
     };
     this.loadUsersDebounced();
   }
+
+  private getPopupContainer = () => this.filterbar;
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -349,14 +357,16 @@ class AdminUsers extends React.Component<IProps, IState> {
             <button className="butn butn-blue" onClick={this.toggleAddUserModal}>
               <Translate>Add User</Translate>
             </button>
-            <div className="_df">
-              <Popover placement="bottom" trigger="click" content={filterMenu}
+            <div className="_df" ref={this.refHandler}>
+              <Popover placement="bottomRight" trigger="click" content={filterMenu}
+                getPopupContainer={this.getPopupContainer}
                 overlayClassName="popover-no-padding popover-filter-bar">
                 <div className="filter">
                   <IcoN name="filter24" size={24}/>
                 </div>
               </Popover>
-              <Popover placement="bottom" trigger="click" content={sortMenu}
+              <Popover placement="bottomRight" trigger="click" content={sortMenu}
+              getPopupContainer={this.getPopupContainer}
                 overlayClassName="popover-no-padding popover-filter-bar">
                 <div className="sort">
                   <IcoN name="sort24" size={24}/>
