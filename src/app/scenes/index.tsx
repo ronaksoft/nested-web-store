@@ -49,6 +49,7 @@ interface IProps {
 
 class Container extends React.Component<IProps, IState> {
   private translator: Translate;
+  private filterbar: any;
 
   public constructor(props: IProps) {
     super(props);
@@ -127,6 +128,10 @@ class Container extends React.Component<IProps, IState> {
     this.checkIsAdmin(props.location.pathname);
   }
 
+  private refHandler = (element) => {
+    this.filterbar = element;
+  }
+
   public toggleSignInModal = () => {
     this.setState({
       openSignInModal: !this.state.openSignInModal,
@@ -201,6 +206,8 @@ class Container extends React.Component<IProps, IState> {
     });
   }
 
+  private getPopupContainer = () => this.filterbar;
+
   /**
    * renders the component if the credentials are valid
    * @returns {ReactElement} markup
@@ -274,7 +281,7 @@ class Container extends React.Component<IProps, IState> {
                 {this.state.user === null &&
                   <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
                 {this.state.user !== null &&
-                <div className="user-avatar">
+                <div className="user-avatar" ref={this.refHandler}>
                   <Popover placement="bottomRight" trigger="click" content={(
                     <div className="profile-popover">
                       <div className="_df">
@@ -292,7 +299,7 @@ class Container extends React.Component<IProps, IState> {
                         <Translate>Sign out</Translate>
                       </a>
                     </div>
-                  )} overlayClassName="popover-no-padding">
+                  )} overlayClassName="popover-no-padding" getPopupContainer={this.getPopupContainer}>
                     <img src={this.state.user.picture} title={this.state.user.name}/>
                   </Popover>
                 </div>}

@@ -211,12 +211,13 @@ class AdminApp extends React.Component<IProps, IState> {
             </Link>
             <div className="_df" ref={this.refHandler}>
               <Popover placement="bottomRight" trigger="click" content={filterMenu}
-                overlayClassName="popover-no-padding" getPopupContainer={this.getPopupContainer}>
+                overlayClassName="popover-no-padding popover-filter-bar" getPopupContainer={this.getPopupContainer}>
                 <div className="filter">
                   <IcoN name="filter24" size={24}/>
                 </div>
               </Popover>
-              <Popover placement="bottomRight" trigger="click" content={sortMenu} overlayClassName="popover-no-padding"
+              <Popover placement="bottomRight" trigger="click" content={sortMenu}
+                overlayClassName="popover-no-padding popover-filter-bar"
                 getPopupContainer={this.getPopupContainer}>
                 <div className="sort">
                   <IcoN name="sort24" size={24}/>
