@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Translate, ProperLanguage} from 'components';
+import {Translate, ProperLanguage, ScrollArea} from 'components';
 import {Link} from 'react-router';
 import {IApplication, ICategory} from '../../api/interfaces';
 import Const from '../../api/consts/CServer';
@@ -52,24 +52,54 @@ export default class AppList extends React.Component<IProps, IState> {
               <div className="filler"/>
               {this.props.haveMore && <a href=""><Translate>See more</Translate></a>}
             </div>
-            <div className={(this.props.noScrollbar ? 'no-scrollbar ' : '') + 'list-body'}>
-              {this.state.items.map((item, index) => (
-                <Link to={'/app/' + item.app_id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
-                  <div className="app-image">
-                    <img src={Const.SERVER_URL + item.logo.path} alt=""/>
-                    {!isMini && (
-                      <div className="app-image-bg">
+            {this.props.noScrollbar && (
+              <div className="no-scrollbar list-body">
+                {this.state.items.map((item, index) => (
+                  <Link to={'/app/' + item.app_id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
+                    <div className="app-image">
+                      <img src={Const.SERVER_URL + item.logo.path} alt=""/>
+                      {!isMini && (
+                        <div className="app-image-bg">
+                          <img src={Const.SERVER_URL + item.logo.path} alt=""/>
+                        </div>
+                      )}
+                    </div>
+                    <div className="app-data">
+                      <h4><ProperLanguage model={item} property="name"/></h4>
+                      <aside>{getCategoriesName(item.categories).map((el) => el)}</aside>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+            {!this.props.noScrollbar && (
+              <div className="list-body">
+                <ScrollArea
+                  speed={0.8}
+                  className="area"
+                  contentClassName="content"
+                  horizontal={true}
+                  vertical={false}
+                  >
+                  {this.state.items.map((item, index) => (
+                    <Link to={'/app/' + item.app_id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
+                      <div className="app-image">
                         <img src={Const.SERVER_URL + item.logo.path} alt=""/>
+                        {!isMini && (
+                          <div className="app-image-bg">
+                            <img src={Const.SERVER_URL + item.logo.path} alt=""/>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div className="app-data">
-                    <h4><ProperLanguage model={item} property="name"/></h4>
-                    <aside>{getCategoriesName(item.categories).map((el) => el)}</aside>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                      <div className="app-data">
+                        <h4><ProperLanguage model={item} property="name"/></h4>
+                        <aside>{getCategoriesName(item.categories).map((el) => el)}</aside>
+                      </div>
+                    </Link>
+                  ))}
+                </ScrollArea>
+              </div>
+            )}
           </div>
           )}
         </div>
