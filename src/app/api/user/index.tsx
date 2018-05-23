@@ -25,6 +25,10 @@ class UserFactory {
   public getCurrent(): Promise<any> {
     return callApi('/user/current', {});
   }
+
+  public logout(): Promise<any> {
+    return callApi('/user/logout', {});
+  }
 }
 
 export default UserFactory;

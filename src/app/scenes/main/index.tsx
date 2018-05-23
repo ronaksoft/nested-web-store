@@ -1,17 +1,19 @@
 import * as React from 'react';
 import AppSearch from 'components/app-search';
+import {Link} from 'react-router';
+import {Translate, AppList, ProperLanguage} from 'components';
+import {category as CategoryFactory, app as AppFactory} from 'api';
+import {message} from 'antd';
+import {IApplication, ICategory} from 'api/interfaces';
+import Const from 'api/consts/CServer';
+
 interface IState {
-  slides: IApplication[];
+  sliderApps: IApplication[];
   recentApps: IApplication[];
   featuredApps: IApplication[];
   categories: ICategory[];
 }
-import {Link} from 'react-router';
 
-import {Translate, AppList, ProperLanguage} from 'components';
-import {category as CategoryFactory, app as AppFactory} from '../../api';
-import {message} from 'antd';
-import {IApplication, ICategory} from '../../api/interfaces';
 class Main extends React.Component<any, IState> {
   private translator: Translate;
   private categoryFactory: CategoryFactory;
@@ -30,7 +32,7 @@ class Main extends React.Component<any, IState> {
     }
     if (initData) {
       this.state = {
-        slides: initData.__INITIAL_DATA__.slides || [],
+        sliderApps: initData.__INITIAL_DATA__.slider_apps || [],
         recentApps: initData.__INITIAL_DATA__.recent_apps || [],
         featuredApps: initData.__INITIAL_DATA__.featured_apps || [],
         categories: initData.__INITIAL_DATA__.categories || [],
@@ -38,7 +40,7 @@ class Main extends React.Component<any, IState> {
       initData.__INITIAL_DATA__ = {};
     } else {
       this.state = {
-        slides: [],
+        sliderApps: [],
         recentApps: [],
         featuredApps: [],
         categories: [],
@@ -60,6 +62,18 @@ class Main extends React.Component<any, IState> {
         });
       }).catch(() => {
         message.error(this.translator._getText('Can\'t fetch categories!'));
+      });
+    }
+    if (this.state.sliderApps.length === 0) {
+      this.appFactory.getAll('slider').then((data) => {
+        if (data === null) {
+          return;
+        }
+        this.setState({
+          sliderApps: data,
+        });
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t fetch recent apps!'));
       });
     }
     if (this.state.recentApps.length === 0) {
@@ -123,21 +137,13 @@ class Main extends React.Component<any, IState> {
             <h2><Translate>Make it easier!</Translate></h2>
             <p><Translate>Add useful apps to you workspace.</Translate></p>
             <div className="featureds">
-              <a href="">
-                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
-              </a>
-              <a href="">
-                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
-              </a>
-              <a href="">
-                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
-              </a>
-              <a href="">
-                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
-              </a>
-              <a href="">
-                <img src={'/public/assets/icons/absents_place.svg'} alt="Nested" className="logo"/>
-              </a>
+              {this.state.sliderApps.map((app, index) => {
+                  return (
+                    <Link key={'slider-' + index} to={'/app/' + app.app_id}>
+                      <img src={Const.SERVER_URL + app.logo.path} alt={app.name} className="logo"/>
+                    </Link>
+                  );
+              })}
             </div>
           </div>
         </div>

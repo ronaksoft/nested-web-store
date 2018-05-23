@@ -23,6 +23,7 @@ import AdminUsers from './admin/users';
 import AdminPermission from './admin/permission';
 import AdminWrapper from './admin/';
 import {IUser} from 'api/interfaces';
+import {user as UserFactory} from 'api';
 import * as Cookies from 'cookies-js';
 import {Translate, IcoN, reactTranslateChangeLanguage} from 'components';
 import Const from './../api/consts/CServer';
@@ -49,6 +50,7 @@ interface IProps {
 
 class Container extends React.Component<IProps, IState> {
   private translator: Translate;
+  private userFactory: UserFactory;
   private filterbar: any;
 
   public constructor(props: IProps) {
@@ -93,6 +95,7 @@ class Container extends React.Component<IProps, IState> {
         lang: 'en',
       };
     }
+    this.userFactory = new UserFactory();
   }
 
   public componentDidMount() {
@@ -201,8 +204,10 @@ class Container extends React.Component<IProps, IState> {
 
   private signOut = () => {
     this.props.setLogout();
-    this.setState({
-      user: null,
+    this.userFactory.logout().then(() => {
+      this.setState({
+        user: null,
+      });
     });
   }
 

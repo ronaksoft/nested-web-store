@@ -32,7 +32,7 @@ interface IProps {
 interface IState {
   loading: boolean;
   apps: IApplication[];
-  topApps: ITopApp[];
+  sliderApps: ITopApp[];
   pageCount: number;
   keyword: string;
 }
@@ -55,7 +55,7 @@ class AdminApp extends React.Component<IProps, IState> {
     const state: IState = {
       loading: false,
       apps: [],
-      topApps: [],
+      sliderApps: [],
       keyword: '',
       pageCount: 1,
     };
@@ -69,6 +69,19 @@ class AdminApp extends React.Component<IProps, IState> {
 
   public componentDidMount() {
     this.loadApps();
+    this.appFactory.getAll('slider').then((data) => {
+      if (data === null) {
+        return;
+      }
+      this.setState({
+        sliderApps: data.map((app) => {
+          return {
+            id: app._id,
+            logoPath: app.logo.path,
+          };
+        }),
+      });
+    });
   }
 
   private loadApps() {
@@ -89,12 +102,6 @@ class AdminApp extends React.Component<IProps, IState> {
         }
         this.setState({
           apps: data.apps,
-          topApps: data.apps.map((app: IApplication) => {
-            return {
-              id: app.app_id,
-              logoPath: app.logo.path,
-            };
-          }),
           pageCount: Math.floor(data.count / this.pagination.limit) + 1,
         });
       }).catch(() => {
@@ -156,29 +163,48 @@ class AdminApp extends React.Component<IProps, IState> {
   }
 
   private onSortEnd = ({oldIndex, newIndex}) => {
-    console.log(oldIndex, newIndex, arrayMove(this.state.topApps, oldIndex, newIndex));
+    const newApps = arrayMove(this.state.sliderApps, oldIndex, newIndex);
+    this.appFactory.setSliderApps(newApps.map((app) => {
+      return app.id;
+    })).then(() => {
+      this.setState({
+        sliderApps: newApps,
+      });
+      message.success(this.translator._getText('Slider apps successfully updated'));
+    }).catch(() => {
+      message.warning(this.translator._getText('Can\'t set slider apps'));
+    });
   }
 
   private onDrop = (event) => {
     event.preventDefault();
     const data = event.dataTransfer.getData('appId');
-    console.log(data);
-    // event.target.appendChild(document.getElementById(data));
-    if (!this.state.topApps.find((app) => app.id === data)) {
-      const newApp = this.state.apps.find((app) => app.app_id === data);
-      this.setState({
-        topApps: [...this.state.topApps, {id: newApp.app_id, logoPath: newApp.logo.path}],
+    if (!this.state.sliderApps.find((app) => app.id === data)) {
+      const newApp = this.state.apps.find((app) => app._id === data);
+      const newApps = [...this.state.sliderApps, {id: newApp._id, logoPath: newApp.logo.path}];
+      this.appFactory.setSliderApps(newApps.map((app) => {
+        return app.id;
+      })).then(() => {
+        this.setState({
+          sliderApps: newApps,
+        });
+        message.success(this.translator._getText('Slider apps successfully updated'));
+      }).catch(() => {
+        message.warning(this.translator._getText('Can\'t set slider apps'));
       });
     } else {
       message.warning(this.translator._getText('App already is in top apps'));
     }
   }
+
   private drag = (event) => {
     event.dataTransfer.setData('appId', event.target.id);
   }
+
   private allowDrop = (event) => {
     event.preventDefault();
   }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -188,7 +214,7 @@ class AdminApp extends React.Component<IProps, IState> {
    */
   public render() {
     const isAdmin = true;
-    const unFilledTopApps = [{}, {}, {}, {}, {}].splice(0, 5 - this.state.topApps.length);
+    const unFilledsliderApps = [{}, {}, {}, {}, {}].splice(0, 5 - this.state.sliderApps.length);
 
     const sortMenu = (
       <ul className="sort-menu">
@@ -201,9 +227,9 @@ class AdminApp extends React.Component<IProps, IState> {
     );
     const filterMenu = (
       <ul className="filter-menu">
-      <li className="container-icon">
-        <Translate>Filter</Translate>
-      </li>
+        <li className="container-icon">
+          <Translate>Filter</Translate>
+        </li>
         <li>
           <label htmlFor="checkbox-published" className="app-badge published">
             <Translate>PUBLISHED</Translate>
@@ -249,13 +275,13 @@ class AdminApp extends React.Component<IProps, IState> {
     const SortableList = SortableContainer(() => {
       return (
         <ul className="top-apps">
-          {this.state.topApps.map((app, index) => (
+          {this.state.sliderApps.map((app, index) => (
             <SortableItem key={`item-${index}`} index={index}
                           onSortEnd={this.onSortEnd} app={app}/>
           ))}
-          {unFilledTopApps.map((_, index) => (
+          {unFilledsliderApps.map((_, index) => (
             <li className="top-app-item" onDrop={this.onDrop} key={index}
-              onDragOver={this.allowDrop}>
+                onDragOver={this.allowDrop}>
               <IcoN name="cross24" size={24}/>
             </li>
           ))}
@@ -272,14 +298,15 @@ class AdminApp extends React.Component<IProps, IState> {
             </Link>
             <div className="_df" ref={this.refHandler}>
               <Popover placement="bottomRight" trigger="click" content={filterMenu}
-                overlayClassName="popover-no-padding popover-filter-bar" getPopupContainer={this.getPopupContainer}>
+                       overlayClassName="popover-no-padding popover-filter-bar"
+                       getPopupContainer={this.getPopupContainer}>
                 <div className="filter">
                   <IcoN name="filter24" size={24}/>
                 </div>
               </Popover>
               <Popover placement="bottomRight" trigger="click" content={sortMenu}
-                overlayClassName="popover-no-padding popover-filter-bar"
-                getPopupContainer={this.getPopupContainer}>
+                       overlayClassName="popover-no-padding popover-filter-bar"
+                       getPopupContainer={this.getPopupContainer}>
                 <div className="sort">
                   <IcoN name="sort24" size={24}/>
                 </div>
@@ -291,7 +318,7 @@ class AdminApp extends React.Component<IProps, IState> {
           <div className="search-list">
             <IcoN name="search24" size={24}/>
             <input type="text" onChange={this.changeSearch}
-              placeholder={this.translator._getText('Search in apps...')}/>
+                   placeholder={this.translator._getText('Search in apps...')}/>
           </div>
         </Affixer>
         {isAdmin && (
@@ -305,11 +332,11 @@ class AdminApp extends React.Component<IProps, IState> {
           {this.state.apps.map((app) => (
             <li key={app._id}>
               <div className="app-icon">
-                <img src={Const.SERVER_URL + app.logo.path} draggable={true} onDragStart={this.drag} id={app.app_id}/>
+                <img src={Const.SERVER_URL + app.logo.path} draggable={true} onDragStart={this.drag} id={app._id}/>
               </div>
               <div className="app-info">
                 <h4>
-                  <ProperLanguage model={app} property="name" />
+                  <ProperLanguage model={app} property="name"/>
                   {app.status === Status.PUBLISHED &&
                   <span className="app-badge published"><Translate>PUBLISHED</Translate></span>}
                   {app.status === Status.DECLINED &&
@@ -324,7 +351,7 @@ class AdminApp extends React.Component<IProps, IState> {
                 <p>{app.app_id}</p>
               </div>
               <Popover placement="topRight" trigger="click"
-                overlayClassName="popover-no-padding" content={(
+                       overlayClassName="popover-no-padding" content={(
                 <ul className="app-more-menu">
                   <li>
                     <Link to={'/admin/app/edit/' + app._id}>
@@ -333,21 +360,21 @@ class AdminApp extends React.Component<IProps, IState> {
                     </Link>
                   </li>
                   <li className={app.stared ? 'feature-button active' : 'feature-button'}
-                        onClick={this.makeFeature.bind(this, app._id)}>
+                      onClick={this.makeFeature.bind(this, app._id)}>
                     <IcoN name="star16" size={16}/>
                     <Translate>Feature app</Translate>
                   </li>
                   <li className="hr"/>
                   <li>
-                  <Popconfirm title="Are you sure about removing this Application?"
-                              onConfirm={this.onRemove.bind(this, app._id)}
-                              okText="Yes" cancelText="No">
-                    <IcoN name="binRed16" size={16}/>
-                    <Translate>Remove app</Translate>
-                  </Popconfirm>
+                    <Popconfirm title="Are you sure about removing this Application?"
+                                onConfirm={this.onRemove.bind(this, app._id)}
+                                okText="Yes" cancelText="No">
+                      <IcoN name="binRed16" size={16}/>
+                      <Translate>Remove app</Translate>
+                    </Popconfirm>
                   </li>
                   <li className="suspend-item"
-                        onClick={this.makeFeature.bind(this, app._id)}>
+                      onClick={this.makeFeature.bind(this, app._id)}>
                     <IcoN name="unavailable16" size={16}/>
                     <Translate>Suspend app</Translate>
                   </li>

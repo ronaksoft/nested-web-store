@@ -58,8 +58,16 @@ class AppFactory {
     return callApi('/purchase/remove', {app_id: appId});
   }
 
-  public getAppStatus(appId: string): Promise<any> {
+  public getAppPurchaseStatus(appId: string): Promise<any> {
     return callApi('/purchase/status/' + appId, {});
+  }
+
+  public setSliderApps(appIds: string[]): Promise<any> {
+    return callApi('/admin/app/setslider', {app_ids: appIds});
+  }
+
+  public setTatus(id: string, status: number): Promise<any> {
+    return callApi('/admin/app/setstatus', {id, status});
   }
 }
 

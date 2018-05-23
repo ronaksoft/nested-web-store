@@ -130,7 +130,7 @@ class AppView extends React.Component<IProps, IState> {
     } else {
       this.setState({
         user: newProps.user,
-        hasAccess: newProps.user.nested_admin,
+        hasAccess: (newProps.user ? newProps.user.nested_admin : false),
       }, () => {
         if (this.state.user && this.state.user._id.length === 24) {
           this.nestedService.setUser(this.state.user);
@@ -153,7 +153,7 @@ class AppView extends React.Component<IProps, IState> {
           message.error(this.translator._getText('Can\'t fetch app!'));
         });
       }
-      this.appFactory.getAppStatus(this.state.appId).then((data) => {
+      this.appFactory.getAppPurchaseStatus(this.state.appId).then((data) => {
         if (data === CPurchaseStatus.INSTALL) {
           this.setState({
             installed: true,
@@ -165,7 +165,7 @@ class AppView extends React.Component<IProps, IState> {
             hasAccess: true,
           });
         }
-      }).then(() => {
+      }).catch(() => {
         this.setState({
           hasAccess: false,
         });
@@ -355,7 +355,7 @@ class AppView extends React.Component<IProps, IState> {
                 <img src="/public/assets/icons/Nested_Logo.svg" alt={this.state.app.app_id}/>
               )}
               <button className="butn butn-primary full-width" onClick={this.toggleAuthorizeModal}
-                      /*disabled={!this.state.hasAccess}*/>
+                      disabled={(this.state.hasAccess !== true)}>
                 {!this.state.installed &&
                 <Translate>Install App</Translate>}
                 {this.state.installed &&

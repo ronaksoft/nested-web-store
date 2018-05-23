@@ -762,7 +762,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
               <img src={Const.SERVER_URL + this.state.app.logo.path} alt=""/> : uploadButton}
           </Upload>
           <div className="multi-input-row">
-            <input type="text" placeholder={this.translator._getText('App user ID')} value={this.state.app.app_id}
+            <input type="text" placeholder={this.translator._getText('App ID')} value={this.state.app.app_id}
                    onChange={this.bindInputToModel.bind(this, 'app_id')}
                    onKeyUp={this.appIdKeyUp} pattern={REGEX.APP_ID}
                    className={!appValidation.app_id.isValid ? 'has-error' : ''}/>
