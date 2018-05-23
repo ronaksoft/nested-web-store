@@ -150,7 +150,7 @@ class Main extends React.Component<any, IState> {
                   this.state.categories.map((category, index) => {
                     return (
                       <li key={'category-' + index}>
-                        <Link to={'/apps/' + category.slug}>
+                        <Link to={'/apps/' + category.slug} activeClassName="active">
                           <ProperLanguage model={category} property="name"/>
                         </Link>
                       </li>

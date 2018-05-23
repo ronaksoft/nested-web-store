@@ -257,6 +257,7 @@ textarea::-webkit-input-placeholder {
 .admin-wrapper {
   border-radius: 10px;
   flex: 1;
+  max-width: 640px;
   width: 100%;
   width: 100%;
   background-color: @color-white;
@@ -1209,7 +1210,49 @@ ul.errors {
     }
   }
 }
-
+.app-list-browse {
+  list-style: none;
+  li {
+    height: 80px;
+    display: flex;
+    cursor: pointer;
+    border-top: 1px solid @color-breeze-new;
+    align-items: center; 
+    .app-image {
+      margin: 0 16px;
+      img {
+        height: 48px;
+        width: 48px;
+        border-radius: 6px;
+      }
+    }
+    .app-data {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      flex-direction: column;
+      h4 {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+      aside {
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        color: @color-solid-64;
+      }
+    }
+    > i {
+      margin: 0 16px;
+      transform-origin: center center;
+      transform: rotateZ(-90deg);
+      opacity: .72;
+    }
+  }
+}
 .app-content {
   display: flex;
   width: 100%;
@@ -1953,6 +1996,9 @@ ul.errors {
   b {
     font-size: 16px;
   }
+}
+.scrollarea-content.content {
+  display: flex;
 }
 @import "../containers/404/style";
 @import "../styles/antd.min.css";

@@ -1,11 +1,12 @@
 import * as React from 'react';
-import AppSearch from 'components/app-search';
 import {message} from 'antd';
 import {category as CategoryFactory, app as AppFactory} from '../../api';
-import {Link} from 'react-router';
-import {Translate, AppList, ProperLanguage, IcoN, Loading} from 'components';
+import {Link, browserHistory} from 'react-router';
+import {Translate, ProperLanguage, IcoN, Loading, Affixer} from 'components';
 import {IApplication, ICategory} from '../../api/interfaces';
+import {debounce} from 'lodash';
 
+import Const from 'api/consts/CServer';
 const ReactPaginate = require('react-paginate');
 
 interface IState {
@@ -14,6 +15,7 @@ interface IState {
   category: ICategory;
   pageCount: number;
   loading: boolean;
+  keyword: string;
 }
 interface IProps {
   location: any;
@@ -43,6 +45,7 @@ class Browse extends React.Component<IProps, IState> {
         category: null,
         pageCount: 1,
         loading: true,
+        keyword: '',
       };
       initData.__INITIAL_DATA__ = {};
     } else {
@@ -52,6 +55,7 @@ class Browse extends React.Component<IProps, IState> {
         category: null,
         pageCount: 1,
         loading: true,
+        keyword: '',
       };
     }
     this.translator = new Translate();
@@ -72,6 +76,8 @@ class Browse extends React.Component<IProps, IState> {
         const initCat = this.getCatFromPath(this.props.location.pathname);
         if (initCat) {
           this.getApps(initCat);
+        } else if (data[0]) {
+          browserHistory.push('/apps/' + data[0].slug);
         }
         const category = data.find((cat) => cat.slug === initCat);
         this.setState({
@@ -131,11 +137,25 @@ class Browse extends React.Component<IProps, IState> {
     }
   }
 
+  private loadAppsDebounced = debounce(this.getApps, 512);
+
   private handlePageClick = (data: any) => {
     this.pagination.skip = this.pagination.limit * data.selected;
     this.getApps();
   }
 
+  private changeSearch = (event) => {
+    this.setState({keyword: event.target.value});
+    this.pagination = {
+      skip: 0,
+      limit: 10,
+    };
+    this.loadAppsDebounced();
+  }
+
+  private goToApp(id) {
+    browserHistory.push('/app/' + id);
+  }
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -148,26 +168,51 @@ class Browse extends React.Component<IProps, IState> {
       <div className="main-container">
         <div className="main-container-inner">
           <div className="sidebar">
-          <h3><Translate>Categories</Translate></h3>
-          <ul>
-            {
-              this.state.categories.map((category, index) => {
-                return (
-                  <li key={'category-' + index}>
-                    <Link to={'/apps/' + category.slug}><ProperLanguage model={category} property="name"/></Link>
-                  </li>
-                );
-              })
-            }
-          </ul>
+            <h3><Translate>Categories</Translate></h3>
+            <ul>
+              {
+                this.state.categories.map((category, index) => {
+                  return (
+                    <li key={'category-' + index}>
+                      <Link to={'/apps/' + category.slug} activeClassName="active">
+                        <ProperLanguage model={category} property="name"/>
+                      </Link>
+                    </li>
+                  );
+                })
+              }
+            </ul>
           </div>
-          <div className="content-wrapper">
-            <AppSearch/>
-            {this.state.category && this.state.apps.length > 0 && (
-              <div>
-                <AppList title={<ProperLanguage model={this.state.category} property="name"/>}
-                  haveMore={false} items={this.state.apps} noScrollbar={true}/>
-                {this.state.pageCount > 1 &&
+          <div className="admin-wrapper">
+            <Affixer offsetTop={72} zIndex={4} height={80}>
+              <div className="page-buttons">
+                <h2>
+                  {this.state.category && <ProperLanguage model={this.state.category} property="name" />}
+                </h2>
+              </div>
+            </Affixer>
+            <Affixer offsetTop={136} zIndex={4} height={48}>
+              <div className="search-list">
+                <IcoN name="search24" size={24}/>
+                <input type="text" onChange={this.changeSearch}
+                  placeholder={this.translator._getText('Search in this category...')}/>
+              </div>
+            </Affixer>
+            <ul className="app-list-browse">
+              {this.state.apps.map((app) => (
+                <li key={app._id} onClick={this.goToApp.bind(this, app.app_id)}>
+                  <div className="app-image">
+                    <img src={Const.SERVER_URL + app.logo.path} alt=""/>
+                  </div>
+                  <div className="app-data">
+                    <h4><ProperLanguage model={app} property="name"/></h4>
+                    <aside>{app.summary}</aside>
+                  </div>
+                  <IcoN name="arrow24" size={24}/>
+                </li>
+              ))}
+            </ul>
+            {this.state.pageCount > 1 &&
                   <ReactPaginate
                     nextLabel={<IcoN name="arrow24" size={24}/>}
                     previousLabel={<IcoN name="arrow24" size={24}/>}
@@ -180,8 +225,6 @@ class Browse extends React.Component<IProps, IState> {
                     containerClassName="pagination"
                     subContainerClassName="pages pagination"
                     activeClassName="active"/>}
-              </div>
-            )}
             {this.state.apps.length === 0 && (
               <h4>
                 {!this.state.loading && <Translate>No Apps found</Translate>}
