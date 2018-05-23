@@ -1,4 +1,4 @@
-import {IUser} from '../../api/interfaces';
+import {IUser} from 'api/interfaces';
 
 class NestedService {
   private c: any;
@@ -7,6 +7,13 @@ class NestedService {
   private nestedConfigs: any[];
 
   constructor(user: IUser) {
+    this.nestedConfigs = [];
+    this.cyrus = '';
+    this.xerxes = '';
+    this.setUser(user);
+  }
+
+  public setUser(user: IUser) {
     if (!user) {
       return;
     }
@@ -60,7 +67,7 @@ class NestedService {
     localStorage.setItem(domain, JSON.stringify(config));
   }
 
-  public parseConfigFromRemote(data, domain) {
+  private parseConfigFromRemote(data, domain) {
     const cyrus = [];
     const xerxes = [];
     data.forEach((configs) => {
@@ -91,7 +98,7 @@ class NestedService {
     };
   }
 
-  public parseConfigData(data) {
+  private parseConfigData(data) {
     const items = data.split(':');
     return {
       name: items[0],
@@ -101,46 +108,44 @@ class NestedService {
     };
   }
 
-  public getCompleteUrl(config) {
+  private getCompleteUrl(config) {
     return config.protocol + '://' + config.url + ':' + config.port;
   }
 
-  public http(cmd, params, callback, catchCallback) {
-    const http = new XMLHttpRequest();
-    let parameters: any = {
-      _app_token: this.c.token,
-      _app_id: this.c.id,
-      _cid: 'Appstore',
-      cmd,
-      data: params,
-    };
+  public http(cmd, params): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const http = new XMLHttpRequest();
+      let parameters: any = {
+        _app_token: this.c.token,
+        _app_id: this.c.id,
+        _cid: 'Appstore',
+        cmd,
+        data: params,
+      };
 
-    if (['session/recall', 'session/register', 'system/get_string_constants'].indexOf(cmd) > -1) {
-      delete parameters._app_token;
-      delete parameters._app_id;
-    }
+      if (['session/recall', 'session/register', 'system/get_string_constants'].indexOf(cmd) > -1) {
+        delete parameters._app_token;
+        delete parameters._app_id;
+      }
 
-    http.open('POST', this.cyrus, true);
-    http.setRequestHeader('accept', 'application/json');
-    http.onreadystatechange = () => {
-      if (http.readyState === 4 && http.status === 200) {
-        const data = JSON.parse(http.responseText);
-        if (data.status === 'ok') {
-          if (typeof callback === 'function') {
-            callback(data.data);
-          }
-        } else {
-          if (typeof catchCallback === 'function') {
-            catchCallback(data.data);
+      http.open('POST', this.cyrus, true);
+      http.setRequestHeader('accept', 'application/json');
+      http.onreadystatechange = () => {
+        if (http.readyState === 4 && http.status === 200) {
+          const data = JSON.parse(http.responseText);
+          if (data.status === 'ok') {
+            resolve(data.data);
+          } else {
+            reject(data.data);
           }
         }
-      }
-    };
-    parameters = JSON.stringify(parameters);
-    http.send(parameters);
+      };
+      parameters = JSON.stringify(parameters);
+      http.send(parameters);
+    });
   }
 
-  public xhr(config, url, params = null, callback = null, catchCallback = null) {
+  private xhr(config, url, params = null, callback = null, catchCallback = null) {
     const http = new XMLHttpRequest();
     const async = config.async === undefined ? true : config.async;
     const method = config.method || 'GET';

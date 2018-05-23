@@ -4,12 +4,14 @@ import {Translate, IcoN} from 'components';
 import {message, Tooltip} from 'antd';
 import {review as ReviewFactory} from '../../api';
 import {IReview, IUser} from '../../api/interfaces';
+
 // import Const from 'api/consts/CServer';
 
 interface IOwnProps {
   appId: string;
   submitted: (IReview) => void;
 }
+
 interface IProps {
   appId: string;
   submitted: (IReview) => void;
@@ -131,10 +133,10 @@ class Rating extends React.Component<IProps, IState> {
           <div className="comment-box">
             <div className="user-logo">
               {!this.state.user.picture &&
-                <img src="/public/assets/icons/absents_place.svg" width={32} height={32} alt=""/>
+              <img src="/public/assets/icons/absents_place.svg" width={32} height={32} alt=""/>
               }
               {this.state.user && <img src={this.state.user.picture}
-                alt={this.state.user._id}/>}
+                                       alt={this.state.user._id}/>}
             </div>
             <div className="text-box">
               <textarea placeholder={this.translator._getText('Write as') + ' ' + this.state.user.name + '...'}
@@ -160,13 +162,14 @@ class Rating extends React.Component<IProps, IState> {
 
 /**
  * redux store mapper
- * @param {any} redux store
+ * @param {any} store store
+ * @param {IOwnProps} props
  * @returns store item object
  */
-const mapStateToProps = (store, IOwnProps: IOwnProps) => ({
+const mapStateToProps = (store, props: IOwnProps) => ({
   user: store.app.user,
-  appId: IOwnProps.appId,
-  submitted: IOwnProps.submitted,
+  appId: props.appId,
+  submitted: props.submitted,
 });
 
 export default connect(mapStateToProps, {})(Rating);
