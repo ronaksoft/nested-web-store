@@ -232,7 +232,7 @@ class Container extends React.Component<IProps, IState> {
                         className="logo-type fa"/>
                   </Link>
                   <div className="devider"/>
-                  <Link to="/admin/app">
+                  <Link to="/">
                     <Translate>App Store</Translate>
                   </Link>
                   <div className="filler"/>

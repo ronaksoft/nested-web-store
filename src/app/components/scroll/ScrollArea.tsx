@@ -1,6 +1,7 @@
 import * as React from 'react';
+
 const lineHeight = require('line-height');
-import { Motion, spring } from 'react-motion';
+import {Motion, spring} from 'react-motion';
 
 import {
   findDOMNode, warnAboutFunctionChild, warnAboutElementChild, positiveOrZero, modifyObjValues,
@@ -8,12 +9,12 @@ import {
 import ScrollBar from './Scrollbar';
 
 const eventTypes = {
-    wheel: 'wheel',
-    api: 'api',
-    touch: 'touch',
-    touchEnd: 'touchEnd',
-    mousemove: 'mousemove',
-    keyPress: 'keypress',
+  wheel: 'wheel',
+  api: 'api',
+  touch: 'touch',
+  touchEnd: 'touchEnd',
+  mousemove: 'mousemove',
+  keyPress: 'keypress',
 };
 
 interface IProps {
@@ -37,6 +38,7 @@ interface IProps {
   stopScrollPropagation?: boolean;
   focusableTabIndex?: number;
 }
+
 interface IState {
   topPosition: number;
   leftPosition: number;
@@ -46,6 +48,7 @@ interface IState {
   containerWidth: number;
   eventType: any;
 }
+
 export default class ScrollArea extends React.Component<IProps, IState> {
   public static defaultProps: Partial<IProps> = {
     speed: 1,
@@ -62,129 +65,131 @@ export default class ScrollArea extends React.Component<IProps, IState> {
   private lineHeightPx: any;
   private content: any;
   private wrapper: any;
+
   constructor(props) {
     super(props);
     this.state = {
-        topPosition: 0,
-        leftPosition: 0,
-        realHeight: 0,
-        containerHeight: 0,
-        realWidth: 0,
-        containerWidth: 0,
-        eventType: '',
+      topPosition: 0,
+      leftPosition: 0,
+      realHeight: 0,
+      containerHeight: 0,
+      realWidth: 0,
+      containerWidth: 0,
+      eventType: '',
     };
     this.eventPreviousValues = {
-        clientX: 0,
-        clientY: 0,
-        deltaX: 0,
-        deltaY: 0,
+      clientX: 0,
+      clientY: 0,
+      deltaX: 0,
+      deltaY: 0,
     };
   }
+
   public refresh = () => {
     this.setSizesToState();
   }
 
   public componentDidMount() {
-      if (this.props.contentWindow) {
-          this.props.contentWindow.addEventListener('resize', this.handleWindowResize);
-      }
-      this.lineHeightPx = lineHeight(this.content);
-      this.setSizesToState();
+    if (this.props.contentWindow) {
+      this.props.contentWindow.addEventListener('resize', this.handleWindowResize);
+    }
+    this.lineHeightPx = lineHeight(this.content);
+    this.setSizesToState();
   }
 
   public componentWillUnmount() {
-      if (this.props.contentWindow) {
-          this.props.contentWindow.removeEventListener('resize', this.handleWindowResize);
-      }
+    if (this.props.contentWindow) {
+      this.props.contentWindow.removeEventListener('resize', this.handleWindowResize);
+    }
   }
 
   public componentDidUpdate() {
-      this.setSizesToState();
+    this.setSizesToState();
   }
 
   public render() {
     const {className, contentClassName, ownerDocument} = this.props;
     let {children} = this.props;
     const withMotion = this.props.smoothScrolling &&
-        (
-          this.state.eventType === eventTypes.wheel ||
-          this.state.eventType === eventTypes.api ||
-          this.state.eventType === eventTypes.touchEnd ||
-          this.state.eventType === eventTypes.keyPress
-        );
+      (
+        this.state.eventType === eventTypes.wheel ||
+        this.state.eventType === eventTypes.api ||
+        this.state.eventType === eventTypes.touchEnd ||
+        this.state.eventType === eventTypes.keyPress
+      );
 
     const scrollbarY = this.canScrollY() ? (
-        <ScrollBar
-            ownerDocument={ownerDocument}
-            realSize={this.state.realHeight}
-            containerSize={this.state.containerHeight}
-            position={this.state.topPosition}
-            onMove={this.handleScrollbarMove}
-            onPositionChange={this.handleScrollbarYPositionChange}
-            containerStyle={this.props.verticalContainerStyle}
-            scrollbarStyle={this.props.verticalScrollbarStyle}
-            smoothScrolling={withMotion}
-            minScrollSize={this.props.minScrollSize}
-            onFocus={this.focusContent}
-            type="vertical"/>
+      <ScrollBar
+        ownerDocument={ownerDocument}
+        realSize={this.state.realHeight}
+        containerSize={this.state.containerHeight}
+        position={this.state.topPosition}
+        onMove={this.handleScrollbarMove}
+        onPositionChange={this.handleScrollbarYPositionChange}
+        containerStyle={this.props.verticalContainerStyle}
+        scrollbarStyle={this.props.verticalScrollbarStyle}
+        smoothScrolling={withMotion}
+        minScrollSize={this.props.minScrollSize}
+        onFocus={this.focusContent}
+        type="vertical"/>
     ) : null;
 
     const scrollbarX = this.canScrollX() ? (
-        <ScrollBar
-            ownerDocument={ownerDocument}
-            realSize={this.state.realWidth}
-            containerSize={this.state.containerWidth}
-            position={this.state.leftPosition}
-            onMove={this.handleScrollbarMove}
-            onPositionChange={this.handleScrollbarXPositionChange}
-            containerStyle={this.props.horizontalContainerStyle}
-            scrollbarStyle={this.props.horizontalScrollbarStyle}
-            smoothScrolling={withMotion}
-            minScrollSize={this.props.minScrollSize}
-            onFocus={this.focusContent}
-            type="horizontal"/>
+      <ScrollBar
+        ownerDocument={ownerDocument}
+        realSize={this.state.realWidth}
+        containerSize={this.state.containerWidth}
+        position={this.state.leftPosition}
+        onMove={this.handleScrollbarMove}
+        onPositionChange={this.handleScrollbarXPositionChange}
+        containerStyle={this.props.horizontalContainerStyle}
+        scrollbarStyle={this.props.horizontalScrollbarStyle}
+        smoothScrolling={withMotion}
+        minScrollSize={this.props.minScrollSize}
+        onFocus={this.focusContent}
+        type="horizontal"/>
     ) : null;
 
     if (typeof children === 'function') {
-        warnAboutFunctionChild();
-        children = children();
+      warnAboutFunctionChild();
+      children = children();
     } else {
-        warnAboutElementChild();
+      warnAboutElementChild();
     }
 
     const classes = 'scrollarea ' + (className || '');
     const contentClasses = 'scrollarea-content ' + (contentClassName || '');
 
     const contentStyle = {
-        marginTop: -this.state.topPosition,
-        marginLeft: -this.state.leftPosition,
+      marginTop: -this.state.topPosition,
+      marginLeft: -this.state.leftPosition,
     };
     const springifiedContentStyle = withMotion ? modifyObjValues(contentStyle, (x) => spring(x)) : contentStyle;
 
     return (
       <Motion style={springifiedContentStyle}>
-        { (style) =>
+        {(style) =>
           <div
-              ref={(x) => this.wrapper = x}
-              className={classes}
-              style={this.props.style}
-              onWheel={this.handleWheel}
+            ref={(x) => this.wrapper = x}
+            className={classes}
+            style={this.props.style}
+            onWheel={this.handleWheel}
           >
             <div
-                ref={(x) => this.content = x}
-                style={{ ...this.props.contentStyle, ...style }}
-                className={contentClasses}
-                onTouchStart={this.handleTouchStart}
-                onTouchMove={this.handleTouchMove}
-                onTouchEnd={this.handleTouchEnd}
-                onKeyDown={this.handleKeyDown}
-                tabIndex={this.props.focusableTabIndex}
+              ref={(x) => this.content = x}
+              style={{...this.props.contentStyle, ...style}}
+              className={contentClasses}
+              onTouchStart={this.handleTouchStart}
+              onTouchMove={this.handleTouchMove}
+              onTouchEnd={this.handleTouchEnd}
+              onKeyDown={this.handleKeyDown}
+              tabIndex={this.props.focusableTabIndex}
             >
-                {children}
+              {children}
             </div>
             {scrollbarY}
             {scrollbarX}
-        </div>
+          </div>
         }
       </Motion>
     );
@@ -192,7 +197,7 @@ export default class ScrollArea extends React.Component<IProps, IState> {
 
   public setStateFromEvent = (newState, eventType?) => {
     if (this.props.onScroll) {
-        this.props.onScroll(newState);
+      this.props.onScroll(newState);
     }
     this.setState({...newState, eventType});
   }
@@ -202,18 +207,18 @@ export default class ScrollArea extends React.Component<IProps, IState> {
     if (touches.length === 1) {
       const {clientX, clientY} = touches[0];
       this.eventPreviousValues = {
-          ...this.eventPreviousValues,
-          clientY,
-          clientX,
-          timestamp: Date.now(),
+        ...this.eventPreviousValues,
+        clientY,
+        clientX,
+        timestamp: Date.now(),
       };
     }
   }
 
   public handleTouchMove(e) {
     if (this.canScroll()) {
-        e.preventDefault();
-        e.stopPropagation();
+      e.preventDefault();
+      e.stopPropagation();
     }
 
     const {touches} = e;
@@ -224,12 +229,12 @@ export default class ScrollArea extends React.Component<IProps, IState> {
       const deltaX = this.eventPreviousValues.clientX - clientX;
 
       this.eventPreviousValues = {
-          ...this.eventPreviousValues,
-          deltaY,
-          deltaX,
-          clientY,
-          clientX,
-          timestamp: Date.now(),
+        ...this.eventPreviousValues,
+        deltaY,
+        deltaX,
+        clientY,
+        clientX,
+        timestamp: Date.now(),
       };
 
       this.setStateFromEvent(this.composeNewState(-deltaX, -deltaY));
@@ -246,13 +251,13 @@ export default class ScrollArea extends React.Component<IProps, IState> {
       deltaY = 0;
     }
     if (Date.now() - timestamp < 200) {
-        this.setStateFromEvent(this.composeNewState(-deltaX * 10, -deltaY * 10), eventTypes.touchEnd);
+      this.setStateFromEvent(this.composeNewState(-deltaX * 10, -deltaY * 10), eventTypes.touchEnd);
     }
 
     this.eventPreviousValues = {
-        ...this.eventPreviousValues,
-        deltaY: 0,
-        deltaX: 0,
+      ...this.eventPreviousValues,
+      deltaY: 0,
+      deltaX: 0,
     };
   }
 
@@ -260,20 +265,20 @@ export default class ScrollArea extends React.Component<IProps, IState> {
     this.setStateFromEvent(this.composeNewState(deltaX, deltaY));
   }
 
-  public handleScrollbarXPositionChange = (position) =>  {
+  public handleScrollbarXPositionChange = (position) => {
     this.scrollXTo(position);
   }
 
-  public handleScrollbarYPositionChange = (position) =>  {
+  public handleScrollbarYPositionChange = (position) => {
     this.scrollYTo(position);
   }
 
-  public handleWheel = (e) =>  {
+  public handleWheel = (e) => {
     let deltaY = e.deltaY;
     let deltaX = e.deltaX;
 
     if (this.props.swapWheelAxes) {
-        [deltaY, deltaX] = [deltaX, deltaY];
+      [deltaY, deltaX] = [deltaX, deltaY];
     }
 
     /*
@@ -283,8 +288,8 @@ export default class ScrollArea extends React.Component<IProps, IState> {
       * https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaMode
       */
     if (e.deltaMode === 1) {
-        deltaY = deltaY * this.lineHeightPx;
-        deltaX = deltaX * this.lineHeightPx;
+      deltaY = deltaY * this.lineHeightPx;
+      deltaX = deltaX * this.lineHeightPx;
     }
 
     deltaY = deltaY * this.props.speed;
@@ -293,10 +298,10 @@ export default class ScrollArea extends React.Component<IProps, IState> {
     const newState = this.composeNewState(-deltaX, -deltaY);
 
     if ((newState.topPosition && this.state.topPosition !== newState.topPosition) ||
-        (newState.leftPosition && this.state.leftPosition !== newState.leftPosition) ||
-        this.props.stopScrollPropagation) {
-        e.preventDefault();
-        e.stopPropagation();
+      (newState.leftPosition && this.state.leftPosition !== newState.leftPosition) ||
+      this.props.stopScrollPropagation) {
+      e.preventDefault();
+      e.stopPropagation();
     }
 
     this.setStateFromEvent(newState, eventTypes.wheel);
@@ -348,16 +353,16 @@ export default class ScrollArea extends React.Component<IProps, IState> {
   }
 
   public handleWindowResize = () => {
-      let newState = this.computeSizes();
-      newState = this.getModifiedPositionsIfNeeded(newState);
-      this.setStateFromEvent(newState);
+    let newState = this.computeSizes();
+    newState = this.getModifiedPositionsIfNeeded(newState);
+    this.setStateFromEvent(newState);
   }
 
   public composeNewState = (deltaX, deltaY) => {
     const newState = this.computeSizes();
     newState.topPosition = this.canScrollY(newState) ? this.computeTopPosition(deltaY, newState) : 0;
     if (this.canScrollX(newState)) {
-        newState.leftPosition = this.computeLeftPosition(deltaX, newState);
+      newState.leftPosition = this.computeLeftPosition(deltaX, newState);
     }
 
     return newState;
@@ -374,23 +379,23 @@ export default class ScrollArea extends React.Component<IProps, IState> {
   }
 
   public normalizeTopPosition = (newTopPosition, sizes) => {
-      if (newTopPosition > sizes.realHeight - sizes.containerHeight) {
-          newTopPosition = sizes.realHeight - sizes.containerHeight;
-      }
-      if (newTopPosition < 0) {
-          newTopPosition = 0;
-      }
-      return newTopPosition;
+    if (newTopPosition > sizes.realHeight - sizes.containerHeight) {
+      newTopPosition = sizes.realHeight - sizes.containerHeight;
+    }
+    if (newTopPosition < 0) {
+      newTopPosition = 0;
+    }
+    return newTopPosition;
   }
 
   public normalizeLeftPosition = (newLeftPosition, sizes) => {
-      if (newLeftPosition > sizes.realWidth - sizes.containerWidth) {
-          newLeftPosition = sizes.realWidth - sizes.containerWidth;
-      } else if (newLeftPosition < 0) {
-          newLeftPosition = 0;
-      }
+    if (newLeftPosition > sizes.realWidth - sizes.containerWidth) {
+      newLeftPosition = sizes.realWidth - sizes.containerWidth;
+    } else if (newLeftPosition < 0) {
+      newLeftPosition = 0;
+    }
 
-      return newLeftPosition;
+    return newLeftPosition;
   }
 
   public computeSizes = () => {
@@ -400,19 +405,19 @@ export default class ScrollArea extends React.Component<IProps, IState> {
     const containerWidth = this.wrapper.offsetWidth;
 
     return {
-        realHeight,
-        containerHeight,
-        realWidth,
-        containerWidth,
-        topPosition: 0,
-        leftPosition: 0,
+      realHeight,
+      containerHeight,
+      realWidth,
+      containerWidth,
+      topPosition: 0,
+      leftPosition: 0,
     };
   }
 
   public setSizesToState = () => {
     const sizes = this.computeSizes();
     if (sizes.realHeight !== this.state.realHeight || sizes.realWidth !== this.state.realWidth) {
-        this.setStateFromEvent(this.getModifiedPositionsIfNeeded(sizes));
+      this.setStateFromEvent(this.getModifiedPositionsIfNeeded(sizes));
     }
   }
 
@@ -482,7 +487,7 @@ export default class ScrollArea extends React.Component<IProps, IState> {
 
   public focusContent = () => {
     if (this.content) {
-        findDOMNode(this.content).focus();
+      findDOMNode(this.content).focus();
     }
   }
 

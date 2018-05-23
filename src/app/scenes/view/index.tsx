@@ -1,14 +1,25 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {Translate, Rating, Tab, RateResult, ProperLanguage} from 'components';
-import {IApplication, IReview} from 'api/interfaces';
+import {IApplication, IReview, IUser} from 'api/interfaces';
 import {Link} from 'react-router';
 import Const from 'api/consts/CServer';
 import {message, Modal} from 'antd';
 import TimeUntiles from 'services/utils/time';
 import {app as AppFactory, review as ReviewFactory} from 'api';
 import CPurchaseStatus from 'api/consts/CPurchaseStatus';
+import NestedService from 'services/nested';
+
+interface IOwnProps {
+  app: string;
+  preview?: boolean;
+  model?: IApplication;
+  routeParams?: any;
+  location?: any;
+}
 
 interface IProps {
+  user?: IUser;
   app: string;
   /**
    * @prop preview
@@ -35,17 +46,20 @@ interface IProps {
 }
 
 interface IState {
+  user?: IUser;
   appId: string;
   authorizeModal: boolean;
   app: IApplication;
   reviews: IReview[];
   installed: boolean;
+  hasAccess: boolean;
 }
 
 class AppView extends React.Component<IProps, IState> {
   private translator: Translate;
   private appFactory: AppFactory;
   private reviewFactory: ReviewFactory;
+  private nestedService: NestedService;
 
   /**
    * @constructor
@@ -87,6 +101,8 @@ class AppView extends React.Component<IProps, IState> {
         reviews: [],
         authorizeModal: false,
         installed: false,
+        user: props.user,
+        hasAccess: false,
       };
       initData.__INITIAL_DATA__ = {};
     } else {
@@ -96,17 +112,29 @@ class AppView extends React.Component<IProps, IState> {
         reviews: [],
         authorizeModal: false,
         installed: false,
+        user: props.user,
+        hasAccess: false,
       };
     }
     this.translator = new Translate();
     this.appFactory = new AppFactory();
     this.reviewFactory = new ReviewFactory();
+    this.nestedService = new NestedService(this.state.user);
   }
 
   public componentWillReceiveProps(newProps: IProps) {
     if (this.props.preview) {
       this.setState({
         app: newProps.model,
+      });
+    } else {
+      this.setState({
+        user: newProps.user,
+        hasAccess: newProps.user.nested_admin,
+      }, () => {
+        if (this.state.user && this.state.user._id.length === 24) {
+          this.nestedService.setUser(this.state.user);
+        }
       });
     }
   }
@@ -129,8 +157,18 @@ class AppView extends React.Component<IProps, IState> {
         if (data === CPurchaseStatus.INSTALL) {
           this.setState({
             installed: true,
+            hasAccess: true,
+          });
+        } else {
+          this.setState({
+            installed: false,
+            hasAccess: true,
           });
         }
+      }).then(() => {
+        this.setState({
+          hasAccess: false,
+        });
       });
       this.reviewFactory.getAll(this.state.appId).then((data) => {
         if (data.reviews === null) {
@@ -158,6 +196,7 @@ class AppView extends React.Component<IProps, IState> {
   }
 
   private reviewHandler = (review: IReview) => {
+    review.user = this.state.user;
     this.setState({
       reviews: [review, ...this.state.reviews],
     });
@@ -170,6 +209,35 @@ class AppView extends React.Component<IProps, IState> {
   }
 
   private onAppInstall = () => {
+    this.nestedService.http('app/register', {
+      app_id: this.state.app.app_id,
+      app_name: this.state.app.name,
+      homepage: this.state.app.website,
+      developer: this.state.app.created_by_name,
+      icon_large_url: Const.SERVER_URL + this.state.app.logo.path,
+      icon_small_url: Const.SERVER_URL + this.state.app.logo.path,
+    }).then(() => {
+      this.installApp();
+    }).catch((err) => {
+      if (err.err_code === 5) {
+        this.installApp();
+      }
+    });
+  }
+
+  private onAppUninstall = () => {
+    this.nestedService.http('app/remove', {
+      app_id: this.state.app.app_id,
+    }).then(() => {
+      this.uninstallApp();
+    }).catch((err) => {
+      if (err.err_code === 3) {
+        this.uninstallApp();
+      }
+    });
+  }
+
+  private installApp() {
     this.appFactory.installApp(this.state.appId).then((data) => {
       if (data.status === CPurchaseStatus.INSTALL) {
         this.setState({
@@ -185,7 +253,7 @@ class AppView extends React.Component<IProps, IState> {
     });
   }
 
-  private onAppUninstall = () => {
+  private uninstallApp() {
     this.appFactory.uninstallApp(this.state.appId).then((data) => {
       if (data.status === CPurchaseStatus.UNINSTALL) {
         this.setState({
@@ -286,7 +354,8 @@ class AppView extends React.Component<IProps, IState> {
               {!this.state.app.logo && (
                 <img src="/public/assets/icons/Nested_Logo.svg" alt={this.state.app.app_id}/>
               )}
-              <button className="butn butn-primary full-width" onClick={this.toggleAuthorizeModal}>
+              <button className="butn butn-primary full-width" onClick={this.toggleAuthorizeModal}
+                      /*disabled={!this.state.hasAccess}*/>
                 {!this.state.installed &&
                 <Translate>Install App</Translate>}
                 {this.state.installed &&
@@ -374,4 +443,19 @@ class AppView extends React.Component<IProps, IState> {
   }
 }
 
-export default AppView;
+/**
+ * redux store mapper
+ * @param {any} store store
+ * @param {IOwnProps} props
+ * @returns store item object
+ */
+const mapStateToProps = (store, props: IOwnProps): IProps => ({
+  user: store.app.user,
+  app: props.app,
+  preview: props.preview,
+  model: props.model,
+  routeParams: props.routeParams,
+  location: props.location,
+});
+
+export default connect(mapStateToProps, {})(AppView);

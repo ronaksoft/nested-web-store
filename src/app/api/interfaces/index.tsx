@@ -97,6 +97,7 @@ interface IUser {
   nested: string;
   nested_domain?: string;
   nested_username?: string;
+  nested_admin?: boolean;
   avatar?: IFile;
   apps: IApp[];
   admin: boolean;
