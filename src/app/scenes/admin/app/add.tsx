@@ -633,7 +633,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       };
     }
 
-     if (this.state.selectedCategories.length === 0) {
+    if (this.state.selectedCategories.length === 0) {
       appValidation.categories = {
         isValid: false,
         message: 'you must choose at least a category',
@@ -647,16 +647,18 @@ class AdminAddApp extends React.Component<IProps, IState> {
       };
     }
 
-    if (!model.translations[0]) {
-      appValidation.translations = {
-        isValid: false,
-        message: 'required',
-      };
-    } else if (!model.translations[0].name) {
-      appValidation.translations = {
-        isValid: false,
-        message: 'please fill Farsi name of your application',
-      };
+    if (_.some(this.state.selectedLanguages, {value: 'fa'})) {
+      if (!model.translations[0]) {
+        appValidation.translations = {
+          isValid: false,
+          message: 'required',
+        };
+      } else if (!model.translations[0].name) {
+        appValidation.translations = {
+          isValid: false,
+          message: 'please fill Farsi name of your application',
+        };
+      }
     }
 
     if (!model.app_id) {
