@@ -45,3 +45,58 @@
     }
   }
 }
+
+.app-more-menu {
+  list-style: none;
+  width: 148px;
+  padding: 8px 0;
+  .hr {
+    margin: 8px 0;
+    height: 1px;
+    width: 100%;
+    background-color: @color-breeze-new;
+  }
+  li:not(.hr) {
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    a {
+      display: flex;
+    }
+    .nstIcon {
+      margin: 0 8px;
+      height: 16px;
+      max-height: 16px;
+    }
+    span {
+      display: flex;
+      line-height: 16px;
+      font-size: 12px;
+    }
+  }
+  .suspend-item {
+    svg path {
+      fill: @color-shine-wire;
+    }
+    span {
+      color: @color-shine-wire;
+    }
+  }
+  .publish-item {
+    svg path {
+      fill: #2FB492;
+    }
+    span {
+      color: #2FB492;
+    }
+  }
+  .decline-item {
+    svg path {
+      fill: #EE3759;
+    }
+    span {
+      color: #EE3759;
+    }
+  }
+}

@@ -213,18 +213,18 @@ class Browse extends React.Component<IProps, IState> {
               ))}
             </ul>
             {this.state.pageCount > 1 &&
-                  <ReactPaginate
-                    nextLabel={<IcoN name="arrow24" size={24}/>}
-                    previousLabel={<IcoN name="arrow24" size={24}/>}
-                    breakLabel={<a href="">...</a>}
-                    breakClassName="reak-me"
-                    pageCount={this.state.pageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={this.handlePageClick}
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                    activeClassName="active"/>}
+              <ReactPaginate
+                nextLabel={<IcoN name="arrow24" size={24}/>}
+                previousLabel={<IcoN name="arrow24" size={24}/>}
+                breakLabel={<a href="">...</a>}
+                breakClassName="reak-me"
+                pageCount={this.state.pageCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageClick}
+                containerClassName="pagination"
+                subContainerClassName="pages pagination"
+                activeClassName="active"/>}
             {this.state.apps.length === 0 && (
               <h4>
                 {!this.state.loading && <Translate>No Apps found</Translate>}
