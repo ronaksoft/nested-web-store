@@ -529,9 +529,177 @@
   },
   "Can\\'t fetch app!": {
     "en": "",
-    "fa": ""
+    "fa": "تلاش ناموفق در دریافت app"
   },
   "Can\\'t fetch app\\'s reviews!": {
+    "en": "",
+    "fa": "تلاش ناموفق در دریافت بررسی‌ها"
+  },
+  "Please login to continue submitting your comment": {
+    "en": "",
+    "fa": " برای ادامه دادن به ارسال نظر خود لطفا وارد شوید"
+  },
+  "Declined": {
+    "en": "",
+    "fa": "لغو شده"
+  },
+  "Status": {
+    "en": "",
+    "fa": "وضعیت"
+  },
+  "App ID": {
+    "en": "",
+    "fa": ""
+  },
+  "Sort": {
+    "en": "",
+    "fa": "ترتیب"
+  },
+  "Date added": {
+    "en": "",
+    "fa": "تاریخ ثبت"
+  },
+  "Starred": {
+    "en": "",
+    "fa": "ویژه"
+  },
+  "Filter": {
+    "en": "",
+    "fa": "فیلتر"
+  },
+  "Start Building": {
+    "en": "",
+    "fa": "شروع ساخت"
+  },
+  "Top apps": {
+    "en": "Slider Apps",
+    "fa": "اسلایدر Apps"
+  },
+  "All apps": {
+    "en": "",
+    "fa": "همه Apps"
+  },
+  "Edit app": {
+    "en": "",
+    "fa": "ویرایش App"
+  },
+  "Feature app": {
+    "en": "",
+    "fa": "ویژه"
+  },
+  "Remove app": {
+    "en": "",
+    "fa": "حذف"
+  },
+  "Suspend app": {
+    "en": "",
+    "fa": "تعلیق"
+  },
+  "Publish": {
+    "en": "",
+    "fa": "انتشار"
+  },
+  "Decline": {
+    "en": "",
+    "fa": "مردود"
+  },
+  "No results": {
+    "en": "",
+    "fa": "بدون نتیجه"
+  },
+  "Slider app successfully deleted": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t set slider apps": {
+    "en": "",
+    "fa": ""
+  },
+  "Slider apps successfully updated": {
+    "en": "",
+    "fa": ""
+  },
+  "App already is in top apps": {
+    "en": "",
+    "fa": ""
+  },
+  "Search in apps...": {
+    "en": "",
+    "fa": ""
+  },
+  "Add Category": {
+    "en": "",
+    "fa": ""
+  },
+  "Add Permission": {
+    "en": "",
+    "fa": ""
+  },
+  "Are you sure about removing this Permission?": {
+    "en": "",
+    "fa": ""
+  },
+  "Add User": {
+    "en": "",
+    "fa": ""
+  },
+  "No Apps found": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch this category apps!": {
+    "en": "",
+    "fa": ""
+  },
+  "Search in this category...": {
+    "en": "",
+    "fa": ""
+  },
+  "Dashboard Panel": {
+    "en": "",
+    "fa": "داشبورد"
+  },
+  "Sign out": {
+    "en": "",
+    "fa": "خروج"
+  },
+  "Sign in with Nested": {
+    "en": "",
+    "fa": "ورود با اکانت نستد"
+  },
+  "or": {
+    "en": "",
+    "fa": "یا"
+  },
+  "Uninstall App": {
+    "en": "",
+    "fa": "حذف App"
+  },
+  "Wants to access:": {
+    "en": "",
+    "fa": "دسترسی های مورد نیاز"
+  },
+  "Authorize": {
+    "en": "",
+    "fa": ""
+  },
+  "Uninstall": {
+    "en": "",
+    "fa": "حذف"
+  },
+  "You don\\'t have permission to install the app": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t install the app!": {
+    "en": "",
+    "fa": ""
+  },
+  "You don\\'t have permission to uninstall the app": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t uninstall the app!": {
     "en": "",
     "fa": ""
   }

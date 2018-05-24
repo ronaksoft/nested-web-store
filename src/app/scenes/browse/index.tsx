@@ -226,7 +226,7 @@ class Browse extends React.Component<IProps, IState> {
                 subContainerClassName="pages pagination"
                 activeClassName="active"/>}
             {this.state.apps.length === 0 && (
-              <h4>
+              <h4 className="no-result-message">
                 {!this.state.loading && <Translate>No Apps found</Translate>}
                 {this.state.loading && <Loading position="absolute" active={true}/>}
               </h4>

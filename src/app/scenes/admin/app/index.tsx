@@ -148,7 +148,7 @@ class AdminApp extends React.Component<IProps, IState> {
     sliderApps.splice(appItemIndex, 1);
     this.setState({sliderApps});
     this.appFactory.setSliderApps(sliderApps.map((a) => a.id)).then(() => {
-      message.success(this.translator._getText('Slider apps successfully deleted'));
+      message.success(this.translator._getText('Slider app successfully deleted'));
     }).catch(() => {
       sliderApps.splice(appItemIndex, 0, app);
       this.setState({sliderApps});
