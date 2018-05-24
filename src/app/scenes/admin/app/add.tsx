@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {Translate, Tab, Loading, IcoN, Affixer, RichEditor, NstCrop} from 'components';
 import {Upload, message, Modal} from 'antd';
 import {EditorState, convertFromHTML, ContentState} from 'draft-js';
@@ -11,7 +12,7 @@ import {
 } from 'api';
 import {
   IApplication, ISelectOption, IFile, ICategory, IPermission,
-  IApplicationValidation,
+  IApplicationValidation, IUser,
 } from 'api/interfaces';
 import Const from 'api/consts/CServer';
 import {REGEX} from 'api/consts/CRegex';
@@ -20,7 +21,20 @@ import {AppView} from 'scenes';
 import {stateToHTML} from 'draft-js-export-html';
 import {browserHistory} from 'react-router';
 
+interface IOwnProps {
+  app: string;
+  /**
+   * @prop routeParams
+   * @desc The parameters are given by React Router
+   * @type {*}
+   * @memberof IOwnProps
+   */
+  routeParams?: any;
+  location?: any;
+}
+
 interface IProps {
+  user: IUser;
   app: string;
   /**
    * @prop routeParams
@@ -47,11 +61,13 @@ interface IState {
   languages: ISelectOption[];
   permissions: ISelectOption[];
   selectedCategories: ISelectOption[];
+  selectedStatus: ISelectOption;
   selectedLanguages: ISelectOption[];
   selectedPermissions: ISelectOption[];
   croppedFiles: File[];
   base64Files: any[];
   showCropModalCounter: number;
+  user: IUser;
 }
 
 class AdminAddApp extends React.Component<IProps, IState> {
@@ -63,6 +79,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
   private permissionFactory: PermissionFactory;
   private emptyModel: IApplication;
   private originalFiles: File[] = [];
+  private statuses: ISelectOption[] = [];
   private categories: ICategory[] = [];
   private permissions: IPermission[] = [];
 
@@ -103,6 +120,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       previewModel: null,
       imageUrl: '',
       selectedCategories: [],
+      selectedStatus: {value: '', label: ''},
       croppedFiles: [],
       base64Files: [],
       showCropModalCounter: 0,
@@ -125,6 +143,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       ],
       app: _.cloneDeep(this.emptyModel),
       appValidation: this.resetValidation(),
+      user: this.props.user,
     };
     this.state = state;
     this.appFactory = new AppFactory();
@@ -132,6 +151,21 @@ class AdminAddApp extends React.Component<IProps, IState> {
     this.categoryFactory = new CategoryFactory();
     this.permissionFactory = new PermissionFactory();
     this.customRequest = this.fileFactory.customRequest.bind(this);
+    this.statuses = [
+      {
+        value: '0',
+        label: 'Publish',
+      }, {
+        value: '1',
+        label: 'Pending',
+      }, {
+        value: '2',
+        label: 'Suspend',
+      }, {
+        value: '3',
+        label: 'Decline',
+      },
+    ];
     // EditorState.createWithContent(ContentState.createFromBlockArray(
     //     convertFromHTML(props.message.body).contentBlocks,
     //     convertFromHTML(props.message.body).entityMap
@@ -183,8 +217,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
     }).then(() => {
       if (this.props.location.pathname.indexOf('/admin/app/edit/') > -1 && this.props.routeParams.id) {
         this.appFactory.getById(this.props.routeParams.id).then((data) => {
+          console.log('aaap', data);
           this.fillModel(data);
-        }).catch(() => {
+        }).catch((e) => {
+          console.log(e);
           message.error(this.translator._getText('Can\'t fetch application!'));
         });
       }
@@ -196,6 +232,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
     window.removeEventListener('reactTranslateChangeLanguage', this.updateLang);
   }
 
+  public componentWillReceiveProps(newProps) {
+    this.setState({
+      user: newProps.user,
+    });
+  }
+
   private updateLang = () => {
     setTimeout(() => {
       this.translator = new Translate();
@@ -205,6 +247,10 @@ class AdminAddApp extends React.Component<IProps, IState> {
 
   private fillModel(data: IApplication) {
     data = _.merge(this.emptyModel, _.omitBy(data, _.isNull));
+    const selectedStatus: ISelectOption = {
+      value: `${data.status}`,
+      label: `${data.status}`,
+    };
     let selectedCategories: ISelectOption[] = [];
     if (data.categories) {
       selectedCategories = data.categories.map((item): ISelectOption => {
@@ -233,16 +279,23 @@ class AdminAddApp extends React.Component<IProps, IState> {
         };
       });
     }
-    const blocksFromHTMLEn = convertFromHTML(data.desc || '');
-    const editorStateEn = EditorState.createWithContent(ContentState.createFromBlockArray(
-      blocksFromHTMLEn.contentBlocks,
-      blocksFromHTMLEn.entityMap,
-    ));
-    const blocksFromHTMLFa = convertFromHTML(data.translations[0].desc || '');
-    const editorStateFa = EditorState.createWithContent(ContentState.createFromBlockArray(
-      blocksFromHTMLFa.contentBlocks,
-      blocksFromHTMLFa.entityMap,
-    ));
+    let editorStateEn = this.state.editorStateEn;
+    if (data.desc) {
+      const blocksFromHTMLEn = convertFromHTML(data.desc || '');
+      console.log(blocksFromHTMLEn, data.desc);
+      editorStateEn = EditorState.createWithContent(ContentState.createFromBlockArray(
+        blocksFromHTMLEn.contentBlocks,
+        blocksFromHTMLEn.entityMap,
+      ));
+    }
+    let editorStateFa = this.state.editorStateFa;
+    if (data.translations[0] && data.translations[0].desc && data.translations[0].desc !== '<p><br></p>') {
+      const blocksFromHTMLFa = convertFromHTML(data.translations[0].desc || '');
+      editorStateFa = EditorState.createWithContent(ContentState.createFromBlockArray(
+        blocksFromHTMLFa.contentBlocks,
+        blocksFromHTMLFa.entityMap,
+      ));
+    }
     // this.getBase64().then((res) => {
     //   console.log(res);
     // });
@@ -253,6 +306,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       selectedPermissions,
       selectedCategories,
       selectedLanguages,
+      selectedStatus,
     });
   }
 
@@ -498,6 +552,13 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
   }
 
+  public handleSelectChangeStatus = (selectedStatus: ISelectOption) => {
+    this.setAppStatus(parseInt(selectedStatus.value, 10));
+    this.setState({
+      selectedStatus,
+    });
+  }
+
   public handleSelectChangeCategories = (selectedCategories) => {
     this.setState({
       selectedCategories,
@@ -700,6 +761,21 @@ class AdminAddApp extends React.Component<IProps, IState> {
     });
   }
 
+  private setAppStatus = (status: number) => {
+    let app = this.state.app;
+    const prvStatus = app.status;
+    app.status = status;
+    this.setState({app});
+    if (!this.props.routeParams.id) {
+      return;
+    }
+    this.appFactory.setTatus(this.props.routeParams.id, status).then().catch(() => {
+      app = this.state.app;
+      app.status = prvStatus;
+      this.setState({app});
+    });
+  }
+
   private checkAppIdDebounced = _.debounce(this.checkAppId, 512);
 
   /**
@@ -762,13 +838,28 @@ class AdminAddApp extends React.Component<IProps, IState> {
               <img src={Const.SERVER_URL + this.state.app.logo.path} alt=""/> : uploadButton}
           </Upload>
           <div className="multi-input-row">
+            <div className="form-row app-status-selector">
+              {this.state.app._id && (
+                <Select
+                  isMulti={false}
+                  onChange={this.handleSelectChangeStatus}
+                  options={this.statuses}
+                  placeholder={this.translator._getText('Status')}
+                  removeSelected={false}
+                  rtl={true}
+                  simpleValue={true}
+                  className="multi-selector"
+                  value={this.state.selectedStatus}
+                />
+              )}
+            </div>
             <input type="text" placeholder={this.translator._getText('App ID')} value={this.state.app.app_id}
                    onChange={this.bindInputToModel.bind(this, 'app_id')}
                    onKeyUp={this.appIdKeyUp} pattern={REGEX.APP_ID}
-                   className={!appValidation.app_id.isValid ? 'has-error' : ''}/>
+                   className={!appValidation.app_id.isValid ? 'with-margin has-error' : 'with-margin'}/>
             <input type="url" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
                    onChange={this.bindInputToModel.bind(this, 'website')} autoComplete="website"
-                   className={!appValidation.website.isValid ? 'has-error' : ''}
+                   className={!appValidation.website.isValid ? 'with-margin has-error' : 'with-margin'}
                    pattern={REGEX.URL}/>
           </div>
         </div>
@@ -936,4 +1027,17 @@ class AdminAddApp extends React.Component<IProps, IState> {
   }
 }
 
-export default AdminAddApp;
+/**
+ * redux store mapper
+ * @param {any} store store
+ * @param {IOwnProps} props
+ * @returns store item object
+ */
+const mapStateToProps = (store, props: IOwnProps): IProps => ({
+  user: store.app.user,
+  app: props.app,
+  routeParams: props.routeParams,
+  location: props.location,
+});
+
+export default connect(mapStateToProps, {})(AdminAddApp);
