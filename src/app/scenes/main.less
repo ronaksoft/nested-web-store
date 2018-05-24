@@ -1093,7 +1093,7 @@ ul.errors {
     textarea {
       height: 96px;
     }
-    .form-row {
+    .form-row, .butn {
       max-width: 150px;
       margin-bottom: 8px;
     }
@@ -2071,24 +2071,58 @@ ul.errors {
   padding: 2px 0;
   width: 100%;
   justify-content: center;
+  li.top-app-item {
+    position: relative;
+    &:hover {
+      .slider-item-handler {
+        display: flex;
+      }
+    }
+  }
 }
 
 li.top-app-item {
   display: flex;
-  background: @color-white;
-  border: 1px solid @color-wind-new;
   box-sizing: border-box;
-  border-radius: 16px;
   margin: 0 16px;
-  overflow: hidden;
   width: 64px;
   justify-content: center;
   align-items: center;
   flex: none;
+  border-radius: 16px;
+  border: 1px solid @color-wind-new;
   img {
     width: 64px;
+    background: @color-white;
     height: 64px;
+    border-radius: 16px;
+  }
+  .slider-item-handler {
+    display: none;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    path {
+      fill: @color-force!important;
+    }
   }
 }
+
+.error-message {
+  background: rgba(238, 55, 89, 0.16);
+  padding: 8px 0;
+  border-radius: 4px;
+  line-height: 24px;
+  display: flex;
+  color: #EE3759;
+  .nstIcon {
+    display: flex;
+    margin: 0 8px;
+  }
+  span:first-child {
+    padding: 0 8px;
+  } 
+}
+
 @import "../containers/404/style";
 @import "../styles/antd.min.css";

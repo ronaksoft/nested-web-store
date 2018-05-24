@@ -515,11 +515,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
 
   private onSubmit = () => {
     const appValidation = this.checkValidation();
-    console.log(appValidation);
-    console.log(Object.keys(appValidation)
-      .map((key) => appValidation[key].isValid)
-      .filter((isValid) => !isValid)
-      .length);
     if (
       Object.keys(appValidation)
         .map((key) => appValidation[key].isValid)
@@ -820,6 +815,14 @@ class AdminAddApp extends React.Component<IProps, IState> {
     const tabs = {};
     tabs[this.translator._getText('App info')] = (
       <div className="add-app">
+        {this.state.app.status === 4 && (
+          <p className="error-message">
+            <IcoN name="alertRed24" size={24}/>
+            <Translate>
+              Your app has been declined because of our <a>terms &amp; conditions</a> are being violated.
+            </Translate>
+          </p>
+        )}
         <p><Translate>
           Add your developed app by filling these fields and helping users find your app better.
         </Translate></p>
@@ -838,21 +841,24 @@ class AdminAddApp extends React.Component<IProps, IState> {
               <img src={Const.SERVER_URL + this.state.app.logo.path} alt=""/> : uploadButton}
           </Upload>
           <div className="multi-input-row">
-            <div className="form-row app-status-selector">
-              {this.state.app._id && (
-                <Select
-                  isMulti={false}
-                  onChange={this.handleSelectChangeStatus}
-                  options={this.statuses}
-                  placeholder={this.translator._getText('Status')}
-                  removeSelected={false}
-                  rtl={true}
-                  simpleValue={true}
-                  className="multi-selector"
-                  value={this.state.selectedStatus}
-                />
-              )}
-            </div>
+            {this.state.app._id && this.state.user && (
+              <div className="form-row app-status-selector">
+                  <Select
+                    isMulti={false}
+                    onChange={this.handleSelectChangeStatus}
+                    options={this.statuses}
+                    placeholder={this.translator._getText('Status')}
+                    removeSelected={false}
+                    rtl={true}
+                    simpleValue={true}
+                    className="multi-selector"
+                    value={this.state.selectedStatus}
+                  />
+              </div>
+            )}
+            {this.state.app._id && !this.state.user && this.state.app.status === 4 && (
+              <div className="butn butn-red"><Translate>Declined</Translate></div>
+            )}
             <input type="text" placeholder={this.translator._getText('App ID')} value={this.state.app.app_id}
                    onChange={this.bindInputToModel.bind(this, 'app_id')}
                    onKeyUp={this.appIdKeyUp} pattern={REGEX.APP_ID}

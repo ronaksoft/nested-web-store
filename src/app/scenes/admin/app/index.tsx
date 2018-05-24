@@ -142,6 +142,20 @@ class AdminApp extends React.Component<IProps, IState> {
     });
   }
 
+  private removeSliderApp = (app) => {
+    const appItemIndex = this.state.sliderApps.findIndex((a) => a.id === app.id);
+    const sliderApps = this.state.sliderApps;
+    sliderApps.splice(appItemIndex, 1);
+    this.setState({sliderApps});
+    this.appFactory.setSliderApps(sliderApps.map((a) => a.id)).then(() => {
+      message.success(this.translator._getText('Slider apps successfully deleted'));
+    }).catch(() => {
+      sliderApps.splice(appItemIndex, 0, app);
+      this.setState({sliderApps});
+      message.warning(this.translator._getText('Can\'t set slider apps'));
+    });
+  }
+
   private handlePageClick = (data: any) => {
     this.pagination.skip = this.pagination.limit * data.selected;
     this.loadApps();
@@ -270,6 +284,9 @@ class AdminApp extends React.Component<IProps, IState> {
     const SortableItem = SortableElement(({app, index}) => (
       <li className="top-app-item" key={'a' + index}>
         <img src={Const.SERVER_URL + app.logoPath} alt=""/>
+        <div className="slider-item-handler" onClick={this.removeSliderApp.bind(this, app)}>
+          <IcoN name="negativeXCross16" size={16}/>
+        </div>
       </li>
     ));
     const SortableList = SortableContainer(() => {
