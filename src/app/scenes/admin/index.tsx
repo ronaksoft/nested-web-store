@@ -9,9 +9,7 @@
  */
 import * as React from 'react';
 import {connect} from 'react-redux';
-// import {browserHistory} from 'react-router';
 import {Link} from 'react-router';
-import {login, logout} from 'redux/app/actions';
 import {IUser} from 'api/interfaces';
 import * as Cookies from 'cookies-js';
 
@@ -19,16 +17,13 @@ import {Translate, Affixer} from 'components';
 import {reactTranslateChangeLanguage} from 'components/';
 interface IState {
   isLogin: boolean;
-  user: any[];
+  user: IUser;
   lang: string;
 }
 
 interface IProps {
   isLogin: boolean;
   user: IUser;
-  params: string;
-  setLogin: (user: IUser) => {};
-  setLogout: () => {};
 }
 
 class AdminWrapper extends React.Component<IProps, IState> {
@@ -47,16 +42,22 @@ class AdminWrapper extends React.Component<IProps, IState> {
     if (initData) {
       this.state = {
         isLogin: false,
-        user: initData.__INITIAL_DATA__.user || [],
+        user: initData.__INITIAL_DATA__.user || props.user || null,
         lang: initData.__INITIAL_DATA__.locale || Cookies.get('locale') || 'en', // from browser
       };
     } else {
       this.state = {
         isLogin: false,
-        user: [],
+        user: this.props.user || null,
         lang: 'en',
       };
     }
+  }
+
+  public componentWillReceiveProps(newProps: IProps) {
+    this.setState({
+      user: newProps.user,
+    });
   }
 
   public componentDidMount() {
@@ -71,6 +72,16 @@ class AdminWrapper extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
+    if (!this.state.user) {
+      // browserHistory.push('/');
+      return (
+        <div className="main-container">
+          <div className="main-container-inner">
+            <div><Translate>Please Login to continue</Translate></div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="main-container">
         <div className="main-container-inner">
@@ -119,20 +130,4 @@ const mapStateToProps = (store) => ({
   user: store.app.user,
 });
 
-/**
- * reducer actions functions mapper
- * @param {any} dispatch reducer dispacther
- * @returns reducer actions object
- */
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setLogin: (user: IUser) => {
-      dispatch(login(user));
-    },
-    setLogout: () => {
-      dispatch(logout());
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AdminWrapper);
+export default connect(mapStateToProps, {})(AdminWrapper);
