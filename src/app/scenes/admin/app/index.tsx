@@ -6,7 +6,7 @@ import {IApplication} from 'api/interfaces';
 import * as _ from 'lodash';
 import {app as AppFactory} from '../../../api';
 import Const from 'api/consts/CServer';
-import Status from 'api/consts/CAppStatus';
+import Status, {default as CAppStatus} from 'api/consts/CAppStatus';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 const ReactPaginate = require('react-paginate');
@@ -35,6 +35,8 @@ interface IState {
   sliderApps: ITopApp[];
   pageCount: number;
   keyword: string;
+  selectedStatuses: number[];
+  sort: string;
 }
 
 class AdminApp extends React.Component<IProps, IState> {
@@ -58,6 +60,9 @@ class AdminApp extends React.Component<IProps, IState> {
       sliderApps: [],
       keyword: '',
       pageCount: 1,
+      selectedStatuses:
+        [CAppStatus.PUBLISHED, CAppStatus.UNPUBLISHED, CAppStatus.SUSPENDED, CAppStatus.PENDING, CAppStatus.DECLINED],
+      sort: '',
     };
     this.state = state;
     this.appFactory = new AppFactory();
@@ -86,7 +91,9 @@ class AdminApp extends React.Component<IProps, IState> {
 
   private loadApps() {
     this.appFactory
-      .searchAll(this.state.keyword, 0, this.pagination.skip, this.pagination.limit)
+      .searchAll(
+        this.state.keyword, this.state.selectedStatuses, this.state.sort,
+        this.pagination.skip, this.pagination.limit)
       .then((data) => {
         if (data.apps === null) {
           this.setState({
@@ -192,9 +199,13 @@ class AdminApp extends React.Component<IProps, IState> {
 
   private onDrop = (event) => {
     event.preventDefault();
-    const data = event.dataTransfer.getData('appId');
-    if (!this.state.sliderApps.find((app) => app.id === data)) {
-      const newApp = this.state.apps.find((app) => app._id === data);
+    const id = event.dataTransfer.getData('appId');
+    if (!this.state.sliderApps.find((app) => app.id === id)) {
+      const newApp = this.state.apps.find((app) => app._id === id);
+      if (newApp.status !== CAppStatus.PUBLISHED) {
+        message.warning(this.translator._getText('You can\'t set an unpublished app in slider'));
+        return;
+      }
       const newApps = [...this.state.sliderApps, {id: newApp._id, logoPath: newApp.logo.path}];
       this.appFactory.setSliderApps(newApps.map((app) => {
         return app.id;
@@ -219,6 +230,31 @@ class AdminApp extends React.Component<IProps, IState> {
     event.preventDefault();
   }
 
+  private setStatusFilter = (status, event) => {
+    const statuses = this.state.selectedStatuses;
+    if (event.target.checked) {
+      statuses.push(status);
+    } else {
+      const index = statuses.indexOf(status);
+      if (index > -1) {
+        statuses.splice(index, 1);
+      }
+    }
+    this.setState({
+      selectedStatuses: statuses,
+    }, () => {
+      this.loadApps();
+    });
+  }
+
+  private setSort = (sort) => {
+    this.setState({
+      sort,
+    }, () => {
+      this.loadApps();
+    });
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -228,15 +264,19 @@ class AdminApp extends React.Component<IProps, IState> {
    */
   public render() {
     const isAdmin = true;
-    const unFilledsliderApps = [{}, {}, {}, {}, {}].splice(0, 5 - this.state.sliderApps.length);
+    const unfilledSliderApps = [{}, {}, {}, {}, {}].splice(0, 5 - this.state.sliderApps.length);
 
     const sortMenu = (
       <ul className="sort-menu">
         <li className="container-icon">
           <Translate>Sort</Translate>
         </li>
-        <li className="active"><Translate>Date added</Translate></li>
-        <li><Translate>Starred</Translate></li>
+        <li className={this.state.sort !== 'starred' ? 'active' : ''}
+            onClick={this.setSort.bind(this, '')}>
+          <Translate>Date added</Translate></li>
+        <li className={this.state.sort === 'starred' ? 'active' : ''}
+            onClick={this.setSort.bind(this, 'starred')}>
+          <Translate>Starred</Translate></li>
       </ul>
     );
     const filterMenu = (
@@ -249,35 +289,40 @@ class AdminApp extends React.Component<IProps, IState> {
             <Translate>PUBLISHED</Translate>
           </label>
           <div className="filler"/>
-          <input id="checkbox-published" type="checkbox" defaultChecked={true}/>
+          <input id="checkbox-published" type="checkbox" defaultChecked={true}
+                 onChange={this.setStatusFilter.bind(this, CAppStatus.PUBLISHED)}/>
         </li>
         <li>
           <label htmlFor="checkbox-pending" className="app-badge pending">
             <Translate>PENDING</Translate>
           </label>
           <div className="filler"/>
-          <input id="checkbox-pending" type="checkbox" defaultChecked={true}/>
+          <input id="checkbox-pending" type="checkbox" defaultChecked={true}
+                 onChange={this.setStatusFilter.bind(this, CAppStatus.PENDING)}/>
         </li>
         <li>
           <label htmlFor="checkbox-suspended" className="app-badge suspended">
             <Translate>SUSPENDED</Translate>
           </label>
           <div className="filler"/>
-          <input id="checkbox-suspended" type="checkbox" defaultChecked={true}/>
+          <input id="checkbox-suspended" type="checkbox" defaultChecked={true}
+                 onChange={this.setStatusFilter.bind(this, CAppStatus.SUSPENDED)}/>
         </li>
         <li>
           <label htmlFor="checkbox-declined" className="app-badge declined">
             <Translate>DECLINED</Translate>
           </label>
           <div className="filler"/>
-          <input id="checkbox-declined" type="checkbox" defaultChecked={true}/>
+          <input id="checkbox-declined" type="checkbox" defaultChecked={true}
+                 onChange={this.setStatusFilter.bind(this, CAppStatus.DECLINED)}/>
         </li>
         <li>
           <label htmlFor="checkbox-badge" className="app-badge unpublished">
-            <Translate>DECLINED</Translate>
+            <Translate>UNPUBLISHED</Translate>
           </label>
           <div className="filler"/>
-          <input id="checkbox-badge" type="checkbox" defaultChecked={true}/>
+          <input id="checkbox-badge" type="checkbox" defaultChecked={true}
+                 onChange={this.setStatusFilter.bind(this, CAppStatus.UNPUBLISHED)}/>
         </li>
       </ul>
     );
@@ -296,7 +341,7 @@ class AdminApp extends React.Component<IProps, IState> {
             <SortableItem key={`item-${index}`} index={index}
                           onSortEnd={this.onSortEnd} app={app}/>
           ))}
-          {unFilledsliderApps.map((_, index) => (
+          {unfilledSliderApps.map((_, index) => (
             <li className="top-app-item" onDrop={this.onDrop} key={index}
                 onDragOver={this.allowDrop}>
               <IcoN name="cross24" size={24}/>

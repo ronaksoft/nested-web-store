@@ -94,7 +94,7 @@ class AdminUsers extends React.Component<IProps, IState> {
   }
 
   private loadUsers() {
-    this.userFactory.getAll(this.state.keyword, 0, this.pagination.skip, this.pagination.limit).then((data) => {
+    this.userFactory.getAll(this.state.keyword, [], this.pagination.skip, this.pagination.limit).then((data) => {
       if (data.users === null) {
         this.setState({
           users: [],

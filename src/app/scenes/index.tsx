@@ -29,6 +29,7 @@ import {Translate, IcoN, reactTranslateChangeLanguage} from 'components';
 import Const from './../api/consts/CServer';
 import axios from 'axios';
 import {message, Modal, Popover} from 'antd';
+import browserHistory from 'react-router/lib/browserHistory';
 
 interface IState {
   isLogin: boolean;
@@ -147,7 +148,7 @@ class Container extends React.Component<IProps, IState> {
     const oauthWindow: any = window.open('', '_blank', strWindowFeatures);
     axios.post(websiteUrl + '/user/oauth/token/create').then((response) => {
       if (response.data.status === 'ok') {
-        oauthWindow.location = 'https://webapp.nested.me/oauth/?client_id=' + Const.CLIENT_ID +
+        oauthWindow.location = 'https://webapp.ronaksoftware.com/oauth/?client_id=' + Const.CLIENT_ID +
           '&redirect_uri=' + websiteUrl + '/user/oauth&scope=read%20profile%20data,create%20app,get%20token&token=' +
           response.data.data;
         if (oauthWindow === undefined) {
@@ -203,11 +204,12 @@ class Container extends React.Component<IProps, IState> {
   }
 
   private signOut = () => {
-    this.props.setLogout();
     this.userFactory.logout().then(() => {
       this.setState({
         user: null,
       });
+      this.props.setLogout();
+      browserHistory.push('/');
     });
   }
 
