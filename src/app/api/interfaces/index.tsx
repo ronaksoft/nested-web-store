@@ -11,7 +11,7 @@ interface IApplication {
   permissions: IPermission[];
   categories: ICategory[];
   official: boolean;
-  stared: boolean;
+  starred: boolean;
   status: number;
   lang: string[];
   created_by?: IUser;
@@ -31,7 +31,7 @@ interface IApplicationValidation {
   permissions: IValidation;
   categories: IValidation;
   official: IValidation;
-  stared: IValidation;
+  starred: IValidation;
   status: IValidation;
   lang: IValidation;
   created_by?: IValidation;
@@ -57,7 +57,7 @@ interface ICategory {
   _id: string;
   name?: string;
   translations?: ICategoryTrans[];
-  stared?: boolean;
+  starred?: boolean;
   order?: number;
   slug?: string;
 }

@@ -702,5 +702,9 @@
   "Can\\'t uninstall the app!": {
     "en": "",
     "fa": ""
+  },
+  "Please login with admin account to continue": {
+    "en": "",
+    "fa": "برای دسترسی به صفحه ادمین به اکانت خود وارد شوید"
   }
 }

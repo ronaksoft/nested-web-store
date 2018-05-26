@@ -72,12 +72,12 @@ class AdminWrapper extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
-    if (!this.state.user) {
+    if (!this.state.user || (this.state.user && !this.state.user.admin)) {
       // browserHistory.push('/');
       return (
         <div className="main-container">
           <div className="main-container-inner">
-            <div><Translate>Please Login to continue</Translate></div>
+            <div><Translate>Please login with admin account to continue</Translate></div>
           </div>
         </div>
       );

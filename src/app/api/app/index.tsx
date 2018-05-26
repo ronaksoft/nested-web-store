@@ -46,8 +46,9 @@ class AppFactory {
     return callApi('/app/search', {query, skip, limit});
   }
 
-  public searchAll(query: string, status: number = 0, skip: number = 0, limit: number = 20): Promise<any> {
-    return callApi('/admin/app/search', {query, status, skip, limit});
+  public searchAll(query: string, statuses: number[] = [], sort: string = '',
+                   skip: number = 0, limit: number = 20): Promise<any> {
+    return callApi('/admin/app/search', {query, statuses, sort, skip, limit});
   }
 
   public installApp(appId: string): Promise<IPurchase> {
@@ -66,7 +67,7 @@ class AppFactory {
     return callApi('/admin/app/setslider', {app_ids: appIds});
   }
 
-  public setTatus(id: string, status: number): Promise<any> {
+  public setStatus(id: string, status: number): Promise<any> {
     return callApi('/admin/app/setstatus', {id, status});
   }
 }

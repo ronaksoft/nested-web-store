@@ -86,7 +86,7 @@ class AppView extends React.Component<IProps, IState> {
       }*/],
       permissions: [],
       official: false,
-      stared: false,
+      starred: false,
       status: 0,
       lang: [],
     };
@@ -209,6 +209,10 @@ class AppView extends React.Component<IProps, IState> {
   }
 
   private onAppInstall = () => {
+    const appMessageLoading = message.loading(
+      this.translator
+        ._getText('Installing "{0}", be patient')
+        .replace('{0}', this.state.app.name), 10000);
     this.nestedService.http('app/register', {
       app_id: this.state.app.app_id,
       app_name: this.state.app.name,
@@ -218,32 +222,43 @@ class AppView extends React.Component<IProps, IState> {
       icon_small_url: Const.SERVER_URL + this.state.app.logo.path,
     }).then(() => {
       this.installApp();
+      appMessageLoading();
     }).catch((err) => {
       if (err.err_code === 5) {
         this.installApp();
       }
+      appMessageLoading();
     });
   }
 
   private onAppUninstall = () => {
+    const appMessageLoading = message.loading(
+      this.translator
+        ._getText('Uninstalling "{0}", be patient')
+        .replace('{0}', this.state.app.name), 10000);
     this.nestedService.http('app/remove', {
       app_id: this.state.app.app_id,
     }).then(() => {
       this.uninstallApp();
+      appMessageLoading();
     }).catch((err) => {
       if (err.err_code === 3) {
         this.uninstallApp();
       }
+      appMessageLoading();
     });
   }
 
   private installApp() {
     this.appFactory.installApp(this.state.appId).then((data) => {
-      if (data.status === CPurchaseStatus.INSTALL) {
-        this.setState({
-          installed: true,
-        });
-      }
+      this.setState({
+        installed: (data.status === CPurchaseStatus.INSTALL),
+        authorizeModal: false,
+      });
+      message.success(
+        this.translator
+          ._getText('"{0}" successfully installed')
+          .replace('{0}', this.state.app.name));
     }).catch((err) => {
       if (err.code === Const.PERMISSION_DENIED) {
         message.error(this.translator._getText('You don\'t have permission to install the app'));
@@ -255,11 +270,14 @@ class AppView extends React.Component<IProps, IState> {
 
   private uninstallApp() {
     this.appFactory.uninstallApp(this.state.appId).then((data) => {
-      if (data.status === CPurchaseStatus.UNINSTALL) {
-        this.setState({
-          installed: false,
-        });
-      }
+      this.setState({
+        installed: !(data.status === CPurchaseStatus.UNINSTALL),
+        authorizeModal: false,
+      });
+      message.success(
+        this.translator
+          ._getText('"{0}" successfully uninstalled')
+          .replace('{0}', this.state.app.name));
     }).catch((err) => {
       if (err.code === Const.PERMISSION_DENIED) {
         message.error(this.translator._getText('You don\'t have permission to uninstall the app'));
