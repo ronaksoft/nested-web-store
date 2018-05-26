@@ -109,7 +109,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
       }],
       permissions: [],
       official: false,
-      stared: false,
+      starred: false,
       status: 0,
       lang: [],
     };
@@ -764,7 +764,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
     if (!this.props.routeParams.id) {
       return;
     }
-    this.appFactory.setTatus(this.props.routeParams.id, status).then().catch(() => {
+    this.appFactory.setStatus(this.props.routeParams.id, status).then().catch(() => {
       app = this.state.app;
       app.status = prvStatus;
       this.setState({app});

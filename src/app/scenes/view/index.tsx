@@ -86,7 +86,7 @@ class AppView extends React.Component<IProps, IState> {
       }*/],
       permissions: [],
       official: false,
-      stared: false,
+      starred: false,
       status: 0,
       lang: [],
     };

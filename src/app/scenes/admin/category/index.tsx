@@ -47,7 +47,7 @@ class AdminCategory extends React.Component<IProps, IState> {
       slug: '',
       name: '',
       order: 0,
-      stared: false,
+      starred: false,
       translations: [{
         locale: 'fa',
         name: '',

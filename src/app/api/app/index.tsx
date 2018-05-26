@@ -67,7 +67,7 @@ class AppFactory {
     return callApi('/admin/app/setslider', {app_ids: appIds});
   }
 
-  public setTatus(id: string, status: number): Promise<any> {
+  public setStatus(id: string, status: number): Promise<any> {
     return callApi('/admin/app/setstatus', {id, status});
   }
 }

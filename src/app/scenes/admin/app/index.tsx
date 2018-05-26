@@ -123,7 +123,7 @@ class AdminApp extends React.Component<IProps, IState> {
       const apps = this.state.apps;
       const index = _.findIndex(this.state.apps, {_id: data._id});
       if (index > -1) {
-        apps[index].stared = !apps[index].stared;
+        apps[index].starred = !apps[index].starred;
       }
       this.setState({
         apps,
@@ -145,7 +145,23 @@ class AdminApp extends React.Component<IProps, IState> {
       });
       message.success(this.translator._getText('Application successfully removed'));
     }).catch(() => {
-      message.error(this.translator._getText('Can\'t remove application!'));
+      message.error(this.translator._getText('Can\'t remove the application!'));
+    });
+  }
+
+  private setStatus = (id, status) => {
+    this.appFactory.setStatus(id, status).then(() => {
+      message.success(this.translator._getText('Application status successfully changed'));
+      const apps = this.state.apps;
+      const index = _.findIndex(apps, {_id: id});
+      if (index > -1) {
+        apps[index].status = status;
+        this.setState({
+          apps,
+        });
+      }
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t change status of the application!'));
     });
   }
 
@@ -397,20 +413,22 @@ class AdminApp extends React.Component<IProps, IState> {
                 <img src={Const.SERVER_URL + app.logo.path} draggable={true} onDragStart={this.drag} id={app._id}/>
               </div>
               <div className="app-info">
-                <h4>
-                  <ProperLanguage model={app} property="name"/>
-                  {app.status === Status.PUBLISHED &&
-                  <span className="app-badge published"><Translate>PUBLISHED</Translate></span>}
-                  {app.status === Status.DECLINED &&
-                  <span className="app-badge declined"><Translate>DECLINED</Translate></span>}
-                  {app.status === Status.PENDING &&
-                  <span className="app-badge pending"><Translate>PENDING</Translate></span>}
-                  {app.status === Status.SUSPENDED &&
-                  <span className="app-badge susoended"><Translate>SUSPENDED</Translate></span>}
-                  {app.status === Status.UNPUBLISHED &&
-                  <span className="app-badge unpublished"><Translate>UNPUBLISHED</Translate></span>}
-                </h4>
-                <p>{app.app_id}</p>
+                <Link to={'/admin/app/edit/' + app._id}>
+                  <h4>
+                    <ProperLanguage model={app} property="name"/>
+                    {app.status === Status.PUBLISHED &&
+                    <span className="app-badge published"><Translate>PUBLISHED</Translate></span>}
+                    {app.status === Status.DECLINED &&
+                    <span className="app-badge declined"><Translate>DECLINED</Translate></span>}
+                    {app.status === Status.PENDING &&
+                    <span className="app-badge pending"><Translate>PENDING</Translate></span>}
+                    {app.status === Status.SUSPENDED &&
+                    <span className="app-badge suspended"><Translate>SUSPENDED</Translate></span>}
+                    {app.status === Status.UNPUBLISHED &&
+                    <span className="app-badge unpublished"><Translate>UNPUBLISHED</Translate></span>}
+                  </h4>
+                  <p>{app.app_id}</p>
+                </Link>
               </div>
               <Popover placement="topRight" trigger="click"
                        overlayClassName="popover-no-padding" content={(
@@ -421,7 +439,7 @@ class AdminApp extends React.Component<IProps, IState> {
                       <Translate>Edit app</Translate>
                     </Link>
                   </li>
-                  <li className={app.stared ? 'feature-button active' : 'feature-button'}
+                  <li className={app.starred ? 'feature-button active' : 'feature-button'}
                       onClick={this.makeFeature.bind(this, app._id)}>
                     <IcoN name="star16" size={16}/>
                     <Translate>Feature app</Translate>
@@ -436,15 +454,17 @@ class AdminApp extends React.Component<IProps, IState> {
                     </Popconfirm>
                   </li>
                   <li className="suspend-item"
-                      onClick={this.makeFeature.bind(this, app._id)}>
+                      onClick={this.setStatus.bind(this, app._id, CAppStatus.SUSPENDED)}>
                     <IcoN name="unavailable16" size={16}/>
                     <Translate>Suspend app</Translate>
                   </li>
-                  <li className="publish-item">
+                  <li className="publish-item"
+                      onClick={this.setStatus.bind(this, app._id, CAppStatus.PUBLISHED)}>
                     <IcoN name="unavailable16" size={16}/>
                     <Translate>Publish</Translate>
                   </li>
-                  <li className="decline-item">
+                  <li className="decline-item"
+                      onClick={this.setStatus.bind(this, app._id, CAppStatus.DECLINED)}>
                     <IcoN name="unavailable16" size={16}/>
                     <Translate>Decline</Translate>
                   </li>
