@@ -931,64 +931,6 @@ footer {
 }
 
 .tabs-content {
-  .reviews {
-    li {
-      display: flex;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(50, 61, 71, 0.06);
-      .rev-logo {
-        display: flex;
-        flex: none;
-        padding-right: 16px;
-        img {
-          width: 32px;
-          border-radius: 16px;
-          height: 32px;
-          background-color: @color-breeze;
-        }
-      }
-      .rev-info {
-        padding: 6px 8px;
-        background: @color-white;
-        border-radius: 4px;
-        flex: 1;
-        h4 {
-          line-height: 21px;
-          font-weight: bold;
-          font-size: 14px;
-          margin-bottom: 8px;
-          display: flex;
-          flex: 1;
-        }
-        time {
-          display: flex;
-          font-weight: bold;
-          line-height: 17px;
-          font-size: 10px;
-          text-align: right;
-          color: @color-solid-48;
-          padding-top: 2px;
-          flex: none;
-        }
-        p {
-          line-height: 21px;
-          font-family: 'YekanBakh', 'OpenSans';
-          font-size: 12px;
-        }
-        .rate-result {
-          margin: 0 0 0 8px;
-          display: inline-flex;
-          svg {
-            opacity: .32;
-          }
-          svg,
-          path {
-            fill: @color-solid !important;
-          }
-        }
-      }
-    }
-  }
   .pictures {
     img {
       margin-bottom: 8px;
@@ -998,7 +940,122 @@ footer {
     }
   }
 }
-
+.reviews-list {
+  li {
+    display: flex;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(50, 61, 71, 0.06);
+    .rev-logo {
+      display: flex;
+      flex: none;
+      padding-right: 16px;
+      img {
+        width: 32px;
+        border-radius: 16px;
+        height: 32px;
+        background-color: @color-breeze;
+      }
+    }
+    .rev-info {
+      padding: 6px 8px;
+      background: @color-white;
+      border-radius: 4px;
+      flex: 1;
+      h4 {
+        line-height: 21px;
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 8px;
+        display: flex;
+        flex: 1;
+      }
+      time {
+        display: flex;
+        font-weight: bold;
+        line-height: 17px;
+        font-size: 10px;
+        text-align: right;
+        color: @color-solid-48;
+        padding-top: 2px;
+        flex: none;
+      }
+      strong {
+        line-height: 18px;
+        font-size: 12px;
+        color: #508EE6;
+        display: flex;
+        margin-bottom: 8px;
+      }
+      p {
+        line-height: 21px;
+        font-family: 'YekanBakh', 'OpenSans';
+        font-size: 12px;
+      }
+      .rate-result {
+        margin: 0 0 0 8px;
+        display: inline-flex;
+        svg {
+          opacity: .32;
+        }
+        svg,
+        path {
+          fill: @color-solid !important;
+        }
+      }
+    }
+  }
+  &.manage-review-list {
+    li {
+      padding-left: 16px;
+      border: none;
+      padding: 8px 0;
+      .rev-logo {
+        padding-right: 8px;
+      }
+      .rev-info {
+        border: 1px solid rgba(50, 61, 71, 0.32);
+        border-radius: 4px;
+        h4 {
+          margin: 0;
+        }
+      }
+      input[type="checkbox"] {
+        margin: 0 8px;
+      }
+      .reply-button ,
+      .accept-button ,
+      .remove-button {
+        height: 24px;
+        margin-left: 0;
+        margin-right: 8px;
+      }
+      .remove-button {
+        path {
+          fill: #FF3243!important;
+        }
+      }
+      .reply-button {
+        path {
+          fill: #508EE6!important;
+        }
+      }
+      &.selected {
+        background: rgba(80, 142, 230, 0.06);
+      }
+    }
+  }
+  .rev-reply {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    textarea {
+      width: 100%;
+      display: flex;
+      min-height: 68px;
+      margin: 8px 0;
+    }
+  }
+}
 ul.errors {
   list-style: none;
   li,
@@ -1104,9 +1161,6 @@ ul.errors {
       margin-bottom: 8px;
     }
   }
-  textarea {
-    border: 1px solid @color-wind-new;
-  }
   input.form-row {
     width: ~'calc(50% - 4px)';
     &.form-block {
@@ -1206,6 +1260,9 @@ ul.errors {
       margin-bottom: 16px;
     }
   }
+}
+textarea.with-border {
+  border: 1px solid @color-wind-new;
 }
 .add-app-scene {
   .multi-selector {

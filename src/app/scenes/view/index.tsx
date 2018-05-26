@@ -313,7 +313,7 @@ class AppView extends React.Component<IProps, IState> {
       tabs[this.translator._getText('Reviews')] = (
         <div>
           <Rating appId={this.state.appId} submitted={this.reviewHandler}/>
-          <ul className="reviews">
+          <ul className="reviews-list">
             {this.state.reviews.map((review, index) => {
               return (
                 <li key={'review-' + index}>
