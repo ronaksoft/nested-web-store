@@ -157,12 +157,10 @@ class AppView extends React.Component<IProps, IState> {
         if (data === CPurchaseStatus.INSTALL) {
           this.setState({
             installed: true,
-            hasAccess: true,
           });
         } else {
           this.setState({
             installed: false,
-            hasAccess: true,
           });
         }
       }).catch(() => {
@@ -179,6 +177,13 @@ class AppView extends React.Component<IProps, IState> {
         });
       }).catch(() => {
         message.error(this.translator._getText('Can\'t fetch app\'s reviews!'));
+      });
+      this.setState({
+        hasAccess: (this.state.user ? this.state.user.nested_admin : false),
+      }, () => {
+        if (this.state.user && this.state.user._id.length === 24) {
+          this.nestedService.setUser(this.state.user);
+        }
       });
     }
     window.addEventListener('reactTranslateChangeLanguage', this.updateLang);

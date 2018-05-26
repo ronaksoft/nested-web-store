@@ -10,7 +10,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 // import {browserHistory} from 'react-router';
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import {login, logout} from 'redux/app/actions';
 import './main.less';
 import AppView from './view/';
@@ -30,7 +30,6 @@ import {Translate, IcoN, reactTranslateChangeLanguage} from 'components';
 import Const from './../api/consts/CServer';
 import axios from 'axios';
 import {message, Modal, Popover} from 'antd';
-import browserHistory from 'react-router/lib/browserHistory';
 
 interface IState {
   isLogin: boolean;
@@ -149,7 +148,7 @@ class Container extends React.Component<IProps, IState> {
     const oauthWindow: any = window.open('', '_blank', strWindowFeatures);
     axios.post(Const.SERVER_URL + '/user/oauth/token/create').then((response) => {
       if (response.data.status === 'ok') {
-        oauthWindow.location = 'https://webapp.ronaksoftware.com/oauth/?client_id=' + Const.CLIENT_ID +
+        oauthWindow.location = 'https://webapp.nested.me/oauth/?client_id=' + Const.CLIENT_ID +
           '&redirect_uri=' + callbackUri + '&scope=read%20profile%20data,create%20app,get%20token&token=' +
           response.data.data;
         if (oauthWindow === undefined) {
