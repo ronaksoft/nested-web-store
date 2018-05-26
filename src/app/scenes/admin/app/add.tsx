@@ -522,10 +522,12 @@ class AdminAddApp extends React.Component<IProps, IState> {
         .length > 0) {
       return;
     }
+    let loadingMessage = null;
     if (this.state.croppedFiles.length !== 0) {
-      message.loading(this.translator._getText('Files are being uploaded...'));
+      loadingMessage = message.loading(this.translator._getText('Files are being uploaded...'), 10000);
     }
     this.uploadScreenShots().then((files) => {
+      loadingMessage();
       return this.getModel(false, files);
     }).then((model) => {
       if (model._id.length === 24) {

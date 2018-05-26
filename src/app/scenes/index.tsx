@@ -143,13 +143,13 @@ class Container extends React.Component<IProps, IState> {
   }
 
   public signInWithNested = () => {
-    const websiteUrl = Const.SERVER_URL;
+    const callbackUri = Const.SERVER_URL + '/user/oauth';
     const strWindowFeatures = 'location=yes,height=570,width=520,scrollbars=yes,status=yes';
     const oauthWindow: any = window.open('', '_blank', strWindowFeatures);
-    axios.post(websiteUrl + '/user/oauth/token/create').then((response) => {
+    axios.post(Const.SERVER_URL + '/user/oauth/token/create').then((response) => {
       if (response.data.status === 'ok') {
         oauthWindow.location = 'https://webapp.ronaksoftware.com/oauth/?client_id=' + Const.CLIENT_ID +
-          '&redirect_uri=' + websiteUrl + '/user/oauth&scope=read%20profile%20data,create%20app,get%20token&token=' +
+          '&redirect_uri=' + callbackUri + '&scope=read%20profile%20data,create%20app,get%20token&token=' +
           response.data.data;
         if (oauthWindow === undefined) {
           message.error('Please disable your popup blocker');
@@ -158,7 +158,7 @@ class Container extends React.Component<IProps, IState> {
         const interval = setInterval(() => {
           if (oauthWindow.closed) {
             clearInterval(interval);
-            axios.post(websiteUrl + '/user/oauth/token/login', {
+            axios.post(Const.SERVER_URL + '/user/oauth/token/login', {
               code: response.data.data,
             }).then((userResponse) => {
               if (userResponse.data.status !== 'nok') {
@@ -167,6 +167,10 @@ class Container extends React.Component<IProps, IState> {
                   user: userResponse.data.data,
                   openSignInModal: false,
                 });
+                message.success(
+                  this.translator
+                    ._getText('You are logged in as {0}')
+                    .replace('{0}', userResponse.data.data.username));
               }
             }).catch((err) => {
               message.error(err);
@@ -230,55 +234,55 @@ class Container extends React.Component<IProps, IState> {
         <div className="navbar-wrapper">
           <div className={isAdminPage ? 'navbar-container admin' : 'navbar-container'}>
             {!isAdminPage && (
-                <div className="navbar">
-                  <Link to="/">
-                    <img src="/public/assets/icons/App_StoreNegative_32.svg" height="32" alt="Nested" className="logo"/>
-                    <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" height="32" alt="Nested"
-                        className="logo-type"/>
-                    <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
-                        className="logo-type fa"/>
-                  </Link>
-                  <div className="devider"/>
-                  <Link to="/">
-                    <Translate>App Store</Translate>
-                  </Link>
-                  <div className="filler"/>
-                  <Link to="/apps"><Translate>Browse</Translate></Link>
-                  {this.state.user === null &&
-                  <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
-                  {this.state.user !== null &&
-                  <div className="user-avatar">
-                    <Popover placement="bottomRight" trigger="click" content={(
-                      <div className="profile-popover">
-                        <div className="_df">
-                          <div className="user-avatar">
-                            <img src={this.state.user.picture} title={this.state.user.name}/>
-                          </div>
-                          <div>
-                            <b>{this.state.user.name}</b>
-                            <span>{this.state.user.username}</span>
-                          </div>
+              <div className="navbar">
+                <Link to="/">
+                  <img src="/public/assets/icons/App_StoreNegative_32.svg" height="32" alt="Nested" className="logo"/>
+                  <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" height="32" alt="Nested"
+                       className="logo-type"/>
+                  <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" height="32" alt="Nested"
+                       className="logo-type fa"/>
+                </Link>
+                <div className="devider"/>
+                <Link to="/">
+                  <Translate>App Store</Translate>
+                </Link>
+                <div className="filler"/>
+                <Link to="/apps"><Translate>Browse</Translate></Link>
+                {this.state.user === null &&
+                <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
+                {this.state.user !== null &&
+                <div className="user-avatar">
+                  <Popover placement="bottomRight" trigger="click" content={(
+                    <div className="profile-popover">
+                      <div className="_df">
+                        <div className="user-avatar">
+                          <img src={this.state.user.picture} title={this.state.user.name}/>
                         </div>
-                        <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>
-                        <a className="signout" onClick={this.signOut}>
-                          <IcoN name="exit16" size={16}/>
-                          <Translate>Sign out</Translate>
-                        </a>
+                        <div>
+                          <b>{this.state.user.name}</b>
+                          <span>{this.state.user.username}</span>
+                        </div>
                       </div>
-                    )} overlayClassName="popover-no-padding">
-                      <img src={this.state.user.picture} title={this.state.user.name}/>
-                    </Popover>
-                  </div>}
-                </div>
+                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>
+                      <a className="signout" onClick={this.signOut}>
+                        <IcoN name="exit16" size={16}/>
+                        <Translate>Sign out</Translate>
+                      </a>
+                    </div>
+                  )} overlayClassName="popover-no-padding">
+                    <img src={this.state.user.picture} title={this.state.user.name}/>
+                  </Popover>
+                </div>}
+              </div>
             )}
             {isAdminPage && (
               <div className="navbar">
                 <Link to="/">
                   <img src="/public/assets/icons/App_Store_32.svg" height={32} alt="Nested" className="logo"/>
                   <img src="/public/assets/icons/Nested_EnglishTypeSolidAppStore.svg" height={32} alt="Nested"
-                    className="logo-type"/>
+                       className="logo-type"/>
                   <img src="/public/assets/icons/Nested_PersianTypeSolidAppStore.svg" height={32} alt="Nested"
-                    className="logo-type fa"/>
+                       className="logo-type fa"/>
                 </Link>
                 <div className="devider"/>
                 <Link to="/admin/app/create">
@@ -286,7 +290,7 @@ class Container extends React.Component<IProps, IState> {
                 </Link>
                 <div className="filler"/>
                 {this.state.user === null &&
-                  <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
+                <button className="butn" onClick={this.toggleSignInModal}><Translate>Sign in</Translate></button>}
                 {this.state.user !== null &&
                 <div className="user-avatar" ref={this.refHandler}>
                   <Popover placement="bottomRight" trigger="click" content={(
@@ -322,9 +326,9 @@ class Container extends React.Component<IProps, IState> {
                 <img src="/public/assets/icons/App_StoreNegative.svg" alt="Nested" className="logo"/>
                 <div className="app-info-logo">
                   <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" alt="Nested"
-                      className="logo-type"/>
+                       className="logo-type"/>
                   <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" alt="Nested"
-                      className="logo-type fa"/>
+                       className="logo-type fa"/>
                   <Translate>App Store</Translate>
                 </div>
               </div>
@@ -380,9 +384,9 @@ class Container extends React.Component<IProps, IState> {
             <IcoN name="appStoreLogo7792" size={7792}/>
             <div className="nested-logo-name">
               <img src="/public/assets/icons/Nested_EnglishTypeNegative.svg" width="136" alt="Nested"
-                  className="logo-type"/>
+                   className="logo-type"/>
               <img src="/public/assets/icons/Nested_PersianTypeNegative.svg" width="136" alt="Nested"
-                  className="logo-type fa"/>
+                   className="logo-type fa"/>
               <Translate>App Store</Translate>
             </div>
           </div>
