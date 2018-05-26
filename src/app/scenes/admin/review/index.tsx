@@ -117,7 +117,6 @@ class AdminReview extends React.Component<IProps, IState> {
   }
 
   private checkboxChange = (review, event) => {
-    console.log();
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     if (value) {

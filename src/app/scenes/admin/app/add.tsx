@@ -217,7 +217,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
     }).then(() => {
       if (this.props.location.pathname.indexOf('/admin/app/edit/') > -1 && this.props.routeParams.id) {
         this.appFactory.getById(this.props.routeParams.id).then((data) => {
-          console.log('aaap', data);
           this.fillModel(data);
         }).catch((e) => {
           console.log(e);
@@ -282,7 +281,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
     let editorStateEn = this.state.editorStateEn;
     if (data.desc) {
       const blocksFromHTMLEn = convertFromHTML(data.desc || '');
-      console.log(blocksFromHTMLEn, data.desc);
       editorStateEn = EditorState.createWithContent(ContentState.createFromBlockArray(
         blocksFromHTMLEn.contentBlocks,
         blocksFromHTMLEn.entityMap,
@@ -843,31 +841,13 @@ class AdminAddApp extends React.Component<IProps, IState> {
               <img src={Const.SERVER_URL + this.state.app.logo.path} alt=""/> : uploadButton}
           </Upload>
           <div className="multi-input-row">
-            {this.state.app._id && this.state.user && (
-              <div className="form-row app-status-selector">
-                  <Select
-                    isMulti={false}
-                    onChange={this.handleSelectChangeStatus}
-                    options={this.statuses}
-                    placeholder={this.translator._getText('Status')}
-                    removeSelected={false}
-                    rtl={true}
-                    simpleValue={true}
-                    className="multi-selector"
-                    value={this.state.selectedStatus}
-                  />
-              </div>
-            )}
-            {this.state.app._id && !this.state.user && this.state.app.status === 4 && (
-              <div className="butn butn-red"><Translate>Declined</Translate></div>
-            )}
             <input type="text" placeholder={this.translator._getText('App ID')} value={this.state.app.app_id}
                    onChange={this.bindInputToModel.bind(this, 'app_id')}
                    onKeyUp={this.appIdKeyUp} pattern={REGEX.APP_ID}
-                   className={!appValidation.app_id.isValid ? 'with-margin has-error' : 'with-margin'}/>
+                   className={!appValidation.app_id.isValid ? 'has-error' : ''}/>
             <input type="url" placeholder={this.translator._getText('Owner URL')} value={this.state.app.website}
                    onChange={this.bindInputToModel.bind(this, 'website')} autoComplete="website"
-                   className={!appValidation.website.isValid ? 'with-margin has-error' : 'with-margin'}
+                   className={!appValidation.website.isValid ? 'has-error' : ''}
                    pattern={REGEX.URL}/>
           </div>
         </div>
@@ -1003,6 +983,27 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <Affixer offsetTop={72} zIndex={4} height={80}>
           <div className="page-buttons">
             <h2><Translate>Add an app to the market</Translate></h2>
+            {this.state.app._id && this.state.user && this.state.user.admin && (
+              <div className="form-row app-status-selector">
+                  <Select
+                    isMulti={false}
+                    onChange={this.handleSelectChangeStatus}
+                    options={this.statuses}
+                    placeholder={this.translator._getText('Status')}
+                    removeSelected={false}
+                    rtl={true}
+                    simpleValue={true}
+                    className="multi-selector"
+                    value={this.state.selectedStatus}
+                  />
+              </div>
+            )}
+            {this.state.app._id && !this.state.user && this.state.app.status === 2 && (
+              <div className="butn butn-shine"><Translate>Declined</Translate></div>
+            )}
+            {this.state.app._id && !this.state.user && this.state.app.status === 3 && (
+              <div className="butn butn-red"><Translate>Declined</Translate></div>
+            )}
             <button className="butn butn-blue secondary" onClick={this.preview}>
               <Translate>Preview</Translate>
             </button>
