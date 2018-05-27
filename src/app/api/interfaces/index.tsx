@@ -140,12 +140,10 @@ interface IReview {
 
 interface IReport {
   _id?: string;
-  title?: string;
-  body: string;
   app_id?: string;
-  user?: IUser;
+  reason?: string;
+  comment?: string;
   created_by?: string;
-  created_by_name?: string;
   created_at?: number;
 }
 
