@@ -1,13 +1,15 @@
 import * as React from 'react';
+import {Link} from 'react-router';
 import {Translate, IcoN, Affixer, RateResult} from 'components';
 import {message, Popconfirm} from 'antd';
 import {IReview} from 'api/interfaces';
-import {debounce} from 'lodash';
+import * as _ from 'lodash';
 import TimeUntiles from 'services/utils/time';
 import {
   review as ReviewFactory,
 } from 'api';
-import Const from '../../../api/consts/CServer';
+import Const from 'api/consts/CServer';
+import CReviewStatus from 'api/consts/CReviewStatus';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -37,7 +39,7 @@ class AdminReview extends React.Component<IProps, IState> {
   private reviewFactory: ReviewFactory;
   private pagination: any;
   private textarea: any;
-  private selecteds: any[] = [];
+  private selectedIds: any[] = [];
 
   /**
    * @constructor
@@ -64,7 +66,7 @@ class AdminReview extends React.Component<IProps, IState> {
   }
 
   private loadReviews = () => {
-    this.reviewFactory.getAll('_formbuilder', this.pagination.skip, this.pagination.limit).then((data) => {
+    this.reviewFactory.adminSearch(this.state.keyword, this.pagination.skip, this.pagination.limit).then((data) => {
       if (data.reviews === null) {
         this.setState({
           reviews: [],
@@ -85,18 +87,79 @@ class AdminReview extends React.Component<IProps, IState> {
       message.error(this.translator._getText('Can\'t fetch reviews!'));
     });
   }
-  private loadReviewssDebounced = debounce(this.loadReviews, 512);
+
+  private loadReviewsDebounced = _.debounce(this.loadReviews, 512);
 
   public componentDidMount() {
     this.loadReviews();
   }
 
   private onRemove = (id) => {
-    console.log(id);
+    const reviews = this.state.reviews;
+    const index = _.findIndex(reviews, {_id: id});
+    if (index > -1) {
+      this.reviewFactory.remove(id).then(() => {
+        reviews.splice(index, 1);
+        this.setState({
+          reviews,
+        });
+        message.success(this.translator._getText('Review successfully removed'));
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t remove the review'));
+      });
+    }
+  }
+
+  private onConfirm = (id) => {
+    const reviews = this.state.reviews;
+    const index = _.findIndex(reviews, {_id: id});
+    if (index > -1) {
+      this.reviewFactory.setStatus(id, CReviewStatus.CONFIRMED).then(() => {
+        reviews[index].status = CReviewStatus.CONFIRMED;
+        this.setState({
+          reviews,
+        });
+        message.success(this.translator._getText('Review successfully confirmed'));
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t confirm the review'));
+      });
+    }
   }
 
   private removeAll = () => {
-    console.log(this.selecteds);
+    this.reviewFactory.removeAll(this.selectedIds).then(() => {
+      const reviews = this.state.reviews;
+      this.selectedIds.forEach((id) => {
+        const index = _.findIndex(reviews, {_id: id});
+        if (index > -1) {
+          reviews.splice(index, 1);
+        }
+      });
+      this.setState({
+        reviews,
+      });
+      message.success(this.translator._getText('Reviews successfully removed'));
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t remove the reviews'));
+    });
+  }
+
+  private confirmAll = () => {
+    this.reviewFactory.setStatusAll(this.selectedIds, CReviewStatus.CONFIRMED).then(() => {
+      const reviews = this.state.reviews;
+      this.selectedIds.forEach((id) => {
+        const index = _.findIndex(reviews, {_id: id});
+        if (index > -1) {
+          reviews[index].status = CReviewStatus.CONFIRMED;
+        }
+      });
+      this.setState({
+        reviews,
+      });
+      message.success(this.translator._getText('Reviews successfully confirmed'));
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t confirm the reviews'));
+    });
   }
 
   private reply = (replyId) => {
@@ -109,11 +172,26 @@ class AdminReview extends React.Component<IProps, IState> {
       skip: 0,
       limit: 10,
     };
-    this.loadReviewssDebounced();
+    this.loadReviewsDebounced();
   }
 
   private submitReply = () => {
-    console.log('submit reply', this.textarea.value);
+    const id = this.state.replyId;
+    const body = this.textarea.value;
+    const reviews = this.state.reviews;
+    const index = _.findIndex(reviews, {_id: id});
+    if (index > -1) {
+      this.reviewFactory.reply(id, body).then(() => {
+        reviews[index].response = body;
+        reviews[index].response_at = new Date().getTime();
+        this.setState({
+          reviews,
+        });
+        message.success(this.translator._getText('Reply successfully sent!'));
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t reply to the review'));
+      });
+    }
   }
 
   private replyTextareaRefHandler = (element) => {
@@ -124,14 +202,14 @@ class AdminReview extends React.Component<IProps, IState> {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     if (value) {
-      this.selecteds.push(review._id);
+      this.selectedIds.push(review._id);
       event.target.parentNode.className = 'selected';
     } else {
-      const index = this.selecteds.indexOf(review._id);
-      this.selecteds.splice(index, 1);
+      const index = this.selectedIds.indexOf(review._id);
+      this.selectedIds.splice(index, 1);
       event.target.parentNode.className = '';
     }
-    if (this.selecteds.length < 2) {
+    if (this.selectedIds.length < 2) {
       this.forceUpdate();
     }
   }
@@ -150,18 +228,22 @@ class AdminReview extends React.Component<IProps, IState> {
           <Affixer offsetTop={72} zIndex={4} height={80}>
             <div className="page-buttons">
               <h2><Translate>Reviews</Translate></h2>
-              {this.selecteds.length > 0 && (
+              {this.selectedIds.length > 0 && (
                 <div className="_df">
-                  <Popconfirm title={this.translator._getText('Are you sure about removing this Review?')}
+                  <Popconfirm title={this.translator._getText('Are you sure about removing these Reviews?')}
                               onConfirm={this.removeAll}
                               okText="Yes" cancelText="No">
                     <div className="remove-button">
                       <IcoN name="xcrossRed24" size={24}/>
                     </div>
                   </Popconfirm>
-                  <div className="accept-button">
-                    <IcoN name="heavyCheck24" size={24} />
-                  </div>
+                  <Popconfirm title={this.translator._getText('Are you sure about confirming these Reviews?')}
+                              onConfirm={this.confirmAll}
+                              okText="Yes" cancelText="No">
+                    <div className="accept-button">
+                      <IcoN name="heavyCheck24" size={24}/>
+                    </div>
+                  </Popconfirm>
                 </div>
               )}
             </div>
@@ -170,7 +252,7 @@ class AdminReview extends React.Component<IProps, IState> {
             <div className="search-list">
               <IcoN name="search24" size={24}/>
               <input type="text" onChange={this.changeSearch}
-                    placeholder={this.translator._getText('Search in reviews...')}/>
+                     placeholder={this.translator._getText('Search in reviews...')}/>
             </div>
           </Affixer>
           <ul className="reviews-list admin-list manage-review-list">
@@ -202,16 +284,18 @@ class AdminReview extends React.Component<IProps, IState> {
                         <IcoN name="xcross24" size={24}/>
                       </div>
                     </Popconfirm>
-                    <div className="accept-button">
-                      <IcoN name="heavyCheck24" size={24} />
+                    <div className="accept-button" onClick={this.onConfirm.bind(this, review._id)}>
+                      <IcoN name="heavyCheck24" size={24}/>
                     </div>
                   </div>
-                  <strong>Google Play Music</strong>
+                  <Link to={'/admin/app/' + review.app_id}>
+                    <strong>{review.app_id}</strong>
+                  </Link>
                   <p>{review.body}</p>
                   {this.state.replyId === review._id && (
                     <div className="rev-reply">
                       <textarea className="with-border" placeholder={this.translator._getText('Reply to comment...')}
-                        ref={this.replyTextareaRefHandler}/>
+                                ref={this.replyTextareaRefHandler}/>
                       <div className="_df">
                         <button className="butn" onClick={this.reply.bind(this, '')}>
                           <Translate>Cancel</Translate>
