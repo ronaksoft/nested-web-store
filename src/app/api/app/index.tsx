@@ -46,8 +46,8 @@ class AppFactory {
     return callApi('/app/search', {query, skip, limit});
   }
 
-  public searchAll(query: string, statuses: number[] = [], sort: string = '',
-                   skip: number = 0, limit: number = 20): Promise<any> {
+  public adminSearch(query: string, statuses: number[] = [], sort: string = '',
+                     skip: number = 0, limit: number = 20): Promise<any> {
     return callApi('/admin/app/search', {query, statuses, sort, skip, limit});
   }
 

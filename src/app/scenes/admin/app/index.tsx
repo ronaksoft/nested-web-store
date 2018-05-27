@@ -91,7 +91,7 @@ class AdminApp extends React.Component<IProps, IState> {
 
   private loadApps() {
     this.appFactory
-      .searchAll(
+      .adminSearch(
         this.state.keyword, this.state.selectedStatuses, this.state.sort,
         this.pagination.skip, this.pagination.limit)
       .then((data) => {

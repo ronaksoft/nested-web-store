@@ -18,6 +18,7 @@ interface IApplication {
   created_by_name?: string;
   created_at?: number;
 }
+
 interface IApplicationValidation {
   _id: IValidation;
   app_id: IValidation;
@@ -128,6 +129,7 @@ interface IReview {
   body: string;
   response?: string;
   response_at?: number;
+  response_by?: string;
   app_id?: string;
   status?: number;
   user?: IUser;
@@ -142,5 +144,7 @@ interface IPurchase {
   status?: number;
 }
 
-export {IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission,
-  IApplicationValidation, IValidation, IReview, IPurchase};
+export {
+  IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission,
+  IApplicationValidation, IValidation, IReview, IPurchase
+};
