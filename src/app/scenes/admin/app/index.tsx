@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Translate, IcoN, Affixer, ProperLanguage} from 'components';
 import {Link} from 'react-router';
-import {message, Popconfirm, Popover} from 'antd';
+import {message, Popconfirm, Popover, Tooltip} from 'antd';
 import {IApplication} from 'api/interfaces';
 import * as _ from 'lodash';
 import {app as AppFactory} from '../../../api';
@@ -426,10 +426,14 @@ class AdminApp extends React.Component<IProps, IState> {
                     <span className="app-badge suspended"><Translate>SUSPENDED</Translate></span>}
                     {app.status === Status.UNPUBLISHED &&
                     <span className="app-badge unpublished"><Translate>UNPUBLISHED</Translate></span>}
-                    <Popover placement="top" trigger="click" content="sdsdsd"
+                    {app.status > 1 && (
+                      <Tooltip placement="top" title="reason"
                             overlayClassName="popover-no-padding">
-                      <IcoN name="ask16" size={16}/>
-                    </Popover>
+                        <div style={{display: 'inline-flex'}}>
+                          <IcoN name="ask16" size={16}/>
+                        </div>
+                      </Tooltip>
+                    )}
                   </h4>
                   <p>{app.app_id}</p>
                 </Link>

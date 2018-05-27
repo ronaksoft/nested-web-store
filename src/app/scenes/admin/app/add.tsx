@@ -520,7 +520,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
         .length > 0) {
       return;
     }
-    let loadingMessage = null;
+    let loadingMessage = () => null;
     if (this.state.croppedFiles.length !== 0) {
       loadingMessage = message.loading(this.translator._getText('Files are being uploaded...'), 10000);
     }
@@ -1011,9 +1011,6 @@ class AdminAddApp extends React.Component<IProps, IState> {
                   </div>
                 </div>
               </div>
-            )}
-            {this.state.app._id && this.state.app.status === 3 && (
-              <div className="butn butn-red"><Translate>Declined</Translate></div>
             )}
             <button className="butn butn-blue secondary" onClick={this.preview}>
               <Translate>Preview</Translate>
