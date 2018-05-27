@@ -274,9 +274,11 @@ class AdminReview extends React.Component<IProps, IState> {
                       <RateResult rate={review.rate} silver={true}/>
                       <time className="openSans">{TimeUntiles.dynamic(review.created_at)}</time>
                     </h4>
-                    <div className="reply-button" onClick={this.reply.bind(this, review._id)}>
-                      <IcoN name="reply24" size={24}/>
-                    </div>
+                    {!review.response && (
+                      <div className="reply-button" onClick={this.reply.bind(this, review._id)}>
+                        <IcoN name="reply24" size={24}/>
+                      </div>
+                    )}
                     <Popconfirm title={this.translator._getText('Are you sure about removing this Review?')}
                                 onConfirm={this.onRemove.bind(this, review._id)}
                                 okText="Yes" cancelText="No">
@@ -292,6 +294,7 @@ class AdminReview extends React.Component<IProps, IState> {
                     <strong>{review.app_id}</strong>
                   </Link>
                   <p>{review.body}</p>
+                  {review.response && <p className="response">{review.response_by}: {review.response}</p>}
                   {this.state.replyId === review._id && (
                     <div className="rev-reply">
                       <textarea className="with-border" placeholder={this.translator._getText('Reply to comment...')}

@@ -101,8 +101,8 @@ class AdminWrapper extends React.Component<IProps, IState> {
                 <li><Link to="/admin/review" activeClassName="active">
                   <Translate>Reviews</Translate></Link>
                 </li>
-                {/* <li><Link to="/admin/reports" activeClassName="active">
-                <Translate>Reports</Translate></Link></li> */}
+                <li><Link to="/admin/report" activeClassName="active">
+                  <Translate>Reports</Translate></Link></li>
                 <li>
                   <Link to="/admin/user" activeClassName="active">
                     <Translate>Users List</Translate>

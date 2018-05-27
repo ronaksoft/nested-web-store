@@ -20,6 +20,7 @@ import AdminApp from './admin/app';
 import AdminAddApp from './admin/app/add';
 import AdminAddCategory from './admin/category';
 import AdminReview from './admin/review';
+import AdminReport from './admin/report';
 import AdminUsers from './admin/users';
 import AdminPermission from './admin/permission';
 import AdminWrapper from './admin/';
@@ -449,5 +450,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
   Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory,
-  AdminPermission, AdminApp, AdminUsers, AdminReview,
+  AdminPermission, AdminApp, AdminUsers, AdminReview, AdminReport,
 };

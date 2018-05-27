@@ -138,6 +138,17 @@ interface IReview {
   created_at?: number;
 }
 
+interface IReport {
+  _id?: string;
+  title?: string;
+  body: string;
+  app_id?: string;
+  user?: IUser;
+  created_by?: string;
+  created_by_name?: string;
+  created_at?: number;
+}
+
 interface IPurchase {
   _id?: string;
   app_id?: string;
@@ -146,5 +157,5 @@ interface IPurchase {
 
 export {
   IApplication, IApplicationTrans, IFile, ICategory, IUser, IApp, ISelectOption, IPermission,
-  IApplicationValidation, IValidation, IReview, IPurchase
+  IApplicationValidation, IValidation, IReview, IPurchase, IReport,
 };
