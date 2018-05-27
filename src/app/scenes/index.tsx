@@ -263,7 +263,8 @@ class Container extends React.Component<IProps, IState> {
                           <span>{this.state.user.username}</span>
                         </div>
                       </div>
-                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>
+                      {this.state.user.admin &&
+                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>}
                       <a className="signout" onClick={this.signOut}>
                         <IcoN name="exit16" size={16}/>
                         <Translate>Sign out</Translate>
@@ -304,7 +305,8 @@ class Container extends React.Component<IProps, IState> {
                           <span>{this.state.user.username}</span>
                         </div>
                       </div>
-                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>
+                      {this.state.user.admin &&
+                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>}
                       <a className="signout" onClick={this.signOut}>
                         <IcoN name="exit16" size={16}/>
                         <Translate>Sign out</Translate>
