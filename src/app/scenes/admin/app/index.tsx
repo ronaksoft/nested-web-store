@@ -426,6 +426,10 @@ class AdminApp extends React.Component<IProps, IState> {
                     <span className="app-badge suspended"><Translate>SUSPENDED</Translate></span>}
                     {app.status === Status.UNPUBLISHED &&
                     <span className="app-badge unpublished"><Translate>UNPUBLISHED</Translate></span>}
+                    <Popover placement="top" trigger="click" content="sdsdsd"
+                            overlayClassName="popover-no-padding">
+                      <IcoN name="ask16" size={16}/>
+                    </Popover>
                   </h4>
                   <p>{app.app_id}</p>
                 </Link>

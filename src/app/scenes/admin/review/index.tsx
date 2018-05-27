@@ -95,6 +95,10 @@ class AdminReview extends React.Component<IProps, IState> {
     console.log(id);
   }
 
+  private removeAll = () => {
+    console.log(this.selecteds);
+  }
+
   private reply = (replyId) => {
     this.setState({replyId});
   }
@@ -127,6 +131,9 @@ class AdminReview extends React.Component<IProps, IState> {
       this.selecteds.splice(index, 1);
       event.target.parentNode.className = '';
     }
+    if (this.selecteds.length < 2) {
+      this.forceUpdate();
+    }
   }
 
   /**
@@ -143,6 +150,20 @@ class AdminReview extends React.Component<IProps, IState> {
           <Affixer offsetTop={72} zIndex={4} height={80}>
             <div className="page-buttons">
               <h2><Translate>Reviews</Translate></h2>
+              {this.selecteds.length > 0 && (
+                <div className="_df">
+                  <Popconfirm title={this.translator._getText('Are you sure about removing this Review?')}
+                              onConfirm={this.removeAll}
+                              okText="Yes" cancelText="No">
+                    <div className="remove-button">
+                      <IcoN name="xcrossRed24" size={24}/>
+                    </div>
+                  </Popconfirm>
+                  <div className="accept-button">
+                    <IcoN name="heavyCheck24" size={24} />
+                  </div>
+                </div>
+              )}
             </div>
           </Affixer>
           <Affixer offsetTop={136} zIndex={4} height={48}>

@@ -153,16 +153,16 @@ class AdminAddApp extends React.Component<IProps, IState> {
     this.customRequest = this.fileFactory.customRequest.bind(this);
     this.statuses = [
       {
-        value: '0',
+        value: '1',
         label: 'Publish',
       }, {
-        value: '1',
+        value: '2',
         label: 'Pending',
       }, {
-        value: '2',
+        value: '3',
         label: 'Suspend',
       }, {
-        value: '3',
+        value: '4',
         label: 'Decline',
       },
     ];
@@ -248,7 +248,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
     data = _.merge(this.emptyModel, _.omitBy(data, _.isNull));
     const selectedStatus: ISelectOption = {
       value: `${data.status}`,
-      label: `${data.status}`,
+      label: `${this.statuses[data.status - 1].label}`,
     };
     let selectedCategories: ISelectOption[] = [];
     if (data.categories) {
@@ -983,25 +983,36 @@ class AdminAddApp extends React.Component<IProps, IState> {
         <Affixer offsetTop={72} zIndex={4} height={80}>
           <div className="page-buttons">
             <h2><Translate>Add an app to the market</Translate></h2>
-            {this.state.app._id && this.state.user && this.state.user.admin && (
-              <div className="form-row app-status-selector">
-                  <Select
-                    isMulti={false}
-                    onChange={this.handleSelectChangeStatus}
-                    options={this.statuses}
-                    placeholder={this.translator._getText('Status')}
-                    removeSelected={false}
-                    rtl={true}
-                    simpleValue={true}
-                    className="multi-selector"
-                    value={this.state.selectedStatus}
-                  />
+            {this.state.app._id && this.state.user.admin && (
+              <div className={'form-row app-status-selector status-' + this.state.selectedStatus.value}>
+                <Select
+                  isMulti={false}
+                  onChange={this.handleSelectChangeStatus}
+                  options={this.statuses}
+                  placeholder={this.translator._getText('Status')}
+                  removeSelected={false}
+                  rtl={true}
+                  disabled={true}
+                  simpleValue={true}
+                  className="multi-selector"
+                  value={this.state.selectedStatus}
+                />
               </div>
             )}
-            {this.state.app._id && !this.state.user && this.state.app.status === 2 && (
-              <div className="butn butn-shine"><Translate>Declined</Translate></div>
+            {this.state.app._id && !this.state.user.admin && (
+              <div className={'form-row app-status-selector status-' + this.state.selectedStatus.value}>
+                <div className="multi-selector">
+                  <div className="multi-selector__control">
+                    <div className="multi-selector__value-container multi-selector__value-container--hasValue">
+                      <div className="multi-selector__single-value">
+                        {this.state.selectedStatus.label}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
-            {this.state.app._id && !this.state.user && this.state.app.status === 3 && (
+            {this.state.app._id && this.state.app.status === 3 && (
               <div className="butn butn-red"><Translate>Declined</Translate></div>
             )}
             <button className="butn butn-blue secondary" onClick={this.preview}>
@@ -1030,7 +1041,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
           <AppView app="test" preview={true} model={this.state.previewModel}/>
         </Modal>
         <NstCrop avatar={this.state.pickedImage} forceUpdateCounter={this.state.showCropModalCounter}
-                 onCropped={this.onCropped}/>
+                onCropped={this.onCropped}/>
       </div>
     );
   }
