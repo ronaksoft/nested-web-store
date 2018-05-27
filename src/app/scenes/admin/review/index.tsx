@@ -294,7 +294,9 @@ class AdminReview extends React.Component<IProps, IState> {
                     <strong>{review.app_id}</strong>
                   </Link>
                   <p>{review.body}</p>
-                  {review.response && <p className="response"><Translate>Reply by admin:</Translate>: {review.response}</p>}
+                  {review.response &&
+                    <p className="response"><Translate>Reply by admin:</Translate>: {review.response}</p>
+                  }
                   {this.state.replyId === review._id && (
                     <div className="rev-reply">
                       <textarea className="with-border" placeholder={this.translator._getText('Reply to comment...')}
