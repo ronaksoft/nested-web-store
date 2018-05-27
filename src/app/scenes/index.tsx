@@ -149,7 +149,7 @@ class Container extends React.Component<IProps, IState> {
     const oauthWindow: any = window.open('', '_blank', strWindowFeatures);
     axios.post(Const.SERVER_URL + '/user/oauth/token/create').then((response) => {
       if (response.data.status === 'ok') {
-        oauthWindow.location = 'https://webapp.ronaksoftware.com/oauth/?client_id=' + Const.CLIENT_ID +
+        oauthWindow.location = 'https://webapp.nested.me/oauth/?client_id=' + Const.CLIENT_ID +
           '&redirect_uri=' + callbackUri + '&scope=read%20profile%20data,create%20app,get%20token&token=' +
           response.data.data;
         if (oauthWindow === undefined) {
@@ -264,7 +264,8 @@ class Container extends React.Component<IProps, IState> {
                           <span>{this.state.user.username}</span>
                         </div>
                       </div>
-                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>
+                      {this.state.user.admin &&
+                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>}
                       <a className="signout" onClick={this.signOut}>
                         <IcoN name="exit16" size={16}/>
                         <Translate>Sign out</Translate>
@@ -305,7 +306,8 @@ class Container extends React.Component<IProps, IState> {
                           <span>{this.state.user.username}</span>
                         </div>
                       </div>
-                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>
+                      {this.state.user.admin &&
+                      <Link to="/admin/app"><Translate>Dashboard Panel</Translate></Link>}
                       <a className="signout" onClick={this.signOut}>
                         <IcoN name="exit16" size={16}/>
                         <Translate>Sign out</Translate>
