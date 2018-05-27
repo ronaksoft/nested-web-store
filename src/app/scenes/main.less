@@ -1596,7 +1596,7 @@ textarea.with-border {
   }
 }
 
-.authorize-modal {
+.authorize-modal, .report-modal {
   .ant-modal-close {
     position: fixed;
     top: 10px;
@@ -1609,6 +1609,11 @@ textarea.with-border {
   h3 {
     font-size: 18px;
     margin-bottom: 16px;
+  }
+  p {
+    color: @color-solid-64;
+    font-size: 12px;
+    margin: 0 0 16px;
   }
   .permissions-list {
     margin-bottom: 32px;
@@ -1625,6 +1630,9 @@ textarea.with-border {
     display: flex;
     flex-direction: column;
     width: 100%;
+    button:first-of-type {
+      margin-bottom: 8px;
+    }
   }
   .butn-primary {
     margin-bottom: 16px;
@@ -1644,8 +1652,34 @@ textarea.with-border {
   .ant-modal-close-x {
     transform: translateY(-10px);
   }
+  ul.reasons-for-report {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid @color-wind;
+    margin-bottom: 16px;
+    li {
+      margin-bottom: 8px;
+      input {
+        width: 14px;
+        height: 14px;
+        margin: 0 8px;
+        transform: translateY(2px);
+      }
+      label {
+        color: @color-solid-64;
+      }
+    }
+  }
 }
-
+.report-modal {
+  textarea {
+    display: flex;
+    width: 100%;
+    min-height: 38px;
+    margin-bottom: 24px;
+  }
+}
 .category-scene {
   ul {
     list-style: none;

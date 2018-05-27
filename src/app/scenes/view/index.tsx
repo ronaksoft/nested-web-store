@@ -48,11 +48,14 @@ interface IProps {
 interface IState {
   user?: IUser;
   appId: string;
+  reportModal: boolean;
   authorizeModal: boolean;
   app: IApplication;
   reviews: IReview[];
   installed: boolean;
   hasAccess: boolean;
+  reportSelectedOption: number;
+  reportTextareaValue: string;
 }
 
 class AppView extends React.Component<IProps, IState> {
@@ -60,6 +63,8 @@ class AppView extends React.Component<IProps, IState> {
   private appFactory: AppFactory;
   private reviewFactory: ReviewFactory;
   private nestedService: NestedService;
+  private reportReasons: string[];
+  private requireAdditionalComment: boolean = false;
 
   /**
    * @constructor
@@ -99,10 +104,13 @@ class AppView extends React.Component<IProps, IState> {
         app: initData.__INITIAL_DATA__.app || this.props.model || emptyModel,
         appId: this.props.routeParams ? this.props.routeParams.appid : '',
         reviews: [],
+        reportModal: false,
         authorizeModal: false,
         installed: false,
         user: props.user,
         hasAccess: false,
+        reportTextareaValue: '',
+        reportSelectedOption: -1,
       };
       initData.__INITIAL_DATA__ = {};
     } else {
@@ -110,10 +118,13 @@ class AppView extends React.Component<IProps, IState> {
         app: this.props.model || emptyModel,
         appId: this.props.routeParams ? this.props.routeParams.appid : '',
         reviews: [],
+        reportModal: false,
         authorizeModal: false,
         installed: false,
         user: props.user,
         hasAccess: false,
+        reportTextareaValue: '',
+        reportSelectedOption: -1,
       };
     }
     this.translator = new Translate();
@@ -213,6 +224,12 @@ class AppView extends React.Component<IProps, IState> {
     });
   }
 
+  private toggleReportApp = () => {
+    this.setState({
+      reportModal: !this.state.reportModal,
+    });
+  }
+
   private onAppInstall = () => {
     const appMessageLoading = message.loading(
       this.translator
@@ -292,6 +309,23 @@ class AppView extends React.Component<IProps, IState> {
     });
   }
 
+  private handleReasonOptionChange = (reportSelectedOption) => {
+    this.setState({
+      reportSelectedOption,
+    });
+    this.requireAdditionalComment = reportSelectedOption === this.reportReasons.length - 1;
+  }
+
+  private changeAppReportTextarea = (event) => {
+    this.setState({
+      reportTextareaValue: event.target.value,
+    });
+  }
+
+  private onSendReport = () => {
+    console.log('onSendReport');
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -300,6 +334,13 @@ class AppView extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
+    this.reportReasons = [
+      this.translator._getText('Has inappropriate content'),
+      this.translator._getText('Is against Nested Community Laws'),
+      this.translator._getText('Has so many bugs in it'),
+      this.translator._getText('Violated the copywrite'),
+      this.translator._getText('Other'),
+    ];
     const tabs = {};
     tabs[this.translator._getText('App info')] = (
       <div className="openSans"><ProperLanguage model={this.state.app} property="desc" html={true}/></div>
@@ -384,7 +425,7 @@ class AppView extends React.Component<IProps, IState> {
                 {this.state.installed &&
                 <Translate>Uninstall App</Translate>}
               </button>
-              <a href="" className="report-butn"><Translate>Report this app</Translate></a>
+              <a onClick={this.toggleReportApp} className="report-butn"><Translate>Report this app</Translate></a>
               <div className="product-her-block categories">
                 <h4><Translate>Categories</Translate>:</h4>
                 {this.state.app.categories.map((category, index) => {
@@ -457,6 +498,51 @@ class AppView extends React.Component<IProps, IState> {
               <Translate>Uninstall</Translate>
             </button>}
             <button className="butn full-width" onClick={this.toggleAuthorizeModal}>
+              <Translate>Cancel</Translate>
+            </button>
+          </div>
+        </Modal>
+        <Modal
+          wrapClassName="vertical-center-modal"
+          className="report-modal"
+          width="360px"
+          visible={this.state.reportModal}
+          onCancel={this.toggleReportApp}
+          maskClosable={true}
+        >
+          <h3><Translate>Report this application</Translate></h3>
+          <p>
+            <Translate>
+              If you think this application is against our violance policy and should be reported,
+              please let us know why simply by explaining the cause.
+            </Translate>
+          </p>
+          <ul className="reasons-for-report">
+            {this.reportReasons.map((reason, index) => (
+              <li key={index}>
+                <input type="radio" name="gender" value={index} id={'report-' + index}
+                  onChange={this.handleReasonOptionChange.bind(this, index)}/>
+                <label htmlFor={'report-' + index}>{reason}</label>
+              </li>
+            ))}
+          </ul>
+          <p>
+            <Translate>
+              If you have any additional comment that will help us improve our community and apps,
+              please write down below
+            </Translate>
+          </p>
+          <textarea placeholder={this.translator._getText('Additional comment (optional)...')}
+            onChange={this.changeAppReportTextarea} value={this.state.reportTextareaValue}/>
+          <div className="modal-buttons">
+            <button className="butn butn-red full-width" onClick={this.onSendReport}
+              disabled={
+                  (this.requireAdditionalComment && this.state.reportTextareaValue.length === 0) ||
+                  this.state.reportSelectedOption < 0
+                }>
+              <Translate>Send Report</Translate>
+            </button>
+            <button className="butn full-width" onClick={this.toggleReportApp}>
               <Translate>Cancel</Translate>
             </button>
           </div>
