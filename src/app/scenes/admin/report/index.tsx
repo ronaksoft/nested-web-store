@@ -163,7 +163,7 @@ class AdminReport extends React.Component<IProps, IState> {
                       <Translate>Mark as done</Translate>
                     </div>}
                     {report.status === CReportStatus.DONE &&
-                    <div>
+                    <div className="report-response-handler done">
                       <Translate>Done</Translate>
                     </div>}
                     <time className="openSans">{TimeUntiles.dynamic(report.created_at)}</time>
