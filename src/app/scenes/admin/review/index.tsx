@@ -66,24 +66,26 @@ class AdminReview extends React.Component<IProps, IState> {
   }
 
   private loadReviews = () => {
-    this.reviewFactory.adminSearch(this.state.keyword, this.pagination.skip, this.pagination.limit).then((data) => {
-      if (data.reviews === null) {
-        this.setState({
-          reviews: [],
-          pageCount: 1,
-        });
-        if (this.pagination.skip > 0) {
-          message.warning(this.translator._getText('Reached the end!'));
-        } else {
-          message.warning(this.translator._getText('No results'));
+    this.reviewFactory
+      .adminSearch(this.state.keyword, this.pagination.skip, this.pagination.limit)
+      .then((data) => {
+        if (data.reviews === null) {
+          this.setState({
+            reviews: [],
+            pageCount: 1,
+          });
+          if (this.pagination.skip > 0) {
+            message.warning(this.translator._getText('Reached the end!'));
+          } else {
+            message.warning(this.translator._getText('No results'));
+          }
+          return;
         }
-        return;
-      }
-      this.setState({
-        reviews: data.reviews,
-        pageCount: Math.floor(data.count / this.pagination.limit) + 1,
-      });
-    }).catch(() => {
+        this.setState({
+          reviews: data.reviews,
+          pageCount: Math.floor(data.count / this.pagination.limit) + 1,
+        });
+      }).catch(() => {
       message.error(this.translator._getText('Can\'t fetch reviews!'));
     });
   }
@@ -294,7 +296,8 @@ class AdminReview extends React.Component<IProps, IState> {
                     <strong>{review.app_id}</strong>
                   </Link>
                   <p>{review.body}</p>
-                  {review.response && <p className="response"><Translate>Reply by admin:</Translate>: {review.response}</p>}
+                  {review.response &&
+                  <p className="response"><Translate>Reply by admin:</Translate>: {review.response}</p>}
                   {this.state.replyId === review._id && (
                     <div className="rev-reply">
                       <textarea className="with-border" placeholder={this.translator._getText('Reply to comment...')}

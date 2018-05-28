@@ -125,9 +125,9 @@ class AdminReport extends React.Component<IProps, IState> {
             {this.state.reports.map((report) => (
               <li key={report._id}>
                 <div className="rev-logo">
-                  {!report.user.picture &&
+                  {!report.user || (report.user && !report.user.picture) &&
                   <img src="/public/assets/icons/absents_place.svg" alt=""/>}
-                  {report.user.picture &&
+                  {report.user && report.user.picture &&
                   <img
                     src={report.user.picture.indexOf('http') > -1 ? report.user.picture :
                       Const.SERVER_URL + report.user.picture}
@@ -136,7 +136,7 @@ class AdminReport extends React.Component<IProps, IState> {
                 <div className="rev-info">
                   <div className="_df">
                     <h4>
-                      {report.created_by_name}
+                      {report.user.name}
                       <time className="openSans">{TimeUntiles.dynamic(report.created_at)}</time>
                     </h4>
                     {/* <div className="accept-button" onClick={this.onConfirm.bind(this, report._id)}>
@@ -146,7 +146,7 @@ class AdminReport extends React.Component<IProps, IState> {
                   <Link to={'/admin/app/' + report.app_id}>
                     <strong>{report.app_id}</strong>
                   </Link>
-                  <p>{report.body}</p>
+                  <p>{report.comment}</p>
                 </div>
               </li>
             ))}

@@ -143,6 +143,7 @@ interface IReport {
   app_id?: string;
   reason?: string;
   comment?: string;
+  user?: IUser;
   created_by?: string;
   created_at?: number;
 }
