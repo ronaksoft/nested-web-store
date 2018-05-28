@@ -9,6 +9,7 @@ import {
   report as ReportFactory,
 } from 'api';
 import {Config} from 'api/consts/CServer';
+import CReportStatus from '../../../api/consts/CReportStatus';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -98,6 +99,21 @@ class AdminReport extends React.Component<IProps, IState> {
     this.loadreportsDebounced();
   }
 
+  private markAsDone = (id) => {
+    const reports = this.state.reports;
+    const index = _.findIndex(reports, {_id: id});
+    if (index > -1) {
+      this.reportFactory.setStatus(id, CReportStatus.DONE).then(() => {
+        reports[index].status = CReportStatus.DONE;
+        this.setState({
+          reports,
+        });
+      }).catch(() => {
+        message.error(this.translator._getText('Can\'t make this report as done!'));
+      });
+    }
+  }
+
   /**
    * renders the component
    * @returns {ReactElement} markup
@@ -106,7 +122,6 @@ class AdminReport extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
-    console.log(this.state.reports);
     return (
       <div className="admin-wrapper">
         <div className="permissions-scene">
@@ -142,11 +157,15 @@ class AdminReport extends React.Component<IProps, IState> {
                         <strong>{report.app_id}</strong>
                       </Link>
                     </h4>
-                    <div className="report-response-handler">
+                    {report.status === CReportStatus.PENDING &&
+                    <div className="report-response-handler" onClick={this.markAsDone.bind(this, report._id)}>
                       <IcoN name="heavyCheckGreen16" size={16}/>
                       <Translate>Mark as done</Translate>
+                    </div>}
+                    {report.status === CReportStatus.DONE &&
+                    <div>
                       <Translate>Done</Translate>
-                    </div>
+                    </div>}
                     <time className="openSans">{TimeUntiles.dynamic(report.created_at)}</time>
                   </div>
                   <div className="rep-body">

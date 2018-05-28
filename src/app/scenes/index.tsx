@@ -149,7 +149,7 @@ class Container extends React.Component<IProps, IState> {
     const oauthWindow: any = window.open('', '_blank', strWindowFeatures);
     axios.post(Config().SERVER_URL + '/user/oauth/token/create').then((response) => {
       if (response.data.status === 'ok') {
-        oauthWindow.location = 'https://webapp.nested.me/oauth/?client_id=' + Const.CLIENT_ID +
+        oauthWindow.location = 'https://webapp.ronaksoftware.com/oauth/?client_id=' + Const.CLIENT_ID +
           '&redirect_uri=' + callbackUri + '&scope=read%20profile%20data,create%20app,get%20token&token=' +
           response.data.data;
         if (oauthWindow === undefined) {

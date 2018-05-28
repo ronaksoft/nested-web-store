@@ -146,6 +146,7 @@ interface IReport {
   user?: IUser;
   created_by?: string;
   created_at?: number;
+  status?: number;
 }
 
 interface IPurchase {
