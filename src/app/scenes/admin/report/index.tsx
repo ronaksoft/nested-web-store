@@ -1,14 +1,14 @@
 import * as React from 'react';
-// import {Link} from 'react-router';
+import {Link} from 'react-router';
 import {Translate, IcoN, Affixer} from 'components';
 import {message} from 'antd';
 import {IReport} from 'api/interfaces';
 import * as _ from 'lodash';
-// import TimeUntiles from 'services/utils/time';
+import TimeUntiles from 'services/utils/time';
 import {
   report as ReportFactory,
 } from 'api';
-// import Const from 'api/consts/CServer';
+import Const from 'api/consts/CServer';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -41,7 +41,7 @@ class AdminReport extends React.Component<IProps, IState> {
    * @constructor
    * Creates an instance of AppAdd.
    * @param {IProps} props
-   * @memberof AdminPermission
+   * @memberof AdminReport
    */
   constructor(props: any) {
     super(props);
@@ -61,7 +61,7 @@ class AdminReport extends React.Component<IProps, IState> {
   }
 
   private loadreports = () => {
-    this.reportFactory.getAll(this.state.keyword, this.pagination.skip, this.pagination.limit).then((data) => {
+    this.reportFactory.adminSearch(this.state.keyword, this.pagination.skip, this.pagination.limit).then((data) => {
       if (data.reports === null) {
         this.setState({
           reports: [],
@@ -101,7 +101,7 @@ class AdminReport extends React.Component<IProps, IState> {
   /**
    * renders the component
    * @returns {ReactElement} markup
-   * @memberof AdminPermission
+   * @memberof AdminReport
    * @override
    * @generator
    */
@@ -124,7 +124,30 @@ class AdminReport extends React.Component<IProps, IState> {
           <ul className="reports-list admin-list manage-review-list">
             {this.state.reports.map((report) => (
               <li key={report._id}>
-                a
+                <div className="rev-logo">
+                  {!report.user || (report.user && !report.user.picture) &&
+                  <img src="/public/assets/icons/absents_place.svg" alt=""/>}
+                  {report.user && report.user.picture &&
+                  <img
+                    src={report.user.picture.indexOf('http') > -1 ? report.user.picture :
+                      Const.SERVER_URL + report.user.picture}
+                    alt=""/>}
+                </div>
+                <div className="rev-info">
+                  <div className="_df">
+                    <h4>
+                      {report.user ? report.user.name : ''}
+                      <time className="openSans">{TimeUntiles.dynamic(report.created_at)}</time>
+                    </h4>
+                    {/* <div className="accept-button" onClick={this.onConfirm.bind(this, report._id)}>
+                      <IcoN name="heavyCheck24" size={24}/>
+                    </div> */}
+                  </div>
+                  <Link to={'/admin/app/' + report.app_id}>
+                    <strong>{report.app_id}</strong>
+                  </Link>
+                  <p>{report.comment}</p>
+                </div>
               </li>
             ))}
           </ul>

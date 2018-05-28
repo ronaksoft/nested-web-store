@@ -408,9 +408,11 @@ class Container extends React.Component<IProps, IState> {
             <div className="seperator"><a><Translate>or</Translate></a></div>
             <form onSubmit={this.submitLoginForm}>
               <input type="text" placeholder={this.translator._getText('Username')}
-                     onChange={this.bindInputToModel.bind(this, 'username')} value={this.state.signin.username}/>
+                     onChange={this.bindInputToModel.bind(this, 'username')}
+                     value={this.state.signin.username}/>
               <input type="text" placeholder={this.translator._getText('Password')}
-                     onChange={this.bindInputToModel.bind(this, 'password')} value={this.state.signin.password}/>
+                     onChange={this.bindInputToModel.bind(this, 'password')}
+                     value={this.state.signin.password}/>
               <button className="butn butn-store-login full-width" type="submit" disabled={validateForm}>
                 <Translate>Sign in</Translate>
               </button>

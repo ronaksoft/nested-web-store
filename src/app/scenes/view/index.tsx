@@ -1,12 +1,16 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Translate, Rating, Tab, RateResult, ProperLanguage} from 'components';
-import {IApplication, IReview, IUser} from 'api/interfaces';
+import {IApplication, IReport, IReview, IUser} from 'api/interfaces';
 import {Link} from 'react-router';
 import Const from 'api/consts/CServer';
 import {message, Modal} from 'antd';
 import TimeUntiles from 'services/utils/time';
-import {app as AppFactory, review as ReviewFactory} from 'api';
+import {
+  app as AppFactory,
+  review as ReviewFactory,
+  report as ReportFactory,
+} from 'api';
 import CPurchaseStatus from 'api/consts/CPurchaseStatus';
 import NestedService from 'services/nested';
 
@@ -62,8 +66,9 @@ class AppView extends React.Component<IProps, IState> {
   private translator: Translate;
   private appFactory: AppFactory;
   private reviewFactory: ReviewFactory;
+  private reportFactory: ReportFactory;
   private nestedService: NestedService;
-  private reportReasons: string[];
+  private reportReasons: any[];
   private requireAdditionalComment: boolean = false;
 
   /**
@@ -130,6 +135,7 @@ class AppView extends React.Component<IProps, IState> {
     this.translator = new Translate();
     this.appFactory = new AppFactory();
     this.reviewFactory = new ReviewFactory();
+    this.reportFactory = new ReportFactory();
     this.nestedService = new NestedService(this.state.user);
   }
 
@@ -323,7 +329,21 @@ class AppView extends React.Component<IProps, IState> {
   }
 
   private onSendReport = () => {
-    console.log('onSendReport');
+    const model: IReport = {
+      app_id: this.state.appId,
+      comment: this.state.reportTextareaValue,
+      reason: this.state.reportSelectedOption,
+    };
+    this.reportFactory.create(model).then(() => {
+      this.setState({
+        reportModal: false,
+        reportSelectedOption: -1,
+        reportTextareaValue: '',
+      });
+      message.success(this.translator._getText('Report successfully sent'));
+    }).catch(() => {
+      message.error(this.translator._getText('Can\'t send report!'));
+    });
   }
 
   /**
@@ -335,11 +355,11 @@ class AppView extends React.Component<IProps, IState> {
    */
   public render() {
     this.reportReasons = [
-      this.translator._getText('Has inappropriate content'),
-      this.translator._getText('Is against Nested Community Laws'),
-      this.translator._getText('Has so many bugs in it'),
-      this.translator._getText('Violated the copywrite'),
-      this.translator._getText('Other'),
+      {id: 1, text: this.translator._getText('Has inappropriate content')},
+      {id: 2, text: this.translator._getText('Is against Nested Community Laws')},
+      {id: 3, text: this.translator._getText('Has so many bugs in it')},
+      {id: 4, text: this.translator._getText('Violated the copyright')},
+      {id: 5, text: this.translator._getText('Other')},
     ];
     const tabs = {};
     tabs[this.translator._getText('App info')] = (
@@ -513,16 +533,16 @@ class AppView extends React.Component<IProps, IState> {
           <h3><Translate>Report this application</Translate></h3>
           <p>
             <Translate>
-              If you think this application is against our violance policy and should be reported,
+              If you think this application is against our violence policy and should be reported,
               please let us know why simply by explaining the cause.
             </Translate>
           </p>
           <ul className="reasons-for-report">
             {this.reportReasons.map((reason, index) => (
               <li key={index}>
-                <input type="radio" name="gender" value={index} id={'report-' + index}
-                  onChange={this.handleReasonOptionChange.bind(this, index)}/>
-                <label htmlFor={'report-' + index}>{reason}</label>
+                <input type="radio" name="report-option" value={reason.id} id={'report-' + index}
+                       onChange={this.handleReasonOptionChange.bind(this, reason.id)}/>
+                <label htmlFor={'report-' + index}>{reason.text}</label>
               </li>
             ))}
           </ul>
@@ -533,13 +553,13 @@ class AppView extends React.Component<IProps, IState> {
             </Translate>
           </p>
           <textarea placeholder={this.translator._getText('Additional comment (optional)...')}
-            onChange={this.changeAppReportTextarea} value={this.state.reportTextareaValue}/>
+                    onChange={this.changeAppReportTextarea} value={this.state.reportTextareaValue}/>
           <div className="modal-buttons">
             <button className="butn butn-red full-width" onClick={this.onSendReport}
-              disabled={
-                  (this.requireAdditionalComment && this.state.reportTextareaValue.length === 0) ||
-                  this.state.reportSelectedOption < 0
-                }>
+                    disabled={
+                      (this.requireAdditionalComment && this.state.reportTextareaValue.length === 0) ||
+                      this.state.reportSelectedOption < 0
+                    }>
               <Translate>Send Report</Translate>
             </button>
             <button className="butn full-width" onClick={this.toggleReportApp}>

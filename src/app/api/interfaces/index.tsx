@@ -141,8 +141,9 @@ interface IReview {
 interface IReport {
   _id?: string;
   app_id?: string;
-  reason?: string;
+  reason?: number;
   comment?: string;
+  user?: IUser;
   created_by?: string;
   created_at?: number;
 }
