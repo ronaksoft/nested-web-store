@@ -106,6 +106,7 @@ class AdminReport extends React.Component<IProps, IState> {
    * @generator
    */
   public render() {
+    console.log(this.state.reports);
     return (
       <div className="admin-wrapper">
         <div className="permissions-scene">
@@ -121,10 +122,10 @@ class AdminReport extends React.Component<IProps, IState> {
                      placeholder={this.translator._getText('Search in reports...')}/>
             </div>
           </Affixer>
-          <ul className="reports-list admin-list manage-review-list">
+          <ul className="reports-list admin-list">
             {this.state.reports.map((report) => (
               <li key={report._id}>
-                <div className="rev-logo">
+                <div className="rep-logo">
                   {!report.user || (report.user && !report.user.picture) &&
                   <img src="/public/assets/icons/absents_place.svg" alt=""/>}
                   {report.user && report.user.picture &&
@@ -133,20 +134,28 @@ class AdminReport extends React.Component<IProps, IState> {
                       Const.SERVER_URL + report.user.picture}
                     alt=""/>}
                 </div>
-                <div className="rev-info">
+                <div className="rep-info">
                   <div className="_df">
                     <h4>
-                      {report.user ? report.user.name : ''}
-                      <time className="openSans">{TimeUntiles.dynamic(report.created_at)}</time>
+                      <b>{report.user ? report.user.name : ''}</b>
+                      <Link to={'/admin/app/' + report.app_id}>
+                        <strong>{report.app_id}</strong>
+                      </Link>
                     </h4>
+                    {/* <div className="report-response-handler">
+                      <IcoN name="heavyCheckGreen16" size={16}/>
+                      <Translate>Mark as done</Translate>
+                      <Translate>Done</Translate>
+                    </div> */}
+                    <time className="openSans">{TimeUntiles.dynamic(report.created_at)}</time>
                     {/* <div className="accept-button" onClick={this.onConfirm.bind(this, report._id)}>
                       <IcoN name="heavyCheck24" size={24}/>
                     </div> */}
                   </div>
-                  <Link to={'/admin/app/' + report.app_id}>
-                    <strong>{report.app_id}</strong>
-                  </Link>
-                  <p>{report.comment}</p>
+                  <div className="rep-body">
+                    <h5>{report.reason}</h5>
+                    <p>{report.comment}</p>
+                  </div>
                 </div>
               </li>
             ))}
