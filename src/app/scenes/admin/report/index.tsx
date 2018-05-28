@@ -41,7 +41,7 @@ class AdminReport extends React.Component<IProps, IState> {
    * @constructor
    * Creates an instance of AppAdd.
    * @param {IProps} props
-   * @memberof AdminPermission
+   * @memberof AdminReport
    */
   constructor(props: any) {
     super(props);
@@ -61,7 +61,7 @@ class AdminReport extends React.Component<IProps, IState> {
   }
 
   private loadreports = () => {
-    this.reportFactory.getAll(this.state.keyword, this.pagination.skip, this.pagination.limit).then((data) => {
+    this.reportFactory.adminSearch(this.state.keyword, this.pagination.skip, this.pagination.limit).then((data) => {
       if (data.reports === null) {
         this.setState({
           reports: [],
@@ -101,7 +101,7 @@ class AdminReport extends React.Component<IProps, IState> {
   /**
    * renders the component
    * @returns {ReactElement} markup
-   * @memberof AdminPermission
+   * @memberof AdminReport
    * @override
    * @generator
    */
@@ -136,7 +136,7 @@ class AdminReport extends React.Component<IProps, IState> {
                 <div className="rev-info">
                   <div className="_df">
                     <h4>
-                      {report.user.name}
+                      {report.user ? report.user.name : ''}
                       <time className="openSans">{TimeUntiles.dynamic(report.created_at)}</time>
                     </h4>
                     {/* <div className="accept-button" onClick={this.onConfirm.bind(this, report._id)}>
