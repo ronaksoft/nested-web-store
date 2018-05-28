@@ -8,7 +8,7 @@ import TimeUntiles from 'services/utils/time';
 import {
   review as ReviewFactory,
 } from 'api';
-import Const from 'api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 import CReviewStatus from 'api/consts/CReviewStatus';
 
 // import {Row, Col, Input, Upload} from 'antd';
@@ -266,7 +266,7 @@ class AdminReview extends React.Component<IProps, IState> {
                   {review.user.picture &&
                   <img
                     src={review.user.picture.indexOf('http') > -1 ? review.user.picture :
-                      Const.SERVER_URL + review.user.picture}
+                      Config().SERVER_URL + review.user.picture}
                     alt=""/>}
                 </div>
                 <div className="rev-info">

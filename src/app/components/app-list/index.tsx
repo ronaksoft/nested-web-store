@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Translate, ProperLanguage, ScrollArea} from 'components';
 import {Link} from 'react-router';
 import {IApplication, ICategory} from '../../api/interfaces';
-import Const from '../../api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 
 interface IProps {
   items: IApplication[];
@@ -57,10 +57,10 @@ export default class AppList extends React.Component<IProps, IState> {
                 {this.state.items.map((item, index) => (
                   <Link to={'/app/' + item.app_id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
                     <div className="app-image">
-                      <img src={Const.SERVER_URL + item.logo.path} alt=""/>
+                      <img src={Config().SERVER_URL + item.logo.path} alt=""/>
                       {!isMini && (
                         <div className="app-image-bg">
-                          <img src={Const.SERVER_URL + item.logo.path} alt=""/>
+                          <img src={Config().SERVER_URL + item.logo.path} alt=""/>
                         </div>
                       )}
                     </div>
@@ -84,10 +84,10 @@ export default class AppList extends React.Component<IProps, IState> {
                   {this.state.items.map((item, index) => (
                     <Link to={'/app/' + item.app_id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
                       <div className="app-image">
-                        <img src={Const.SERVER_URL + item.logo.path} alt=""/>
+                        <img src={Config().SERVER_URL + item.logo.path} alt=""/>
                         {!isMini && (
                           <div className="app-image-bg">
-                            <img src={Const.SERVER_URL + item.logo.path} alt=""/>
+                            <img src={Config().SERVER_URL + item.logo.path} alt=""/>
                           </div>
                         )}
                       </div>

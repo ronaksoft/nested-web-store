@@ -5,7 +5,7 @@ import {message, Popconfirm, Popover, Tooltip} from 'antd';
 import {IApplication} from 'api/interfaces';
 import * as _ from 'lodash';
 import {app as AppFactory} from '../../../api';
-import Const from 'api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 import Status, {default as CAppStatus} from 'api/consts/CAppStatus';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
@@ -344,7 +344,7 @@ class AdminApp extends React.Component<IProps, IState> {
     );
     const SortableItem = SortableElement(({app, index}) => (
       <li className="top-app-item" key={'a' + index}>
-        <img src={Const.SERVER_URL + app.logoPath} alt=""/>
+        <img src={Config().SERVER_URL + app.logoPath} alt=""/>
         <div className="slider-item-handler" onClick={this.removeSliderApp.bind(this, app)}>
           <IcoN name="negativeXCross16" size={16}/>
         </div>
@@ -410,7 +410,7 @@ class AdminApp extends React.Component<IProps, IState> {
           {this.state.apps.map((app) => (
             <li key={app._id}>
               <div className="app-icon">
-                <img src={Const.SERVER_URL + app.logo.path} draggable={true} onDragStart={this.drag} id={app._id}/>
+                <img src={Config().SERVER_URL + app.logo.path} draggable={true} onDragStart={this.drag} id={app._id}/>
               </div>
               <div className="app-info">
                 <Link to={'/admin/app/edit/' + app._id}>

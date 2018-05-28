@@ -8,7 +8,7 @@ import TimeUntiles from 'services/utils/time';
 import {
   report as ReportFactory,
 } from 'api';
-import Const from 'api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -131,7 +131,7 @@ class AdminReport extends React.Component<IProps, IState> {
                   {report.user && report.user.picture &&
                   <img
                     src={report.user.picture.indexOf('http') > -1 ? report.user.picture :
-                      Const.SERVER_URL + report.user.picture}
+                      Config().SERVER_URL + report.user.picture}
                     alt=""/>}
                 </div>
                 <div className="rep-info">
@@ -142,15 +142,12 @@ class AdminReport extends React.Component<IProps, IState> {
                         <strong>{report.app_id}</strong>
                       </Link>
                     </h4>
-                    {/* <div className="report-response-handler">
+                    <div className="report-response-handler">
                       <IcoN name="heavyCheckGreen16" size={16}/>
                       <Translate>Mark as done</Translate>
                       <Translate>Done</Translate>
-                    </div> */}
+                    </div>
                     <time className="openSans">{TimeUntiles.dynamic(report.created_at)}</time>
-                    {/* <div className="accept-button" onClick={this.onConfirm.bind(this, report._id)}>
-                      <IcoN name="heavyCheck24" size={24}/>
-                    </div> */}
                   </div>
                   <div className="rep-body">
                     <h5>{report.reason}</h5>

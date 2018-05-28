@@ -6,7 +6,7 @@ import {Translate, ProperLanguage, IcoN, Loading, Affixer} from 'components';
 import {IApplication, ICategory} from '../../api/interfaces';
 import {debounce} from 'lodash';
 
-import Const from 'api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 const ReactPaginate = require('react-paginate');
 
 interface IState {
@@ -202,7 +202,7 @@ class Browse extends React.Component<IProps, IState> {
               {this.state.apps.map((app) => (
                 <li key={app._id} onClick={this.goToApp.bind(this, app.app_id)}>
                   <div className="app-image">
-                    <img src={Const.SERVER_URL + app.logo.path} alt=""/>
+                    <img src={Config().SERVER_URL + app.logo.path} alt=""/>
                   </div>
                   <div className="app-data">
                     <h4><ProperLanguage model={app} property="name"/></h4>

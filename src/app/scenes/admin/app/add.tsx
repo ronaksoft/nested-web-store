@@ -14,7 +14,7 @@ import {
   IApplication, ISelectOption, IFile, ICategory, IPermission,
   IApplicationValidation, IUser,
 } from 'api/interfaces';
-import Const from 'api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 import {REGEX} from 'api/consts/CRegex';
 import * as _ from 'lodash';
 import {AppView} from 'scenes';
@@ -838,7 +838,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
             customRequest={this.customRequest}
           >
             {imageUrl ? <img src={imageUrl} alt=""/> : this.state.app.logo ?
-              <img src={Const.SERVER_URL + this.state.app.logo.path} alt=""/> : uploadButton}
+              <img src={Config().SERVER_URL + this.state.app.logo.path} alt=""/> : uploadButton}
           </Upload>
           <div className="multi-input-row">
             <input type="text" placeholder={this.translator._getText('App ID')} value={this.state.app.app_id}
@@ -900,7 +900,7 @@ class AdminAddApp extends React.Component<IProps, IState> {
           {this.state.app.screenshots.map((val, index) => {
             return (
               <div key={index} className="image-handler">
-                <img src={Const.SERVER_URL + val.path} alt=""/>
+                <img src={Config().SERVER_URL + val.path} alt=""/>
                 <div className="image-buttons">
                   <div onClick={this.removePictures.bind(this, index)}>
                     <IcoN name="xcross16Red" size={16}/>

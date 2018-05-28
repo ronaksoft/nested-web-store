@@ -28,9 +28,9 @@ import {IUser} from 'api/interfaces';
 import {user as UserFactory} from 'api';
 import * as Cookies from 'cookies-js';
 import {Translate, IcoN, reactTranslateChangeLanguage} from 'components';
-import Const from './../api/consts/CServer';
 import axios from 'axios';
 import {message, Modal, Popover} from 'antd';
+import {Config, Const} from 'api/consts/CServer';
 
 interface IState {
   isLogin: boolean;
@@ -144,10 +144,10 @@ class Container extends React.Component<IProps, IState> {
   }
 
   public signInWithNested = () => {
-    const callbackUri = Const.SERVER_URL + '/user/oauth';
+    const callbackUri = Config().SERVER_URL + '/user/oauth';
     const strWindowFeatures = 'location=yes,height=570,width=520,scrollbars=yes,status=yes';
     const oauthWindow: any = window.open('', '_blank', strWindowFeatures);
-    axios.post(Const.SERVER_URL + '/user/oauth/token/create').then((response) => {
+    axios.post(Config().SERVER_URL + '/user/oauth/token/create').then((response) => {
       if (response.data.status === 'ok') {
         oauthWindow.location = 'https://webapp.nested.me/oauth/?client_id=' + Const.CLIENT_ID +
           '&redirect_uri=' + callbackUri + '&scope=read%20profile%20data,create%20app,get%20token&token=' +
@@ -159,7 +159,7 @@ class Container extends React.Component<IProps, IState> {
         const interval = setInterval(() => {
           if (oauthWindow.closed) {
             clearInterval(interval);
-            axios.post(Const.SERVER_URL + '/user/oauth/token/login', {
+            axios.post(Config().SERVER_URL + '/user/oauth/token/login', {
               code: response.data.data,
             }).then((userResponse) => {
               if (userResponse.data.status !== 'nok') {

@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Translate, Rating, Tab, RateResult, ProperLanguage} from 'components';
 import {IApplication, IReport, IReview, IUser} from 'api/interfaces';
 import {Link} from 'react-router';
-import Const from 'api/consts/CServer';
+import {Config, Const} from 'api/consts/CServer';
 import {message, Modal} from 'antd';
 import TimeUntiles from 'services/utils/time';
 import {
@@ -246,8 +246,8 @@ class AppView extends React.Component<IProps, IState> {
       app_name: this.state.app.name,
       homepage: this.state.app.website,
       developer: this.state.app.created_by_name,
-      icon_large_url: Const.SERVER_URL + this.state.app.logo.path,
-      icon_small_url: Const.SERVER_URL + this.state.app.logo.path,
+      icon_large_url: Config().SERVER_URL + this.state.app.logo.path,
+      icon_small_url: Config().SERVER_URL + this.state.app.logo.path,
     }).then(() => {
       this.installApp();
       appMessageLoading();
@@ -370,7 +370,8 @@ class AppView extends React.Component<IProps, IState> {
         {
           this.state.app.screenshots.map((screenshot, index) => {
             return (
-              <img key={index} src={(screenshot.tmp ? '' : Const.SERVER_URL) + screenshot.path} alt={screenshot.name}/>
+              <img key={index} src={(screenshot.tmp ? '' : Config().SERVER_URL) + screenshot.path}
+                   alt={screenshot.name}/>
             );
           })
         }
@@ -382,7 +383,7 @@ class AppView extends React.Component<IProps, IState> {
           {this.state.app.permissions.map((permission, index) => (
             <li key={'permission-' + index}>
               <div className="per-icon">
-                <img src={Const.SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>
+                <img src={Config().SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>
               </div>
               <div className="per-info">
                 <h4><ProperLanguage model={permission} property="name"/></h4>
@@ -407,7 +408,7 @@ class AppView extends React.Component<IProps, IState> {
                     {review.user.picture &&
                     <img
                       src={review.user.picture.indexOf('http') > -1 ? review.user.picture :
-                        Const.SERVER_URL + review.user.picture}
+                        Config().SERVER_URL + review.user.picture}
                       alt=""/>}
                   </div>
                   <div className="rev-info">
@@ -433,7 +434,7 @@ class AppView extends React.Component<IProps, IState> {
           <div className="app-content">
             <div className="product-hero">
               {this.state.app.logo && (
-                <img src={Const.SERVER_URL + this.state.app.logo.path} alt={this.state.app.app_id}/>
+                <img src={Config().SERVER_URL + this.state.app.logo.path} alt={this.state.app.app_id}/>
               )}
               {!this.state.app.logo && (
                 <img src="/public/assets/icons/Nested_Logo.svg" alt={this.state.app.app_id}/>
@@ -487,7 +488,7 @@ class AppView extends React.Component<IProps, IState> {
         >
           {this.state.app.logo && (
             <div className="app-snippet">
-              <img src={Const.SERVER_URL + this.state.app.logo.path} alt={this.state.app.app_id}/>
+              <img src={Config().SERVER_URL + this.state.app.logo.path} alt={this.state.app.app_id}/>
               <div className="_df _fw">
                 <b><ProperLanguage model={this.state.app} property="name"/></b>
                 <span>{this.state.app.app_id}</span>
@@ -500,7 +501,7 @@ class AppView extends React.Component<IProps, IState> {
               <li key={permission._id}>
                 <div className="per-info">
                   <div className="_df">
-                    <img src={Const.SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>
+                    <img src={Config().SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>
                     <h4><ProperLanguage model={permission} property="name"/></h4>
                   </div>
                   <p><ProperLanguage model={permission} property="desc"/></p>

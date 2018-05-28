@@ -7,7 +7,7 @@ import {
   user as UserFactory,
   file as FileFactory,
 } from 'api';
-import Const from 'api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 
 const ReactPaginate = require('react-paginate');
 
@@ -94,24 +94,26 @@ class AdminUsers extends React.Component<IProps, IState> {
   }
 
   private loadUsers() {
-    this.userFactory.getAll(this.state.keyword, [], this.pagination.skip, this.pagination.limit).then((data) => {
-      if (data.users === null) {
-        this.setState({
-          users: [],
-          pageCount: 1,
-        });
-        if (this.pagination.skip > 0) {
-          message.warning(this.translator._getText('Reached the end!'));
-        } else {
-          message.warning(this.translator._getText('No results'));
+    this.userFactory
+      .getAll(this.state.keyword, [], this.pagination.skip, this.pagination.limit)
+      .then((data) => {
+        if (data.users === null) {
+          this.setState({
+            users: [],
+            pageCount: 1,
+          });
+          if (this.pagination.skip > 0) {
+            message.warning(this.translator._getText('Reached the end!'));
+          } else {
+            message.warning(this.translator._getText('No results'));
+          }
+          return;
         }
-        return;
-      }
-      this.setState({
-        users: data.users,
-        pageCount: Math.floor(data.count / this.pagination.limit) + 1,
-      });
-    }).catch(() => {
+        this.setState({
+          users: data.users,
+          pageCount: Math.floor(data.count / this.pagination.limit) + 1,
+        });
+      }).catch(() => {
       message.error(this.translator._getText('Can\'t fetch users!'));
     });
   }
@@ -359,15 +361,15 @@ class AdminUsers extends React.Component<IProps, IState> {
             </button>
             <div className="_df" ref={this.refHandler}>
               <Popover placement="bottomRight" trigger="click" content={filterMenu}
-                getPopupContainer={this.getPopupContainer}
-                overlayClassName="popover-no-padding popover-filter-bar">
+                       getPopupContainer={this.getPopupContainer}
+                       overlayClassName="popover-no-padding popover-filter-bar">
                 <div className="filter">
                   <IcoN name="filter24" size={24}/>
                 </div>
               </Popover>
               <Popover placement="bottomRight" trigger="click" content={sortMenu}
-              getPopupContainer={this.getPopupContainer}
-                overlayClassName="popover-no-padding popover-filter-bar">
+                       getPopupContainer={this.getPopupContainer}
+                       overlayClassName="popover-no-padding popover-filter-bar">
                 <div className="sort">
                   <IcoN name="sort24" size={24}/>
                 </div>
@@ -379,7 +381,7 @@ class AdminUsers extends React.Component<IProps, IState> {
           <div className="search-list">
             <IcoN name="search24" size={24}/>
             <input type="text" onChange={this.changeSearch}
-              placeholder={this.translator._getText('Search in apps...')}/>
+                   placeholder={this.translator._getText('Search in apps...')}/>
           </div>
         </Affixer>
         <ul className="users-list admin-list">
@@ -390,7 +392,7 @@ class AdminUsers extends React.Component<IProps, IState> {
                   {!user.picture &&
                   <img src={'/public/assets/icons/absents_place.svg'} alt=""/>}
                   {user.picture &&
-                  <img src={user.picture.indexOf('http') > -1 ? user.picture : Const.SERVER_URL + user.picture}
+                  <img src={user.picture.indexOf('http') > -1 ? user.picture : Config().SERVER_URL + user.picture}
                        alt=""/>}
                 </div>
                 <div className="user-info">
@@ -402,7 +404,8 @@ class AdminUsers extends React.Component<IProps, IState> {
                 </div>
                 <Popconfirm title={this.translator._getText('Are you sure about removing this user?')}
                             onConfirm={this.onRemove.bind(this, 'robzizo')}
-                            okText={this.translator._getText('Yes')} cancelText={this.translator._getText('No')}>
+                            okText={this.translator._getText('Yes')}
+                            cancelText={this.translator._getText('No')}>
                   <div className="remove-button">
                     <IcoN name="binRed24" size={24}/>
                   </div>

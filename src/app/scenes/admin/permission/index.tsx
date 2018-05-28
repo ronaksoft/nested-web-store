@@ -7,7 +7,7 @@ import {
   file as FileFactory,
   permission as PermissionFactory,
 } from 'api';
-import Const from '../../../api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 
 // import {Row, Col, Input, Upload} from 'antd';
 
@@ -287,7 +287,7 @@ class AdminPermission extends React.Component<IProps, IState> {
                   {!permission.icon &&
                   <IcoN name="filter16" size={16}/>}
                   {permission.icon && permission.icon.length !== 0 &&
-                  <img src={Const.SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>}
+                  <img src={Config().SERVER_URL + permission.icon} alt={permission.name} width="24" height="24"/>}
                 </div>
                 <div className="per-info">
                   <h4><ProperLanguage model={permission} property="name"/></h4>
@@ -340,7 +340,7 @@ class AdminPermission extends React.Component<IProps, IState> {
                 customRequest={this.customRequest}
               >
                 {imageUrl ? <img src={imageUrl} alt=""/> : this.state.model.icon ?
-                  <img src={Const.SERVER_URL + this.state.model.icon} alt=""/> : uploadButton}
+                  <img src={Config().SERVER_URL + this.state.model.icon} alt=""/> : uploadButton}
               </Upload>
               <form onSubmit={this.submitCreatePermissionForm}>
                 <Tab items={tabs}/>

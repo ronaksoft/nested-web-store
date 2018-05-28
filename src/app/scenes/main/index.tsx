@@ -5,7 +5,7 @@ import {Translate, AppList, ProperLanguage} from 'components';
 import {category as CategoryFactory, app as AppFactory} from 'api';
 import {message} from 'antd';
 import {IApplication, ICategory} from 'api/interfaces';
-import Const from 'api/consts/CServer';
+import {Config} from 'api/consts/CServer';
 
 interface IState {
   sliderApps: IApplication[];
@@ -140,7 +140,7 @@ class Main extends React.Component<any, IState> {
               {this.state.sliderApps.map((app, index) => {
                   return (
                     <Link key={'slider-' + index} to={'/app/' + app.app_id}>
-                      <img src={Const.SERVER_URL + app.logo.path} alt={app.name} className="logo"/>
+                      <img src={Config().SERVER_URL + app.logo.path} alt={app.name} className="logo"/>
                     </Link>
                   );
               })}
