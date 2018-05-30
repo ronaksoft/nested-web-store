@@ -180,10 +180,8 @@ class AppView extends React.Component<IProps, IState> {
             installed: false,
           });
         }
-      }).catch(() => {
-        this.setState({
-          hasAccess: false,
-        });
+      }).catch((err) => {
+        console.log(err);
       });
       this.reviewFactory.getAll(this.state.appId).then((data) => {
         if (data.reviews === null) {
