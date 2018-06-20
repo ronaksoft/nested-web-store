@@ -345,7 +345,7 @@ class Container extends React.Component<IProps, IState> {
             </div>
             <div>
               <h6><Translate>DEVELOPERS</Translate></h6>
-              <a target="_blank" href="http://git.ronaksoftware.com/nested-apps/hello-world">
+              <a target="_blank" href="https://github.com/ronaksoft/app-hello-world">
                 <Translate>Create an App</Translate></a>
               <h6><Translate>NESTED</Translate></h6>
               <a target="_blank" href="https://nested.me/features/"><Translate>Features</Translate></a>
