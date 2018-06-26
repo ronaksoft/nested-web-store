@@ -149,7 +149,7 @@ class Container extends React.Component<IProps, IState> {
     const oauthWindow: any = window.open('', '_blank', strWindowFeatures);
     axios.post(Config().SERVER_URL + '/user/oauth/token/create').then((response) => {
       if (response.data.status === 'ok') {
-        oauthWindow.location = 'https://webapp.ronaksoftware.com/oauth/?client_id=' + Const.CLIENT_ID +
+        oauthWindow.location = 'https://web.nested.me/oauth/?client_id=' + Const.CLIENT_ID +
           '&redirect_uri=' + callbackUri + '&scope=read%20profile%20data,create%20app,get%20token&token=' +
           response.data.data;
         if (oauthWindow === undefined) {
@@ -344,6 +344,9 @@ class Container extends React.Component<IProps, IState> {
               </div>
             </div>
             <div>
+              <h6><Translate>DEVELOPERS</Translate></h6>
+              <a target="_blank" href="https://github.com/ronaksoft/app-hello-world">
+                <Translate>Create an App</Translate></a>
               <h6><Translate>NESTED</Translate></h6>
               <a target="_blank" href="https://nested.me/features/"><Translate>Features</Translate></a>
               <a target="_blank" href="https://play.google.com/store/apps/details?id=me.nested.android.mail">

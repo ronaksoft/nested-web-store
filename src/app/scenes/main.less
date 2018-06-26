@@ -208,6 +208,11 @@ textarea::-webkit-input-placeholder {
     height: 32px;
     object-fit: cover
   }
+  .user-avatar {
+    img {
+      width: 32px;
+    }
+  }
   .devider {
     height: 32px;
     width: 2px;
@@ -1149,6 +1154,7 @@ footer {
           color: @color-white;
           border-radius: 3px;
           padding: 2px;
+          height: 20px;
           i {
             margin: 2px;
             path {
@@ -1161,9 +1167,8 @@ footer {
   }
   &.manage-review-list {
     li {
-      padding-left: 16px;
       border: none;
-      padding: 8px 0;
+      padding: 8px 0 8px 16px;
       .rev-logo {
         padding-right: 8px;
       }
