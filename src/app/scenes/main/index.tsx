@@ -82,7 +82,7 @@ class Main extends React.Component<any, IState> {
           return;
         }
         this.setState({
-          recentApps: data,
+          recentApps: data.splice(0, 3),
         });
       }).catch(() => {
         message.error(this.translator._getText('Can\'t fetch recent apps!'));
