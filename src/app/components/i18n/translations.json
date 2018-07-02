@@ -81,11 +81,11 @@
   },
   "Make it easier!": {
     "en": "",
-    "fa": ""
+    "fa": "ساده‌‌سازی"
   },
   "Add useful apps to you workspace.": {
     "en": "",
-    "fa": ""
+    "fa": "اپلیکیشن‌های مفید را به فضای کارتان اضافه کنید."
   },
   "Categories": {
     "en": "",
@@ -706,5 +706,185 @@
   "Please login with admin account to continue": {
     "en": "",
     "fa": "برای دسترسی به صفحه ادمین به اکانت خود وارد شوید"
+  },
+  "Can\\'t remove the application!": {
+    "en": "",
+    "fa": ""
+  },
+  "Application status successfully changed": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t change status of the application!": {
+    "en": "",
+    "fa": ""
+  },
+  "You can\\'t set an unpublished app in slider": {
+    "en": "",
+    "fa": ""
+  },
+  "reports": {
+    "en": "",
+    "fa": ""
+  },
+  "Mark as done": {
+    "en": "",
+    "fa": ""
+  },
+  "Done": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch reports!": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t make this report as done!": {
+    "en": "",
+    "fa": ""
+  },
+  "Search in reports...": {
+    "en": "",
+    "fa": ""
+  },
+  "Reply by admin:": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t fetch reviews!": {
+    "en": "",
+    "fa": ""
+  },
+  "Review successfully removed": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t remove the review": {
+    "en": "",
+    "fa": ""
+  },
+  "Review successfully confirmed": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t confirm the review": {
+    "en": "",
+    "fa": ""
+  },
+  "Reviews successfully removed": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t remove the reviews": {
+    "en": "",
+    "fa": ""
+  },
+  "Reviews successfully confirmed": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t confirm the reviews": {
+    "en": "",
+    "fa": ""
+  },
+  "Reply successfully sent!": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t reply to the review": {
+    "en": "",
+    "fa": ""
+  },
+  "Are you sure about removing these Reviews?": {
+    "en": "",
+    "fa": ""
+  },
+  "Are you sure about confirming these Reviews?": {
+    "en": "",
+    "fa": ""
+  },
+  "Search in reviews...": {
+    "en": "",
+    "fa": ""
+  },
+  "Are you sure about removing this Review?": {
+    "en": "",
+    "fa": ""
+  },
+  "Reply to comment...": {
+    "en": "",
+    "fa": ""
+  },
+  "No": {
+    "en": "",
+    "fa": "خیر"
+  },
+  "DEVELOPERS": {
+    "en": "",
+    "fa": "گسترش‌دهندگان"
+  },
+  "Create an App": {
+    "en": "",
+    "fa": "ساخت اپ جدید"
+  },
+  "You are logged in as {0}": {
+    "en": "",
+    "fa": ""
+  },
+  "Report this application": {
+    "en": "",
+    "fa": ""
+  },
+  "Send Report": {
+    "en": "",
+    "fa": ""
+  },
+  "Installing \"{0}\", be patient": {
+    "en": "",
+    "fa": ""
+  },
+  "Uninstalling \"{0}\", be patient": {
+    "en": "",
+    "fa": ""
+  },
+  "\"{0}\" successfully installed": {
+    "en": "",
+    "fa": ""
+  },
+  "\"{0}\" successfully uninstalled": {
+    "en": "",
+    "fa": ""
+  },
+  "Report successfully sent": {
+    "en": "",
+    "fa": ""
+  },
+  "Can\\'t send report!": {
+    "en": "",
+    "fa": ""
+  },
+  "Has inappropriate content": {
+    "en": "",
+    "fa": ""
+  },
+  "Is against Nested Community Laws": {
+    "en": "",
+    "fa": ""
+  },
+  "Has so many bugs in it": {
+    "en": "",
+    "fa": ""
+  },
+  "Violated the copyright": {
+    "en": "",
+    "fa": ""
+  },
+  "Other": {
+    "en": "",
+    "fa": ""
+  },
+  "Additional comment (optional)...": {
+    "en": "",
+    "fa": ""
   }
 }
