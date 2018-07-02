@@ -57,7 +57,9 @@ export default class AppList extends React.Component<IProps, IState> {
                 {this.state.items.map((item, index) => (
                   <Link to={'/app/' + item.app_id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
                     <div className="app-image">
-                      <img src={Config().SERVER_URL + item.logo.path} alt=""/>
+                      <div className="app-image-inner">
+                        <img src={Config().SERVER_URL + item.logo.path} alt=""/>
+                      </div>
                       {!isMini && (
                         <div className="app-image-bg">
                           <img src={Config().SERVER_URL + item.logo.path} alt=""/>
@@ -84,7 +86,9 @@ export default class AppList extends React.Component<IProps, IState> {
                   {this.state.items.map((item, index) => (
                     <Link to={'/app/' + item.app_id} key={index} className={isMini ? 'app-card-mini' : 'app-card'}>
                       <div className="app-image">
-                        <img src={Config().SERVER_URL + item.logo.path} alt=""/>
+                        <div className="app-image-inner">
+                          <img src={Config().SERVER_URL + item.logo.path} alt=""/>
+                        </div>
                         {!isMini && (
                           <div className="app-image-bg">
                             <img src={Config().SERVER_URL + item.logo.path} alt=""/>

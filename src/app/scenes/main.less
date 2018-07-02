@@ -422,8 +422,13 @@ select {
       height: 64px;
       width: 100%;
       justify-content: center;
-      >a {
+      > a {
         margin: 0 16px;
+        width: 64px;
+        background: #FFFFFF;
+        height: 64px;
+        border-radius: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16);
         &:first-child {
           margin-left: 0;
         }
@@ -431,11 +436,10 @@ select {
           margin-right: 0;
         }
         img {
-          width: 64px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16);
-          height: 64px;
-          border-radius: 16px;
-          background: #FFFFFF;
+          width: 48px;
+          height: 48px;
+          margin: 8px;
+          border-radius: 2px;
         }
       }
     }
@@ -489,13 +493,18 @@ select {
         z-index: 2;
       }
     }
-    >img {
+    .app-image-inner {
       background: #FFFFFF;
-      border-radius: 16px;
       width: 72px;
       height: 72px;
-      object-fit: cover;
       z-index: 2;
+      border-radius: 16px;
+      img {
+        object-fit: cover;
+        margin: 8px;
+        width: 56px;
+        height: 56px;
+      }
     }
   }
   .app-data {

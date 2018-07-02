@@ -202,7 +202,9 @@ class Browse extends React.Component<IProps, IState> {
               {this.state.apps.map((app) => (
                 <li key={app._id} onClick={this.goToApp.bind(this, app.app_id)}>
                   <div className="app-image">
-                    <img src={Config().SERVER_URL + app.logo.path} alt=""/>
+                    <div className="app-image-inner">
+                      <img src={Config().SERVER_URL + app.logo.path} alt=""/>
+                    </div>
                   </div>
                   <div className="app-data">
                     <h4><ProperLanguage model={app} property="name"/></h4>
