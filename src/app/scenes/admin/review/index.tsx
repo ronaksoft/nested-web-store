@@ -269,7 +269,7 @@ class AdminReview extends React.Component<IProps, IState> {
                       Config().SERVER_URL + review.user.picture}
                     alt=""/>}
                 </div>
-                <div className="rev-info">
+                <div className={['rev-info', review.response_at ? 'responsed' : ''].join(' ')}>
                   <div className="_df">
                     <h4>
                       {review.created_by_name}
