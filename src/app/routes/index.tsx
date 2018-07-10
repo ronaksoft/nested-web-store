@@ -1,7 +1,7 @@
 import * as React from 'react';
 import AppWrapper, {
   Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory,
-  AdminPermission, AdminApp, AdminUsers, AdminReview, AdminReport,
+  AdminPermission, AdminApp, AdminUsers, AdminReview, AdminReport, Developer,
 } from 'scenes';
 import NotFound from 'containers/404';
 import {Provider} from 'react-redux';
@@ -17,6 +17,7 @@ export default (
         <IndexRoute component={Main}/>
         <Route path="/" component={Main}/>
         <Route path="/app/:appid" component={AppView}/>
+        <Route path="/developer" component={Developer}/>
         <Route path="/apps" component={Browse}/>
         <Route path="/apps/:cat" component={Browse}/>
         <Route component={AdminWrapper}>

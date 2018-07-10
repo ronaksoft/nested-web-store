@@ -16,6 +16,7 @@ import './main.less';
 import AppView from './view/';
 import Main from './main/';
 import Browse from './browse/';
+import Developer from './developer';
 import AdminApp from './admin/app';
 import AdminAddApp from './admin/app/add';
 import AdminAddCategory from './admin/category';
@@ -346,7 +347,9 @@ class Container extends React.Component<IProps, IState> {
             <div>
               <h6><Translate>DEVELOPERS</Translate></h6>
               <a target="_blank" href="https://github.com/ronaksoft/app-hello-world">
-                <Translate>Create an App</Translate></a>
+                <Translate>Sample App</Translate></a>
+              {this.state.user !== null && <Link to="/developer">
+                <Translate>Create an App</Translate></Link>}
               <h6><Translate>NESTED</Translate></h6>
               <a target="_blank" href="https://nested.me/features/"><Translate>Features</Translate></a>
               <a target="_blank" href="https://play.google.com/store/apps/details?id=me.nested.android.mail">
@@ -457,5 +460,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export {
   Main, AppView, AdminAddApp, Browse, AdminWrapper, AdminAddCategory,
-  AdminPermission, AdminApp, AdminUsers, AdminReview, AdminReport,
+  AdminPermission, AdminApp, AdminUsers, AdminReview, AdminReport, Developer,
 };

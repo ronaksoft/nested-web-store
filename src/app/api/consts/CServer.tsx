@@ -1,6 +1,6 @@
 const Const = {
   CLIENT_ID: '_appstore',
-  SERVER_URL: 'http://localhost:8080',
+  SERVER_URL: 'https://store.nested.me',
   PERMISSION_DENIED: 0x01,
 };
 
