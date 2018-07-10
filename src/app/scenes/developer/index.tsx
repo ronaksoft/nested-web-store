@@ -200,7 +200,6 @@ class Developer extends React.Component<any, IState> {
   private onSubmit = () => {
     const appValidation = this.checkValidation();
     const model = this.state.app;
-    console.log(appValidation, model);
     if (
       Object.keys(appValidation)
         .map((key) => appValidation[key].isValid)
@@ -211,10 +210,12 @@ class Developer extends React.Component<any, IState> {
     model.permissions = this.state.selectedPermissions.map((permission) => {
       return {_id: permission.value};
     });
-    return this.appFactory.create(model).then(() => {
+    return this.appFactory.create(model).then((res) => {
       message.success(this.translator._getText('Application successfully created'));
+      model._id = res._id;
       this.setState({
         created: true,
+        app: model,
       }, this.goStepThree);
     }).catch((error) => {
       message.error(this.translator._getText('Can\'t create the Application!'));
@@ -296,7 +297,11 @@ class Developer extends React.Component<any, IState> {
   }
 
   private goMoreSetting = () => {
-    browserHistory.push(`/admin/app/edit/${this.state.app.app_id}`);
+    browserHistory.push(`/admin/app/edit/${this.state.app._id}`);
+  }
+
+  private goAppList = () => {
+    browserHistory.push(`/admin/app`);
   }
 
   private onChangeEnglishDesc = (editorStateEn: EditorState) => {
@@ -468,7 +473,7 @@ class Developer extends React.Component<any, IState> {
             <img src={Config().SERVER_URL + this.state.app.logo.path} alt=""/>
             <div className="app-data">
               <h4>{this.state.app.name}</h4>
-              <p>{this.state.app.desc}</p>
+              <p dangerouslySetInnerHTML={{__html: this.state.app.desc}}/>
               <a target="_blank" href={this.state.app.website}>{this.state.app.website}</a>
             </div>
           </div>}
@@ -489,7 +494,7 @@ class Developer extends React.Component<any, IState> {
             {step === 3 && <button className="butn butn-blue primary" onClick={this.goMoreSetting}>
               <Translate>More Settings</Translate>
             </button>}
-            {step === 3 && <button className="butn butn-primary">
+            {step === 3 && <button className="butn butn-primary" onClick={this.goAppList}>
               <Translate>Done</Translate>
             </button>}
           </div>
