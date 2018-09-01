@@ -56,7 +56,7 @@ class Html extends React.Component<IHtmlProps, {}> {
         {head.meta.toComponent()}
         {head.link.toComponent()}
         {head.script.toComponent()}
-        <Helmet meta={appConfig.app.head.meta} title={appConfig.app.head.title}/>
+        <Helmet meta={appConfig.app.head.meta} title={appConfig.app.head.title || 'Nested App Store'}/>
         {renderStyles}
         <link rel="shortcut icon" href="/public/favicon.ico"/>
         <link rel="manifest" href="/public/manifest.json"/>
